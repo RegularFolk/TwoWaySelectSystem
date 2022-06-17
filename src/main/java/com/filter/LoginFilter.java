@@ -1,5 +1,7 @@
 package com.filter;
 
+import com.bean.Student;
+import com.bean.Tutor;
 import com.bean.Result;
 import com.constant.Constants;
 import com.utils.JSONUtils;
@@ -17,21 +19,19 @@ public class LoginFilter implements Filter {
     public void destroy() {
     }
 
+    //登录过滤器（by周才邦）
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-//        //判断当前是否已登录
-//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//        HttpSession session = httpServletRequest.getSession();
-//        User loginUser = (User) session.getAttribute(Constants.USER_SESSION_KEY);
-//        if (loginUser == null) {
-//            //说明未登录,存储一个errorMessage,不能直接转发到页面，否则thymeleaf无法解析
-//            //ajax发送的异步请求无法使用一般的请求转发和重定向
-//            //响应数据给客户端,告诉客户端未登录
-//            JSONUtils.writeResult(httpServletResponse, CommonResult.error().setMessage("unlogin"));
-//            return;
-//        }
-//        //已登录则放行
-//        chain.doFilter(request, response);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        HttpSession session = httpServletRequest.getSession();
+        Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+        Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+        if (student == null && tutor == null) {
+            //未登录
+            JSONUtils.writeResult(httpServletResponse, new Result(false, Constants.NOT_LOGGED_IN));
+            return;
+        }
+        chain.doFilter(request, response);
     }
 }
