@@ -13,7 +13,7 @@ public class MD5Util {
      */
     public static String encode(String source) {
 
-        // 1.判断明文字符串是否有效1111
+        // 1.判断明文字符串是否有效dev1
         if (source == null || "".equals(source)) {
             throw new RuntimeException("用于加密的明文不可为空");
         }
