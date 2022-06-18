@@ -22,6 +22,15 @@ public class Result implements Serializable {
         this.data = data;
     }
 
+    @Override
+    public String toString() {
+        return "Result{" +
+                "flag=" + flag +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public boolean getFlag() {
         return flag;
     }

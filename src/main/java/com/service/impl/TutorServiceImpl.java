@@ -15,8 +15,8 @@ public class TutorServiceImpl implements TutorService {
     public Tutor doLogin(Tutor tutor) {
         Tutor findByNumber = tutorDao.findByNumber(tutor.getNumber());
         if (findByNumber != null) {
-            String encode = MD5Util.encode(findByNumber.getPassword());
-            if (encode.equals(tutor.getPassword())) {
+            String encode = MD5Util.encode(tutor.getPassword());
+            if (findByNumber.getPassword().equals(encode)) {
                 return findByNumber;
             } else {
                 throw new RuntimeException(Constants.WRONG_PASSWORD);
