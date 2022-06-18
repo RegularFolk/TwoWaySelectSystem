@@ -1,5 +1,6 @@
 package com.utils;
 
+import com.bean.StudentInfo;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +40,16 @@ public class JSONUtils {
             //异步请求的response.getWriter().write()和同步请求的有所不同
             response.getWriter().write(s);
         } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public static Object analysisJSON(String s, Class<Object> studentInfoClass) {
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(s, Object.class);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }

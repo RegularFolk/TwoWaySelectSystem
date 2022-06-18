@@ -2,6 +2,7 @@ package com.servlet.model;
 
 import com.bean.Result;
 import com.bean.Student;
+import com.bean.StudentInfo;
 import com.constant.Constants;
 import com.service.StudentService;
 import com.service.impl.StudentServiceImpl;
@@ -10,6 +11,7 @@ import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class StudentServlet extends ModelBaseServlet {
@@ -60,6 +62,25 @@ public class StudentServlet extends ModelBaseServlet {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
+    }
+
+    public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            StudentInfo studentInfo = new StudentInfo();
+            BeanUtils.populate(studentInfo, parameterMap);
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            student = studentService.updateStudentInfo(student, studentInfo);
+            //跟新session中的student
+            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+
+
     }
 
 }

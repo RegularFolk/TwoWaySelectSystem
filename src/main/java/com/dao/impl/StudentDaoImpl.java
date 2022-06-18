@@ -30,4 +30,10 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         String sql = "select *from student";
         return getBeanList(Student.class, sql);
     }
+
+    @Override
+    public void updateInfoId(int infoId, int id) {
+        String sql = "update student set self_info_id = ? where id = ?";
+        update(sql, infoId, id);
+    }
 }

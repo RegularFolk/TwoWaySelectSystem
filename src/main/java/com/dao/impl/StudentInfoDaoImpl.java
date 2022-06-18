@@ -11,4 +11,10 @@ public class StudentInfoDaoImpl extends BaseDao<StudentInfo> implements StudentI
         String sql = "select * from student_info where id = ?";
         return getBean(StudentInfo.class, sql, student.getSelfInfoId());
     }
+
+    //zyq
+    @Override
+    public void update(StudentInfo studentInfo) {
+        String sql="update student_info set  gender = ?,birthday = ?,politic_status= ? ,phone_number = ?,email = ?,   where id = ?";
+    }
 }

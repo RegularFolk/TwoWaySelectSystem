@@ -5,4 +5,7 @@ import com.bean.StudentInfo;
 
 public interface StudentInfoDao {
     StudentInfo findInfo(Student student);
+
+    //zyq
+    void update(StudentInfo studentInfo);
 }
