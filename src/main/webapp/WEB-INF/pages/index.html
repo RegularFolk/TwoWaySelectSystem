@@ -4,15 +4,15 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>学生导师双选系统</title>
-    <base th:href="@{/}"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
     <!--
       使用绝对路径
     -->
-    <link rel="stylesheet" href="static/css/minireset.css"/>
+    <!--<link rel="stylesheet" href="static/css/minireset.css"/>
     <link rel="stylesheet" href="static/css/common.css"/>
     <link rel="stylesheet" href="static/css/iconfont.css"/>
     <link rel="stylesheet" href="static/css/index.css"/>
-    <link rel="stylesheet" href="static/css/swiper.min.css"/>
+    <link rel="stylesheet" href="static/css/swiper.min.css"/>-->
     <!--引入layer-->
     <script type="text/javascript" src="static/script/jquery.js"></script>
 
@@ -26,21 +26,27 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <!-- 引入element 的组件库-->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../../plugins/font-awesome/css/font-awesome.min.css">
+    <script src="../../js/vue.js"></script>
+    <script src="../../plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script src="../../js/axios-0.18.0.js"></script>
 </head>
 <body>
 <div id="app">
     <el-container style="height: 700px; border: 1px solid #eee">
         <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <el-menu :default-openeds="['1', '3']">
-                <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-message"></i>学院教师信息</template>
-                    <el-menu-item-group>
-                        <template slot="title">教信系</template>
-                        <el-menu-item index="1-1">王永固</el-menu-item>
+            <el-menu @open="getTutors()">
+                <el-submenu index="1" @click="getTutors()">
+                    <template slot="title"><i class="el-icon-message"></i>学院教师信息
+                    </template>
+                    <el-menu-item-group :data="tutors" v-for="tutor in tutors">
+                        <el-menu-item>{{tutor.name}}</el-menu-item>
+                        <!--<el-menu-item index="1-1">王永固</el-menu-item>
                         <el-menu-item index="1-2">刘迎春</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="机电系">
-                        <el-menu-item index="1-3">选项3</el-menu-item>
+                        <el-menu-item index="1-3">选项3</el-menu-item>-->
                     </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="2">
@@ -90,29 +96,29 @@
             </el-header>
 
             <el-main>
-                    <el-table
-                            :data="tableData"
-                            style="width: 100%"
-                            :default-sort = "{prop: 'date', order: 'descending'}"
-                    >
-                        <el-table-column
-                                prop="date"
-                                label="日期"
-                                sortable
-                                width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="姓名"
-                                sortable
-                                width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                label="地址"
-                                :formatter="formatter">
-                        </el-table-column>
-                    </el-table>
+                <el-table
+                        :data="tableData"
+                        style="width: 100%"
+                        :default-sort="{prop: 'date', order: 'descending'}"
+                >
+                    <el-table-column
+                            prop="date"
+                            label="日期"
+                            sortable
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="姓名"
+                            sortable
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="address"
+                            label="地址"
+                            :formatter="formatter">
+                    </el-table-column>
+                </el-table>
             </el-main>
         </el-container>
     </el-container>
@@ -129,50 +135,70 @@
         color: #333;
     }
 </style>
-    <script>
-        var Main = {
-            methods: {
-                handleClick(row) {
-                    console.log(row);
-                }
-            },
-
-            data() {
-                return {
-                    tableData: [{
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        zip: 200333
-                    }, {
-                        date: '2016-05-04',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1517 弄',
-                        zip: 200333
-                    }, {
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1519 弄',
-                        zip: 200333
-                    }, {
-                        date: '2016-05-03',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1516 弄',
-                        zip: 200333
-                    }]
-                }
+<script>
+    // var Main = {
+    //     methods: {
+    //         handleClick(row) {
+    //             console.log(row);
+    //         }
+    //     },
+    //
+    //     data() {
+    //         return {
+    //             tableData: [{
+    //                 date: '2016-05-02',
+    //                 name: '王小虎',
+    //                 province: '上海',
+    //                 city: '普陀区',
+    //                 address: '上海市普陀区金沙江路 1518 弄',
+    //                 zip: 200333
+    //             }, {
+    //                 date: '2016-05-04',
+    //                 name: '王小虎',
+    //                 province: '上海',
+    //                 city: '普陀区',
+    //                 address: '上海市普陀区金沙江路 1517 弄',
+    //                 zip: 200333
+    //             }, {
+    //                 date: '2016-05-01',
+    //                 name: '王小虎',
+    //                 province: '上海',
+    //                 city: '普陀区',
+    //                 address: '上海市普陀区金沙江路 1519 弄',
+    //                 zip: 200333
+    //             }, {
+    //                 date: '2016-05-03',
+    //                 name: '王小虎',
+    //                 province: '上海',
+    //                 city: '普陀区',
+    //                 address: '上海市普陀区金沙江路 1516 弄',
+    //                 zip: 200333
+    //             }]
+    //         }
+    //     }
+    // }
+    // var Ctor = Vue.extend(Main)
+    // new Ctor().$mount('#app')
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            "tutors": []
+        },
+        methods: {
+            getTutors() {
+                axios.get("tutor?method=getTutors").then(resp => {
+                    if (resp.data.flag) {
+                        this.tutors = resp.data.data
+                    } else {
+                        this.$message({
+                            message: resp.data.message,
+                            type: "error"
+                        })
+                    }
+                })
             }
         }
-        var Ctor = Vue.extend(Main)
-        new Ctor().$mount('#app')
+    })
 </script>
 
 </html>

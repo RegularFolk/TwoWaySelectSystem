@@ -10,6 +10,7 @@ import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
+import java.util.List;
 import java.util.Map;
 
 public class TutorServlet extends ModelBaseServlet {
@@ -67,6 +68,18 @@ public class TutorServlet extends ModelBaseServlet {
     //教师查看学生志愿（仅自己）
     public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
 
+    }
+
+    //查询所有导师 （zcb）
+    public void getTutors(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<Tutor> tutorList = tutorService.getTutorList();
+            tutorList.forEach(System.out::println);
+            JSONUtils.writeResult(response, new Result(true, tutorList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
+        }
     }
 
 }
