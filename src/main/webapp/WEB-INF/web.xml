@@ -27,7 +27,7 @@
     </filter>
     <filter-mapping><!--只对需要访问数据库的servlet采用这个filter-->
         <filter-name>CloseConnectionFilter</filter-name>
-        <url-pattern>/bookManager</url-pattern>
+        <url-pattern>/tutor</url-pattern>
         <url-pattern>/protected/*</url-pattern>
         <url-pattern>/index.html</url-pattern>
         <url-pattern>/user</url-pattern>
