@@ -23,3 +23,11 @@ AUTHOR: 周才邦（后端）
 6.设置了登录过滤器，如果未登录状态下进行特点行为会返回请先登录的JSON。 result{false,"请先登录！"}
 
 7.设置了EncodingFilter，设置请求和响应编码格式为utf-8
+
+=============================================
+前端
+1.所有用到elementUI的页面必须按照以下顺序引入【   <!-- 引入ElementUI样式 -->
+                               <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+                               <script src="https://unpkg.com/vue/dist/vue.js"></script>
+                               <!-- 引入ElementUI组件库 -->
+                               <script src="https://unpkg.com/element-ui/lib/index.js"></script>】
