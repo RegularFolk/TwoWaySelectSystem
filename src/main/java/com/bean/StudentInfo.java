@@ -4,7 +4,7 @@ public class StudentInfo {
     private int id;
     private int gender;
     private String birthday;
-    private String politics_status;
+    private String politicStatus;
     private String phoneNumber;
     private String email;
     private String planning;
@@ -17,7 +17,7 @@ public class StudentInfo {
         this.id = id;
         this.gender = gender;
         this.birthday = birthday;
-        this.politics_status = politics_status;
+        this.politicStatus = politics_status;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.planning = planning;
@@ -30,7 +30,7 @@ public class StudentInfo {
                 "id=" + id +
                 ", gender=" + gender +
                 ", birthday='" + birthday + '\'' +
-                ", politics_status='" + politics_status + '\'' +
+                ", politicStatus='" + politicStatus + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", planning='" + planning + '\'' +
@@ -62,12 +62,12 @@ public class StudentInfo {
         this.birthday = birthday;
     }
 
-    public String getPolitics_status() {
-        return politics_status;
+    public String getPoliticStatus() {
+        return politicStatus;
     }
 
-    public void setPolitics_status(String politics_status) {
-        this.politics_status = politics_status;
+    public void setPoliticStatus(String politicStatus) {
+        this.politicStatus = politicStatus;
     }
 
     public String getPhoneNumber() {

@@ -15,4 +15,9 @@ public class Constants {
     public static final String CHECK_CODE = "checkCode";
     public static final String TUTOR_SESSION_KEY = "LoginTutor";
     public static final String NOT_LOGGED_IN = "请先登录！";
+    public static final String LOGOUT = "登出成功！";
+    public static final Integer FIRST_PREFERENCE = 1;
+    public static final Integer SECOND_PREFERENCE = 2;
+    public static final Integer THIRD_PREFERENCE = 3;
+    public static final String WRONG_PREFERENCE = "请选择正确的志愿号";
 }

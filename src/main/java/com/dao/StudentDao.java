@@ -12,4 +12,8 @@ public interface StudentDao {
     Student findById(int id);
 
     List<Student> findAll();
+
+    Student findByPreferenceId(Integer preferenceId);
+
+
 }

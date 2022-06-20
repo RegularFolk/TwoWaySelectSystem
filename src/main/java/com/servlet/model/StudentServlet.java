@@ -62,4 +62,10 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
+    //学生登出
+    public void doLogout(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().invalidate();
+        JSONUtils.writeResult(response,new Result(true,Constants.LOGOUT));
+    }
+
 }
