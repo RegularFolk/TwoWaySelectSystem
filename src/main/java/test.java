@@ -1,7 +1,10 @@
+import com.bean.*;
+import com.bean.Message;
 import com.bean.Result;
 import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
+import com.dao.impl.MessageDaoImpl;
 import com.service.StudentService;
 import com.service.TutorService;
 import com.service.impl.StudentServiceImpl;
@@ -14,6 +17,7 @@ import org.junit.Test;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class test {
@@ -113,6 +117,86 @@ public class test {
             //失败则返回失败,返回错误信息
             System.out.println(new Result(false, e.getMessage()));
         }
+    }
+
+    @Test //测试学生信息增删改查
+    public void testStudent() {
+        List<Student> list;
+        List<StudentInfo> list1;
+        //list = studentService.getStudentList();
+        //list=studentService.getStudentListByStatus(0);
+        //list1=studentService.getInfoList();
+        //System.out.println(list1);
+
+        Student studentById = studentService.getStudentById(4);
+        StudentInfo infoByStudentId = studentService.getInfoByStudentId(4);
+        StudentInfo infoByInfoId = studentService.getInfoByInfoId(1);
+
+//        StudentInfo studentInfo=new StudentInfo();
+//        studentInfo.setBirthday("1800");
+//        Student student = studentService.updateStudentInfo(studentById, studentInfo);
+////        System.out.println(student);
+        System.out.println(studentById);
+
+//        studentService.getStudentListByTutorId();
+//        List<Student> studentListByMajorId = studentService.getStudentListByMajorId(1);
+//        System.out.println(studentListByMajorId);
+
+//        studentService.updatePassword("0",studentById);
+
+//        System.out.println(studentService.getStudentList());
+
+    }
+
+    @Test //tutor信息增删改查
+    public void testTutor(){
+        List<Tutor> list;
+        List<TutorInfo> list1;
+
+        Tutor tutorById = tutorService.getTutorById(1);
+        List<Tutor> tutorList = tutorService.getTutorList();
+
+        TutorInfo infoByTutorId = tutorService.getInfoByTutorId(1);
+
+        TutorInfo infoByInfoId = tutorService.getInfoByInfoId(1);
+        List<TutorInfo> infoList = tutorService.getInfoList();
+
+        TutorInfo tutorInfo=new TutorInfo();
+        tutorInfo.setGender(11);
+
+        Tutor tutor = tutorService.updateTutorInfo(tutorById, tutorInfo);
+
+        System.out.println(tutor);
+
+        List<Tutor> tutorByMajorId = tutorService.getTutorByMajorId(1);
+        System.out.println(tutorByMajorId);
+
+    }
+
+    @Test //测试发送私信
+    public void testSendById() {
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer receiverId = 1;
+        Integer senderId = 1;
+        String text = "aaa";
+        String time = "6.20";
+        messageDao.sandById(receiverId, senderId, text, time);
+    }
+
+    @Test //测试私信查询ByReceiverId
+    public void testFindByReceiverId(){
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer receiverId = 1;
+        List<Message> messageList = messageDao.findByReceiverId(receiverId);
+        System.out.println(messageList);
+    }
+
+    @Test //测试私信查询BySenderId
+    public void testFindBySenderId(){
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer senderId = 1;
+        List<Message> messageList = messageDao.findBySenderId(senderId);
+        System.out.println(messageList);
     }
 
 }

@@ -58,4 +58,15 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
+    //教师登出
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().invalidate();
+        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+    }
+
+    //教师查看学生志愿（仅自己）
+    public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
 }

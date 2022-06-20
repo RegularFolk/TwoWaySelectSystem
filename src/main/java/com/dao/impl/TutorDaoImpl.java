@@ -30,4 +30,22 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
         String sql = "select * from tutor";
         return getBeanList(Tutor.class, sql);
     }
+
+    @Override
+    public Tutor findById(int id) {
+        String sql = "select * from tutor where id = ?";
+        return getBean(Tutor.class, sql,id);
+    }
+
+    @Override
+    public List<Tutor> findByMajorId(int majorId) {
+        String sql = "select * from tutor where major_id = ?";
+        return getBeanList(Tutor.class, sql,majorId);
+    }
+
+    @Override
+    public void updateInfoId(int infoId, int id) {
+        String sql = "update tutor set tutor_info_id = ? where id = ?";
+        update(sql, infoId, id);
+    }
 }

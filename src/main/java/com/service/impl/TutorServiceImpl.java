@@ -1,15 +1,22 @@
 package com.service.impl;
 
 import com.bean.Tutor;
+import com.bean.TutorInfo;
 import com.constant.Constants;
 import com.dao.TutorDao;
+import com.dao.TutorInfoDao;
 import com.dao.impl.TutorDaoImpl;
+import com.dao.impl.TutorInfoDaoImpl;
 import com.service.TutorService;
 import com.utils.MD5Util;
+
+import java.util.List;
 
 public class TutorServiceImpl implements TutorService {
 
     TutorDao tutorDao = new TutorDaoImpl();
+
+    TutorInfoDao tutorInfoDao=new TutorInfoDaoImpl();
 
     @Override
     public Tutor doLogin(Tutor tutor) {
@@ -36,5 +43,52 @@ public class TutorServiceImpl implements TutorService {
         String encode = MD5Util.encode(tutor.getPassword());
         tutor.setPassword(encode);
         tutorDao.add(tutor);
+    }
+
+
+
+
+    @Override
+    public Tutor updateTutorInfo(Tutor tutor, TutorInfo tutorInfoInfo) {
+        int tutorInfoId=tutor.getTutorInfoId();
+        if (tutorInfoId!=0){
+            tutorInfoDao.updateInfo(tutorInfoId,tutorInfoInfo);
+        }else {
+            int infoId = tutorInfoDao.addInfo(tutorInfoInfo);
+            tutorDao.updateInfoId(infoId,tutor.getId());
+            tutor.setTutorInfoId(infoId);
+        }
+        tutor.setTutorInfo(tutorInfoInfo);
+        return tutor;
+    }
+
+    @Override
+    public List<Tutor> getTutorList() {
+        return tutorDao.findAll();
+    }
+
+    @Override
+    public Tutor getTutorById(int id) {
+        return tutorDao.findById(id);
+    }
+
+    @Override
+    public List<Tutor> getTutorByMajorId(int majorId) {
+        return tutorDao.findByMajorId(majorId);
+    }
+
+    @Override
+    public List<TutorInfo> getInfoList() {
+        return tutorInfoDao.findAllInfo();
+    }
+
+    @Override
+    public TutorInfo getInfoByInfoId(int infoId) {
+        return tutorInfoDao.findInfoByInfoId(infoId);
+    }
+
+    @Override
+    public TutorInfo getInfoByTutorId(int tutorId) {
+        return tutorInfoDao.findInfoByTutorId(tutorId);
     }
 }
