@@ -52,9 +52,9 @@ public class test {
         try {
             Map<String, String[]> parameterMap = new HashMap<>();
             parameterMap.put("code", new String[]{"aaaa"});
-            parameterMap.put("number", new String[]{"333333"});
+            parameterMap.put("number", new String[]{"888888"});
             parameterMap.put("password", new String[]{"123456"});
-            parameterMap.put("name", new String[]{"闻立鹏"});
+            parameterMap.put("name", new String[]{"kevin"});
             //获取输入验证码
             String code = parameterMap.get("code")[0];
             String checkCode = "aaaa";

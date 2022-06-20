@@ -26,9 +26,8 @@
         <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
             <el-menu>
                 <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-message"></i>学院教师信息
-                    </template>
-                    <el-menu-item-group :data="tutors" v-for="tutor in tutors">
+                    <template slot="title"><i class="el-icon-message"></i>学院教师信息</template>
+                    <el-menu-item-group v-for="tutor in tutors">
                         <el-menu-item>{{tutor.name}}</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
@@ -36,15 +35,14 @@
                     <template slot="title"><i class="el-icon-menu"></i>学生功能</template>
                     <el-menu-item-group>
                         <template slot="title">选择导师</template>
-                        <el-menu-item index="2-1" @click="toSelectTutor()">志愿填写</el-menu-item>
-                        <el-menu-item index="2-2">查看结果</el-menu-item>
+                        <el-menu-item index="2-1">查看结果</el-menu-item>
                     </el-menu-item-group>
                     <el-menu-item-group title="分组2">
-                        <el-menu-item index="2-3">私信</el-menu-item>
+                        <el-menu-item index="2-2">私信</el-menu-item>
                     </el-menu-item-group>
-                    <el-submenu index="2-4">
+                    <el-submenu index="2-3">
                         <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项4-1</el-menu-item>
+                        <el-menu-item index="2-3-1">选项4-1</el-menu-item>
                     </el-submenu>
                 </el-submenu>
                 <el-submenu index="3">
@@ -79,45 +77,18 @@
             </el-header>
 
             <el-main>
-                <el-table
-                        :data="tutors"
-                        style="width: 100%"
-                >
-                    <el-table-column
-                            prop="name"
-                            label="导师姓名"
-                            sortable
-                            width="120"
+                <template>
+                    <el-transfer
+                            v-model="chosen"
+                            :data="tutors"
+                            :props="{
+                                key:'id',
+                                label:'name'
+                                        }"
+                            :titles="['导师列表', '志愿列表']"
                     >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.title"
-                            label="职称"
-                            width="120"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.educationBackground"
-                            label="学历"
-                            width="120"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.researchField"
-                            label="研究领域"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.lessons"
-                            label="任教课程"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.selfIntroduction"
-                            label="自我介绍"
-                    >
-                    </el-table-column>
-                </el-table>
+                    </el-transfer>
+                </template>
             </el-main>
         </el-container>
     </el-container>
@@ -135,19 +106,42 @@
     }
 </style>
 <script>
+    /*var Main = {
+        data() {
+            const generateData = _ => {
+                const data = [];
+                const cities = ['郭海东', '朱敬东', '刘迎春','李浩君'];
+                const pinyin = ['guohaidong', 'zhujingdong', 'liuyingchun','lihaojun'];
+                cities.forEach((city, index) => {
+                    data.push({
+                        label: city,
+                        key: index,
+                        pinyin: pinyin[index]
+                    });
+                });
+                return data;
+            };
+            return {
+                data: generateData(),
+                value: [],
+                filterMethod(query, item) {
+                    return item.pinyin.indexOf(query) > -1;
+                }
+            };
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')*/
     var vue = new Vue({
         el: '#app',
         data: {
-            "tutors": []
+            "tutors": [], //获取的导师列表
+            "chosen": [] //穿梭框选择的项目
         },
-        methods: {
-            toSelectTutor() {
-                window.location.href = "tutor?method=toSelectTutor"
-            }
-        },
-        created(){
+        methods: {},
+        created() {
             if (this.tutors.length === 0) {
-                axios.get("tutor?method=getFullTutors").then(resp => {
+                axios.get("tutor?method=getTutors").then(resp => {
                     if (resp.data.flag) {
                         this.tutors = resp.data.data
                     } else {
