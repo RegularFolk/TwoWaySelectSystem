@@ -12,11 +12,13 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 public class StudentServlet extends ModelBaseServlet {
 
     StudentService studentService = new StudentServiceImpl();
+
 
     //学生登录（by周才邦）
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -64,6 +66,7 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
+    //学生info表修改，by郑应啟
     public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, String[]> parameterMap = request.getParameterMap();
@@ -79,8 +82,55 @@ public class StudentServlet extends ModelBaseServlet {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
+    }
+
+    //学生密码修改，by郑应啟
+    public void updateStudentPassword(HttpServletRequest request, HttpServletResponse response) {
+        String password = request.getParameter("password");
+        try {
+            HttpSession session = request.getSession();
+            //获取当前登入学生
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            //Service层改密码
+            student = studentService.updatePassword(password, student);
+            //更新session信息
+            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //导师选择学生界面，页面自动查询所有选选导师的学生，by郑应啟     不好
+    public void findAllStudent(HttpServletRequest request, HttpServletResponse response){
 
 
+        try {
+            HttpSession session = request.getSession();
+
+            List<Student> students = studentService.getStudentList();
+            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //根据学生Id查询详细信息，by郑应啟
+    public void findStudentById(HttpServletRequest request, HttpServletResponse response){
+        String studentId = request.getParameter("studentId");
+        int id= Integer.parseInt(studentId);
+        try {
+            Student student = studentService.getStudentById(id);
+            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,student));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
     }
 
 }

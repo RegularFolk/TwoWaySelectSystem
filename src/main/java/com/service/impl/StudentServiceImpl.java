@@ -10,6 +10,8 @@ import com.dao.impl.StudentInfoDaoImpl;
 import com.service.StudentService;
 import com.utils.MD5Util;
 
+import java.util.List;
+
 public class StudentServiceImpl implements StudentService {
     StudentDao studentDao = new StudentDaoImpl();
 
@@ -44,19 +46,83 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student updatePassword(String password, Student student) {
+        //加密明文密码
+        String encode = MD5Util.encode(password);
+        studentDao.updatePassword(encode, student.getId());
+        student.setPassword(password);
+        return student;
+    }
+
+    @Override
     public Student updateStudentInfo(Student student, StudentInfo studentInfo) {
         //判断student是否已经存在info
         int selfInfoId = student.getSelfInfoId();
         if (selfInfoId != 0) {
-            studentDao.updateInfo(selfInfoId, studentInfo);
+            studentInfoDao.updateInfo(selfInfoId, studentInfo);
         } else {
             //添加的同时进行主键回填
-            int infoId = studentDao.addInfo(studentInfo);
+            int infoId = studentInfoDao.addInfo(studentInfo);
             studentDao.updateInfoId(infoId, student.getId());
             student.setSelfInfoId(infoId);
         }
         student.setStudentInfo(studentInfo);
         return student;
+    }
+
+    @Override
+    public List<Student> getStudentList() {
+        List<Student> students = studentDao.findAll();
+//        for (Student student:students){
+//            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+//            student.setStudentInfo(info);
+//        }
+        return students;
+    }
+
+    @Override
+    public List<Student> getStudentListByMajorId(int majorId) {
+        List<Student> students = studentDao.findByMajorId(majorId);
+//        for (Student student:students){
+//            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+//            student.setStudentInfo(info);
+//        }
+        return students;
+    }
+
+    @Override
+    public List<Student> getStudentListByTutorId(int tutorId) {
+        return studentDao.findByTutorId(tutorId);
+    }
+
+    @Override
+    public List<Student> getStudentListByStatus(int status) {
+        return studentDao.findByStatus(status);
+    }
+
+    @Override
+    public Student getStudentById(int id) {
+        Student student = studentDao.findById(id);
+        StudentInfo info = studentInfoDao.findInfoByStudentId(id);
+        student.setStudentInfo(info);
+        return student;
+    }
+
+
+    @Override
+    public List<StudentInfo> getInfoList() {
+        return studentInfoDao.findAllInfo();
+    }
+
+    @Override
+    public StudentInfo getInfoByInfoId(int infoId) {
+        return studentInfoDao.findInfoById(infoId);
+
+    }
+
+    @Override
+    public StudentInfo getInfoByStudentId(int studentId) {
+        return studentInfoDao.findInfoByStudentId(studentId);
     }
 
 
