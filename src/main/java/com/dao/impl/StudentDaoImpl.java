@@ -11,8 +11,8 @@ import java.util.List;
 public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     @Override
     public Student findByNumber(String studentNumber) {
-        String sql1 = "select * from student where student_number = ?";
-        return getBean(Student.class, sql1, studentNumber);
+        String sql = "select * from student where student_number = ?";
+        return getBean(Student.class, sql, studentNumber);
     }
 
     @Override
@@ -63,6 +63,14 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         String sql = "select * from student";
         return getBeanList(Student.class, sql);
     }
+
+    @Override
+    public Student findByPreferenceId(Integer preferenceId) {
+        String sql = "select * from student where preferences_id = ?";
+        return getBean(Student.class, sql, preferenceId);
+    }
+
+
 
 
     @Override

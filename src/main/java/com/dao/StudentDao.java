@@ -24,6 +24,10 @@ public interface StudentDao {
 
     List<Student> findAll();
 
+    Student findByPreferenceId(Integer preferenceId);
+
+
+
     void updateInfoId(int infoId, int id);
 
 

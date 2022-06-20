@@ -1,5 +1,10 @@
 import com.bean.*;
+import com.bean.Message;
+import com.bean.Result;
+import com.bean.Student;
+import com.bean.Tutor;
 import com.constant.Constants;
+import com.dao.impl.MessageDaoImpl;
 import com.service.StudentService;
 import com.service.TutorService;
 import com.service.impl.StudentServiceImpl;
@@ -166,6 +171,32 @@ public class test {
         List<Tutor> tutorByMajorId = tutorService.getTutorByMajorId(1);
         System.out.println(tutorByMajorId);
 
+    }
+
+    @Test //测试发送私信
+    public void testSendById() {
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer receiverId = 1;
+        Integer senderId = 1;
+        String text = "aaa";
+        String time = "6.20";
+        messageDao.sandById(receiverId, senderId, text, time);
+    }
+
+    @Test //测试私信查询ByReceiverId
+    public void testFindByReceiverId(){
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer receiverId = 1;
+        List<Message> messageList = messageDao.findByReceiverId(receiverId);
+        System.out.println(messageList);
+    }
+
+    @Test //测试私信查询BySenderId
+    public void testFindBySenderId(){
+        MessageDaoImpl messageDao = new MessageDaoImpl();
+        Integer senderId = 1;
+        List<Message> messageList = messageDao.findBySenderId(senderId);
+        System.out.println(messageList);
     }
 
 }

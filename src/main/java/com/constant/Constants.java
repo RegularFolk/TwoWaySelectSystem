@@ -19,4 +19,9 @@ public class Constants {
 
     public static final String UPDATE_SUCCESS = "修改成功！";
     public static final String QUERY_SUCCESS = "查询成功!";
+    public static final String LOGOUT = "登出成功！";
+    public static final Integer FIRST_PREFERENCE = 1;
+    public static final Integer SECOND_PREFERENCE = 2;
+    public static final Integer THIRD_PREFERENCE = 3;
+    public static final String WRONG_PREFERENCE = "请选择正确的志愿号";
 }
