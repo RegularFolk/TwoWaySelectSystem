@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="login-wrap">
+        <el-row type="flex" justify="center">
+            <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
+                <h3>登录</h3>
+                <hr>
+                <el-form-item prop="number" label="学号">
+                    <el-input v-model="user.number" placeholder="请输入学号" prefix-icon></el-input>
+                </el-form-item>
+                <el-form-item id="password" prop="password" label="密码">
+                    <el-input v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                </el-form-item>
+<!--                还没做，最后在做这个-->
+                <router-link to="/">找回密码</router-link>
+<!--              这里跳注册页面-->
+                <router-link to="/register">注册账号</router-link>
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForStu()">学生登录</el-button>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForTutor()">教师登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-row>
+    </div>
+</div>
+
+<script>
+    var Main = {
+        data() {
+            return {
+                user: {
+                    number: "",
+                    password: ""
+                }
+            };
+        },
+        created() {},
+        methods: {
+            doLoginForStu() {
+                if (!this.user.number) {
+                    this.$message.error("请输入学号！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    // this.$router.push({ path: "/personal" });
+                    axios
+                        .post("/login/", {
+                            number: this.user.number,
+                            password: this.user.password
+                        })
+                        .then(res => {
+                            // console.log("输出response.data.status", res.data.status);
+                            if (res.data.status === 200) {
+                                //这里跳学生端
+                                this.$router.push({ path: "/personal" });
+                            } else {
+                                alert("您输入的学号或密码错误！");
+                            }
+                        });
+                }
+            },
+            doLoginForTutor() {
+                if (!this.user.number) {
+                    this.$message.error("请输入用户名！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    // this.$router.push({ path: "/personal" });
+                    axios
+                        .post("/login/", {
+                            number: this.user.number,
+                            password: this.user.password
+                        })
+                        .then(res => {
+                            // console.log("输出response.data.status", res.data.status);
+                            if (res.data.status === 200) {
+                                //这里跳教师端
+                                this.$router.push({ path: "/personal" });
+                            } else {
+                                alert("您输入的用户名或密码错误！");
+                            }
+                        });
+                }
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+</body>
+</html>
