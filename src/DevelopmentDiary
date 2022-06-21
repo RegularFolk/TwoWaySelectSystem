@@ -23,3 +23,16 @@ AUTHOR: 周才邦（后端）
 6.设置了登录过滤器，如果未登录状态下进行特点行为会返回请先登录的JSON。 result{false,"请先登录！"}
 
 7.设置了EncodingFilter，设置请求和响应编码格式为utf-8
+
+===============================================
+DATE:  2022年6月20日
+AUTHOR: 王城梓
+
+1.私信查询Dao: findByReceiverId: 传入int id, 返回List<Message>;
+             findBySenderId: 传入int id, 返回List<Message>;
+
+2.发送私信Dao: sandById: 传入int senderId, int receiverId, String text, String time 四个参数缺一不可。
+
+3.导师查看选自己的学生: Service层先调用findStudentIdsByPreference, 需要传入int类型第几志愿和int类型导师id, 获取志愿id, 再根据志愿id查学生表
+调用findByPreferenceId, 需要传入int类型的志愿id， 获得Student(Service调用时需要循环获得一个List<Student>以供展示)
+
