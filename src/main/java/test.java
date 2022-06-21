@@ -1,3 +1,4 @@
+import com.bean.*;
 import com.bean.Message;
 import com.bean.Result;
 import com.bean.Student;
@@ -51,9 +52,9 @@ public class test {
         try {
             Map<String, String[]> parameterMap = new HashMap<>();
             parameterMap.put("code", new String[]{"aaaa"});
-            parameterMap.put("number", new String[]{"123456"});
+            parameterMap.put("number", new String[]{"888888"});
             parameterMap.put("password", new String[]{"123456"});
-            parameterMap.put("name", new String[]{"咩咩"});
+            parameterMap.put("name", new String[]{"kevin"});
             //获取输入验证码
             String code = parameterMap.get("code")[0];
             String checkCode = "aaaa";
@@ -116,6 +117,60 @@ public class test {
             //失败则返回失败,返回错误信息
             System.out.println(new Result(false, e.getMessage()));
         }
+    }
+
+    @Test //测试学生信息增删改查
+    public void testStudent() {
+        List<Student> list;
+        List<StudentInfo> list1;
+        //list = studentService.getStudentList();
+        //list=studentService.getStudentListByStatus(0);
+        //list1=studentService.getInfoList();
+        //System.out.println(list1);
+
+        Student studentById = studentService.getStudentById(4);
+        StudentInfo infoByStudentId = studentService.getInfoByStudentId(4);
+        StudentInfo infoByInfoId = studentService.getInfoByInfoId(1);
+
+//        StudentInfo studentInfo=new StudentInfo();
+//        studentInfo.setBirthday("1800");
+//        Student student = studentService.updateStudentInfo(studentById, studentInfo);
+////        System.out.println(student);
+        System.out.println(studentById);
+
+//        studentService.getStudentListByTutorId();
+//        List<Student> studentListByMajorId = studentService.getStudentListByMajorId(1);
+//        System.out.println(studentListByMajorId);
+
+//        studentService.updatePassword("0",studentById);
+
+//        System.out.println(studentService.getStudentList());
+
+    }
+
+    @Test //tutor信息增删改查
+    public void testTutor(){
+        List<Tutor> list;
+        List<TutorInfo> list1;
+
+        Tutor tutorById = tutorService.getTutorById(1);
+        List<Tutor> tutorList = tutorService.getTutorList();
+
+        TutorInfo infoByTutorId = tutorService.getInfoByTutorId(1);
+
+        TutorInfo infoByInfoId = tutorService.getInfoByInfoId(1);
+        List<TutorInfo> infoList = tutorService.getInfoList();
+
+        TutorInfo tutorInfo=new TutorInfo();
+        tutorInfo.setGender(11);
+
+        Tutor tutor = tutorService.updateTutorInfo(tutorById, tutorInfo);
+
+        System.out.println(tutor);
+
+        List<Tutor> tutorByMajorId = tutorService.getTutorByMajorId(1);
+        System.out.println(tutorByMajorId);
+
     }
 
     @Test //测试发送私信

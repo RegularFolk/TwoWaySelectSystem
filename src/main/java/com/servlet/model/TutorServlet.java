@@ -10,6 +10,8 @@ import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class TutorServlet extends ModelBaseServlet {
@@ -66,6 +68,40 @@ public class TutorServlet extends ModelBaseServlet {
 
     //教师查看学生志愿（仅自己）
     public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    //查询所有导师 （zcb）
+    public void getTutors(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<Tutor> tutorList = tutorService.getTutorList();
+            JSONUtils.writeResult(response, new Result(true, tutorList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
+        }
+    }
+
+    //跳转到选择导师界面  （zcb）
+    public void toSelectTutor(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("student/selectTutor", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //获取所有导师和导师信息  （zcb）
+    public void getFullTutors(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<Tutor> tutorList = tutorService.getTutorList();
+            tutorList.forEach(tutor -> tutor.setTutorInfo(tutorService.getInfoByTutorId(tutor.getTutorInfoId())));
+            JSONUtils.writeResult(response, new Result(true, tutorList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
+        }
 
     }
 
