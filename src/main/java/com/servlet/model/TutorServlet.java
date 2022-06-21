@@ -105,4 +105,15 @@ public class TutorServlet extends ModelBaseServlet {
 
     }
 
+    //跳转到展示导师页面 （zcb）
+    public void toShowTutors(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/showTutors", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+
+    }
+
 }
