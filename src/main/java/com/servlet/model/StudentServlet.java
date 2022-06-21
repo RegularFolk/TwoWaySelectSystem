@@ -106,6 +106,7 @@ public class StudentServlet extends ModelBaseServlet {
     public void findAllStudent(HttpServletRequest request, HttpServletResponse response){
         try {
             List<Student> students = studentService.getStudentList();
+            students.forEach(student -> student.setStudentInfo(studentService.getInfoByStudentId(student.getSelfInfoId())));
             JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,12 +115,13 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //通过tutorId查学生,  zyq
+    //通过tutorId查学生,  郑应啟
     public void findStudentListByTutorId(HttpServletRequest request, HttpServletResponse response){
         String tutorId = request.getParameter("tutorId");
         int id= Integer.parseInt(tutorId);
         try {
             List<Student> students = studentService.getStudentListByTutorId(id);
+            students.forEach(student -> student.setStudentInfo(studentService.getInfoByStudentId(student.getSelfInfoId())));
             JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
         } catch (Exception e) {
             e.printStackTrace();
