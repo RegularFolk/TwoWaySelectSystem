@@ -39,7 +39,6 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         return getBean(Student.class, sql, id);
     }
 
-
     @Override
     public List<Student> findByStatus(int status) {
         String sql = "select * from student where status = ?";
@@ -69,9 +68,6 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         String sql = "select * from student where preferences_id = ?";
         return getBean(Student.class, sql, preferenceId);
     }
-
-
-
 
     @Override
     public void updateInfoId(int infoId, int id) {

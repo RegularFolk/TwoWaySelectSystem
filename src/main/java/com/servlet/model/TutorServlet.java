@@ -1,6 +1,7 @@
 package com.servlet.model;
 
 import com.bean.Result;
+import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
 import com.service.TutorService;
@@ -60,14 +61,25 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //教师登出
+    //教师登出 by王城梓
     public void doLogout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
         JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
     }
 
-    //教师查看学生志愿（仅自己）
+    //教师查看学生志愿（仅自己） by王城梓
     public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
+        String preferenceStr = request.getParameter("preference");
+        String tutorIdStr = request.getParameter("tutorId");
+        Integer preference = Integer.parseInt(preferenceStr);
+        Integer tutorId = Integer.parseInt(tutorIdStr);
+        try {
+            List<Student> studentList = tutorService.checkStudent(preference, tutorId);
+            JSONUtils.writeResult(response, new Result(true, studentList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
 
     }
 

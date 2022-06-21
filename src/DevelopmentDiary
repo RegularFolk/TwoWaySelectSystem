@@ -29,10 +29,14 @@ DATE:  2022年6月20日
 AUTHOR: 王城梓
 
 1.私信查询Dao: findByReceiverId: 传入int id, 返回List<Message>;
-             findBySenderId: 传入int id, 返回List<Message>;
+findBySenderId: 传入int id, 返回List<Message>;
 
-2.发送私信Dao: sandById: 传入int senderId, int receiverId, String text, String time 四个参数缺一不可。
+2.发送私信Dao: sandById: 传入int senderId, int receiverId, String text, String time 四个参数缺一不可
 
 3.导师查看选自己的学生: Service层先调用findStudentIdsByPreference, 需要传入int类型第几志愿和int类型导师id, 获取志愿id, 再根据志愿id查学生表
 调用findByPreferenceId, 需要传入int类型的志愿id， 获得Student(Service调用时需要循环获得一个List<Student>以供展示)
 
+4.学生查看自己的三个志愿: Service层先调用StudentDao, 根据id获取Student, 在Service层获得PreferenceId之后, 调用PreferenceDao中的
+findTutorIdsByPreferenceId, 获得TutorIds, 再根据TutorId查询
+
+5.ResultDao根据给定的eventId, 查出相关的学生id, 并以List<Integer>类型返回

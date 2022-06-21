@@ -3,6 +3,7 @@ package com.servlet.model;
 import com.bean.Result;
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 import com.constant.Constants;
 import com.service.StudentService;
 import com.service.impl.StudentServiceImpl;
@@ -104,14 +105,14 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
     //导师选择学生界面，页面自动查询所有选选导师的学生，by郑应啟     不好
-    public void findAllStudent(HttpServletRequest request, HttpServletResponse response){
+    public void findAllStudent(HttpServletRequest request, HttpServletResponse response) {
 
 
         try {
             HttpSession session = request.getSession();
 
             List<Student> students = studentService.getStudentList();
-            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
+            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, students));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -120,12 +121,12 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
     //根据学生Id查询详细信息，by郑应啟
-    public void findStudentById(HttpServletRequest request, HttpServletResponse response){
+    public void findStudentById(HttpServletRequest request, HttpServletResponse response) {
         String studentId = request.getParameter("studentId");
-        int id= Integer.parseInt(studentId);
+        int id = Integer.parseInt(studentId);
         try {
             Student student = studentService.getStudentById(id);
-            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,student));
+            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, student));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -133,10 +134,24 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //学生登出
-    public void doLogout(HttpServletRequest request,HttpServletResponse response){
+    //学生登出 by王城梓
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
-        JSONUtils.writeResult(response,new Result(true,Constants.LOGOUT));
+        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+    }
+
+    //学生查看志愿对应的三个导师 by王城梓
+    public void checkPreference(HttpServletRequest request, HttpServletResponse response) {
+        String studentIdStr = request.getParameter("studentId");
+        Integer studentId = Integer.parseInt(studentIdStr);
+        try {
+            Student student = studentService.getStudentById(studentId);
+            List<TutorInfo> tutorInfos = studentService.getTutorInfoListByStudent(student);
+            JSONUtils.writeResult(response, new Result(true, tutorInfos));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
     }
 
 }
