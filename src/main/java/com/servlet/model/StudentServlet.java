@@ -1,9 +1,6 @@
 package com.servlet.model;
 
-import com.bean.Result;
-import com.bean.Student;
-import com.bean.StudentInfo;
-import com.bean.TutorInfo;
+import com.bean.*;
 import com.constant.Constants;
 import com.service.StudentService;
 import com.service.impl.StudentServiceImpl;
@@ -13,14 +10,12 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 public class StudentServlet extends ModelBaseServlet {
 
     StudentService studentService = new StudentServiceImpl();
-
 
     //学生登录（by周才邦）
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -150,7 +145,7 @@ public class StudentServlet extends ModelBaseServlet {
     //学生查看志愿对应的三个导师 by王城梓
     public void checkPreference(HttpServletRequest request, HttpServletResponse response) {
         String studentIdStr = request.getParameter("studentId");
-        Integer studentId = Integer.parseInt(studentIdStr);
+        int studentId = Integer.parseInt(studentIdStr);
         try {
             Student student = studentService.getStudentById(studentId);
             List<TutorInfo> tutorInfos = studentService.getTutorInfoListByStudent(student);
@@ -161,11 +156,73 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //跳转到学生主页面
+    //跳转到学生主页面  (周才邦)
     public void toMain(HttpServletRequest request, HttpServletResponse response) {
         try {
             processTemplate("student/main", request, response);
         } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //更新学生志愿  (周才邦)
+    public void submitPreferences(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            if (student == null) {
+                throw new RuntimeException(Constants.NOT_LOGGED_IN);
+            } else {
+                //更新完志愿后同时更新session中student的属性
+                Preference preference = (Preference) JSONUtils.parseJsonToBean(request, Preference.class);
+                //根据studentId和preference更新学生志愿，返回志愿表更新后的主键
+                if (studentService.hasPreference(student.getId())) {
+                    //如果已经填写过志愿，就更新,根据原本id更新id
+                    studentService.updatePreference(preference, student.getPreferencesId());
+                } else {
+                    //否则添加新志愿
+                    int preferenceId = studentService.addPreference(preference, student.getId());
+                    student.setPreferencesId(preferenceId);
+                }
+                student.setPreference(preference);
+                session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+                JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_PREFERENCE_SUCCESS));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.UPDATE_PREFERENCE_FAIL));
+        }
+    }
+
+    //获得学生填写的志愿记录 ,先判断当前student有没有preference对象，再判断有没有preferenceId,都没有说明没有填写过  （周才邦）
+    public void getPreference(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            if (student == null) {
+                throw new RuntimeException(Constants.NOT_LOGGED_IN);
+            } else {
+                Preference preference = student.getPreference();
+                if (preference != null) {
+                    JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES,preference.getList()));
+                } else {
+                    int preferenceId = student.getPreferencesId();
+                    if (preferenceId != 0) {
+                        Preference preferenceIds = studentService.getPreferenceByPreferenceId(preferenceId);
+                        if (preferenceIds != null) { //查询到了Preference,更新session中的对象，并转换成数组返回
+                            student.setPreference(preferenceIds);
+                            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+                            JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preferenceIds.getList()));
+                        } else { //有id但是却没有查询到id，是一个异常情况
+                            throw new RuntimeException("查询异常");
+                        }
+                    } else { //没有id
+                        JSONUtils.writeResult(response, new Result(true, Constants.NO_PREVIOUS_PREFERENCES));
+                    }
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }

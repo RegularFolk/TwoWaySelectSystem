@@ -5,7 +5,7 @@ public class Student {
     private int status;
     private int collegeMajor;
     private int selfInfoId;
-    private int preferenceId;
+    private int preferencesId;
     private int majorId;
     private int tutorId;
     private String code;
@@ -36,7 +36,7 @@ public class Student {
         this.status = status;
         this.collegeMajor = collegeMajor;
         this.selfInfoId = selfInfoId;
-        this.preferenceId = preferenceId;
+        this.preferencesId = preferenceId;
         this.majorId = majorId;
         this.tutorId = tutorId;
         this.code = code;
@@ -56,7 +56,7 @@ public class Student {
                 ", status=" + status +
                 ", collegeMajor=" + collegeMajor +
                 ", selfInfoId=" + selfInfoId +
-                ", preferenceId=" + preferenceId +
+                ", preferencesId=" + preferencesId +
                 ", majorId=" + majorId +
                 ", tutorId=" + tutorId +
                 ", code='" + code + '\'' +
@@ -94,12 +94,12 @@ public class Student {
         this.selfInfoId = selfInfoId;
     }
 
-    public int getPreferenceId() {
-        return preferenceId;
+    public int getPreferencesId() {
+        return preferencesId;
     }
 
-    public void setPreferenceId(int preferenceId) {
-        this.preferenceId = preferenceId;
+    public void setPreferencesId(int preferencesId) {
+        this.preferencesId = preferencesId;
     }
 
     public int getMajorId() {

@@ -23,4 +23,8 @@ public class Constants {
     public static final Integer THIRD_PREFERENCE = 3;
     public static final String WRONG_PREFERENCE = "请选择正确的志愿号";
     public static final String QUERY_FAIL = "查询失败！";
+    public static final String UPDATE_PREFERENCE_SUCCESS = "更新志愿成功！";
+    public static final String UPDATE_PREFERENCE_FAIL = "更新志愿失败！";
+    public static final String GET_PREVIOUS_PREFERENCES = "成功获取从前志愿！";
+    public static final String NO_PREVIOUS_PREFERENCES = "没有被记录的志愿！";
 }

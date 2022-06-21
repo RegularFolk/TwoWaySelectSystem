@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.bean.Preference;
 import com.bean.Student;
 import com.bean.Tutor;
 import com.bean.TutorInfo;
@@ -56,8 +57,6 @@ public class TutorServiceImpl implements TutorService {
     }
 
 
-
-
     @Override
     public Tutor updateTutorInfo(Tutor tutor, TutorInfo tutorInfoInfo) {
         int tutorInfoId = tutor.getTutorInfoId();
@@ -105,7 +104,8 @@ public class TutorServiceImpl implements TutorService {
     @Override//导师查看选自己的学生，传入int类型第几志愿 int类型导师id, 最后返回List<Student>
     public List<Student> checkStudent(Integer preference, Integer tutorId) {
         List<Student> studentList = new ArrayList<>();
-        List<Integer> preferenceIdList = preferenceDao.findStudentIdsByPreference(preference, tutorId);
+        Preference preferences = preferenceDao.findStudentIdsByPreference(preference, tutorId);
+        List<Integer> preferenceIdList = preferences.getList();
         for (Integer integer : preferenceIdList) {
             Student byPreferenceId = studentDao.findByPreferenceId(integer);
             studentList.add(byPreferenceId);

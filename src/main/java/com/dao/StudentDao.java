@@ -26,9 +26,7 @@ public interface StudentDao {
 
     Student findByPreferenceId(Integer preferenceId);
 
-
     void updateInfoId(int infoId, int id);
 
-
-
+    void updatePreference(int id, int preferenceId);
 }

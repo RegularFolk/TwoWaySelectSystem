@@ -30,7 +30,7 @@
                     <el-input v-model="user.number" placeholder="请输入学号" prefix-icon></el-input>
                 </el-form-item>
                 <el-form-item id="password" prop="password" label="密码">
-                    <el-input v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                    <el-input type="password" v-model="user.password" show-password placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <!--                还没做，最后在做这个-->
                 <router-link to="/">找回密码</router-link>
