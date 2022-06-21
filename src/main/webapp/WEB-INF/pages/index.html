@@ -23,45 +23,6 @@
 <body>
 <div id="app">
     <el-container style="height: 700px; border: 1px solid #eee">
-        <!--<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <el-menu>
-                <el-submenu v-for="menu in menuList" :index="menu.path">
-                    <template slot="title"><i class="el-icon-message"></i>学院教师信息
-                    </template>
-                    <el-menu-item-group :data="tutors" v-for="tutor in tutors">
-                        <el-menu-item>{{tutor.name}}</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title"><i class="el-icon-menu"></i>学生功能</template>
-                    <el-menu-item-group>
-                        <template slot="title">选择导师</template>
-                        <el-menu-item index="2-1" @click="toSelectTutor()">志愿填写</el-menu-item>
-                        <el-menu-item index="2-2">查看结果</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="2-3">私信</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="3">
-                    <template slot="title"><i class="el-icon-setting"></i>个人中心</template>
-                    <el-menu-item-group>
-                        <template slot="title">分组一</template>
-                        <el-menu-item index="3-1">修改个人信息</el-menu-item>
-                        <el-menu-item index="3-2">选项2</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="3-3">选项3</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="3-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-            </el-menu>
-        </el-aside>-->
-
-
         <el-container>
             <el-header style="text-align: right; font-size: 12px">
                 <el-dropdown>
@@ -91,47 +52,6 @@
                     </el-menu>
                 </el-aside>
                 <el-container>
-                    <!--<el-main>
-                        <el-table
-                                :data="tutors"
-                                style="width: 100%"
-                        >
-                            <el-table-column
-                                    prop="name"
-                                    label="导师姓名"
-                                    sortable
-                                    width="120"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    prop="tutorInfo.title"
-                                    label="职称"
-                                    width="120"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    prop="tutorInfo.educationBackground"
-                                    label="学历"
-                                    width="120"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    prop="tutorInfo.researchField"
-                                    label="研究领域"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    prop="tutorInfo.lessons"
-                                    label="任教课程"
-                            >
-                            </el-table-column>
-                            <el-table-column
-                                    prop="tutorInfo.selfIntroduction"
-                                    label="自我介绍"
-                            >
-                            </el-table-column>
-                        </el-table>
-                    </el-main>-->
                     <iframe name="right" class="el-main" src="tutor?method=toShowTutors" width="90%" height="800px"
                             frameborder="1"></iframe>
                 </el-container>
@@ -202,20 +122,6 @@
         methods: {
 
         }
-        /*created() {
-            if (this.tutors.length === 0) {
-                axios.get("tutor?method=getFullTutors").then(resp => {
-                    if (resp.data.flag) {
-                        this.tutors = resp.data.data
-                    } else {
-                        this.$message({
-                            message: resp.data.message,
-                            type: "error"
-                        })
-                    }
-                })
-            }
-        }*/
     })
 </script>
 
