@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-main>
+        <el-table
+                :data="tutors"
+                style="width: 100%"
+        >
+            <el-table-column
+                    prop="name"
+                    label="导师姓名"
+                    sortable
+                    width="120"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="tutorInfo.title"
+                    label="职称"
+                    width="120"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="tutorInfo.educationBackground"
+                    label="学历"
+                    width="120"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="tutorInfo.researchField"
+                    label="研究领域"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="tutorInfo.lessons"
+                    label="任教课程"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="tutorInfo.selfIntroduction"
+                    label="自我介绍"
+            >
+            </el-table-column>
+        </el-table>
+    </el-main>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+        el: "#app",
+        data: {
+            "tutors": [],
+            "tableLabel": [
+                {
+                    "prop": "name",
+                    "label": "导师姓名",
+                    "width": "120"
+                },
+                {
+                    "prop": "tutorInfo.title",
+                    "label": "职称",
+                    "width": "120"
+                }, {
+                    "prop": "tutorInfo.educationBackground",
+                    "label": "学历",
+                    "width": "120"
+                }, {
+                    "prop": "tutorInfo.researchField",
+                    "label": "研究领域"
+                }, {
+                    "prop": "tutorInfo.lessons",
+                    "label": "任教课程"
+                }, {
+                    "prop": "tutorInfo.selfIntroduction",
+                    "label": "自我介绍"
+                }
+            ]
+        },
+        methods: {},
+        created() {
+            if (this.tutors.length === 0) {
+                axios.get("tutor?method=getFullTutors").then(resp => {
+                    if (resp.data.flag) {
+                        this.tutors = resp.data.data
+                    } else {
+                        this.$message({
+                            message: resp.data.message,
+                            type: "error"
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>
