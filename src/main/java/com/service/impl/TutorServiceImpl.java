@@ -91,4 +91,12 @@ public class TutorServiceImpl implements TutorService {
     public TutorInfo getInfoByTutorId(int tutorId) {
         return tutorInfoDao.findInfoByTutorId(tutorId);
     }
+
+    @Override
+    public Tutor updatePassword(String password, Tutor tutor) {
+        String encode = MD5Util.encode(password);
+        tutorDao.updatePassword(encode, tutor.getId());
+        tutor.setPassword(password);
+        return tutor;
+    }
 }

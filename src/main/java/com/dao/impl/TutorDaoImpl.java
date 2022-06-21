@@ -48,4 +48,10 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
         String sql = "update tutor set tutor_info_id = ? where id = ?";
         update(sql, infoId, id);
     }
+
+    @Override
+    public void updatePassword(String password, int id) {
+        String sql = "update tutor set password = ? where id=?";
+        update(sql, password,id);
+    }
 }
