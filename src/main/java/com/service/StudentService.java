@@ -2,6 +2,7 @@ package com.service;
 
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 
 import java.util.List;
 
@@ -29,5 +30,7 @@ public interface StudentService {
     StudentInfo getInfoByInfoId(int infoId);
 
     StudentInfo getInfoByStudentId(int studentId);
+
+    List<TutorInfo> getTutorInfoListByStudent(Student studentId);
 
 }

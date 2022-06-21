@@ -3,6 +3,7 @@ package com.servlet.model;
 import com.bean.Result;
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 import com.constant.Constants;
 import com.service.StudentService;
 import com.service.impl.StudentServiceImpl;
@@ -146,10 +147,24 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //学生登出
-    public void doLogout(HttpServletRequest request,HttpServletResponse response){
+    //学生登出 by王城梓
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
-        JSONUtils.writeResult(response,new Result(true,Constants.LOGOUT));
+        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+    }
+
+    //学生查看志愿对应的三个导师 by王城梓
+    public void checkPreference(HttpServletRequest request, HttpServletResponse response) {
+        String studentIdStr = request.getParameter("studentId");
+        Integer studentId = Integer.parseInt(studentIdStr);
+        try {
+            Student student = studentService.getStudentById(studentId);
+            List<TutorInfo> tutorInfos = studentService.getTutorInfoListByStudent(student);
+            JSONUtils.writeResult(response, new Result(true, tutorInfos));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
     }
 
     //跳转到学生主页面

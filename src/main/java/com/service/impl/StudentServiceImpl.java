@@ -2,20 +2,31 @@ package com.service.impl;
 
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 import com.constant.Constants;
+import com.dao.PreferenceDao;
 import com.dao.StudentDao;
 import com.dao.StudentInfoDao;
+import com.dao.TutorInfoDao;
+import com.dao.impl.PreferenceDaoImpl;
 import com.dao.impl.StudentDaoImpl;
 import com.dao.impl.StudentInfoDaoImpl;
+import com.dao.impl.TutorInfoDaoImpl;
 import com.service.StudentService;
 import com.utils.MD5Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentServiceImpl implements StudentService {
+
     StudentDao studentDao = new StudentDaoImpl();
 
     StudentInfoDao studentInfoDao = new StudentInfoDaoImpl();
+
+    PreferenceDao preferenceDao = new PreferenceDaoImpl();
+
+    TutorInfoDao tutorInfoDao = new TutorInfoDaoImpl();
 
     @Override
     public Student doLogin(Student student) {
@@ -108,7 +119,6 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-
     @Override
     public List<StudentInfo> getInfoList() {
         return studentInfoDao.findAllInfo();
@@ -117,7 +127,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentInfo getInfoByInfoId(int infoId) {
         return studentInfoDao.findInfoById(infoId);
-
     }
 
     @Override
@@ -125,5 +134,16 @@ public class StudentServiceImpl implements StudentService {
         return studentInfoDao.findInfoByStudentId(studentId);
     }
 
+    @Override//查看学生志愿中的导师信息 需要传入Student, 最后返回List<TutorInfo>
+    public List<TutorInfo> getTutorInfoListByStudent(Student student) {
+        Integer preferenceId = student.getPreferenceId();
+        List<Integer> tutorIdList = preferenceDao.findTutorIdsByPreferenceId(preferenceId);
+        List<TutorInfo> tutorInfos = new ArrayList<>();
+        for (Integer integer : tutorIdList) {
+            TutorInfo tutorInfo = tutorInfoDao.findInfoByTutorId(integer);
+            tutorInfos.add(tutorInfo);
+        }
+        return tutorInfos;
+    }
 
 }

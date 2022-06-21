@@ -8,6 +8,7 @@ import com.bean.TutorInfo;
 import java.util.List;
 
 public interface TutorService {
+
     Tutor doLogin(Tutor tutor);
 
     void doRegister(Tutor tutor);
@@ -27,4 +28,6 @@ public interface TutorService {
     TutorInfo getInfoByTutorId(int tutorId);
 
     Tutor updatePassword(String password, Tutor tutor);
+    List<Student> checkStudent(Integer preference, Integer tutorId);
+
 }
