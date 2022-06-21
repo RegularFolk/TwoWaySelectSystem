@@ -32,3 +32,17 @@ AUTHOR: 周才邦（后端）
                                <!-- 引入ElementUI组件库 -->
                                <script src="https://unpkg.com/element-ui/lib/index.js"></script>】
 2.
+
+=============================================
+DATE:   2022年6月21日
+AUTHOR: 郑应啟（后端）
+
+1.增加Student、studentInfo、tutor、tutorInfo DAO层接口，student、tutorSERVICE层接口
+
+2.学生密码修改：...
+  导师密码修改：...
+
+3.查询所有学生：...
+
+4.通过导师id查询学生：...
+

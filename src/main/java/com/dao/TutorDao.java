@@ -20,4 +20,5 @@ public interface TutorDao {
 
     void updateInfoId(int infoId, int id);
 
+    void updatePassword(String password, int id);
 }

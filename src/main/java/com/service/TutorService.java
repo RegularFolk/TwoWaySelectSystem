@@ -26,4 +26,5 @@ public interface TutorService {
 
     TutorInfo getInfoByTutorId(int tutorId);
 
+    Tutor updatePassword(String password, Tutor tutor);
 }

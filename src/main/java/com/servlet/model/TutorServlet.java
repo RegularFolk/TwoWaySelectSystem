@@ -1,9 +1,10 @@
 package com.servlet.model;
 
-import com.bean.Result;
-import com.bean.Tutor;
+import com.bean.*;
 import com.constant.Constants;
+import com.service.StudentService;
 import com.service.TutorService;
+import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class TutorServlet extends ModelBaseServlet {
 
     TutorService tutorService = new TutorServiceImpl();
+    StudentService studentService = new StudentServiceImpl();
 
     //教师登录（by周才邦）
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -108,7 +110,43 @@ public class TutorServlet extends ModelBaseServlet {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
+    }
 
+    //导师info表修改，by郑应啟
+    public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            TutorInfo tutorInfo = new TutorInfo();
+            BeanUtils.populate(tutorInfo, parameterMap);
+            HttpSession session = request.getSession();
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            tutor = tutorService.updateTutorInfo(tutor, tutorInfo);
+            //跟新session中的student
+            session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
+            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //学生密码修改，by郑应啟
+    public void updateStudentPassword(HttpServletRequest request, HttpServletResponse response) {
+        String password = request.getParameter("password");
+        try {
+            HttpSession session = request.getSession();
+            //获取当前登入学生
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            //Service层改密码
+            tutor = tutorService.updatePassword(password, tutor);
+            //更新session信息
+            session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
+            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
     }
 
 }
