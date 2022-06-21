@@ -72,7 +72,7 @@
                     }
                 },
                 doSubmit() {
-                    axios.post("student?method=submitPreferences", {
+                    axios.post("protected/student?method=submitPreferences", {
                         "no1": this.chosen[0],
                         "no2": this.chosen[1],
                         "no3": this.chosen[2]
@@ -96,7 +96,7 @@
             },
             created() {
                 if (this.tutors.length === 0) {
-                    axios.get("tutor?method=getTutors").then(resp => {
+                    axios.get("protected/tutor?method=getTutors").then(resp => {
                         if (resp.data.flag) {
                             this.tutors = resp.data.data
                         } else {
@@ -107,7 +107,7 @@
                         }
                     })
                 }
-                axios.get("student?method=getPreference").then(resp => {
+                axios.get("protected/student?method=getPreference").then(resp => {
                     if (resp.data.flag){
                         this.chosen = resp.data.data
                         this.$message.success(resp.data.message)

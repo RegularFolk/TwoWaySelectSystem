@@ -64,14 +64,14 @@
                     return;
                 } else {
                     //校验用户名和密码是否正确;
-                    axios.post("student?method=doLogin", {
+                    axios.post("entrance?method=doStudentLogin", {
                         "studentNumber": this.user.number,
                         "password": this.user.password
                     }).then(res => {
                         // console.log("输出response.data.status", res.data.status);
                         if (res.data.flag) {
                             //这里跳学生端
-                            window.location.href = "student?method=toMain"
+                            window.location.href = "protected/student?method=toMain"
                         } else {
                             alert(res.data.message);
                         }
@@ -87,13 +87,13 @@
                     return;
                 } else {
                     //校验用户名和密码是否正确;
-                    axios.post("tutor?method=doLogin", {
+                    axios.post("entrance?method=doTutorLogin", {
                         "number": this.user.number,
                         "password": this.user.password
                     }).then(res => {
                         if (res.data.flag) {
                             //这里跳教师端
-                            window.location.href = "student?method=toMain"
+                            window.location.href = "protected/tutor?method=toMain"
                         } else {
                             alert(res.data.message);
                         }

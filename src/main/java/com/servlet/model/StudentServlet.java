@@ -17,46 +17,6 @@ public class StudentServlet extends ModelBaseServlet {
 
     StudentService studentService = new StudentServiceImpl();
 
-    //学生登录（by周才邦）
-    public void doLogin(HttpServletRequest request, HttpServletResponse response) {
-
-        Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
-        //调用service层处理登录
-        try {
-            student = studentService.doLogin(student);
-            //如果没有报错，则登陆成功,将student存入session
-            HttpSession session = request.getSession();
-            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-            //登陆成功返回登陆成功的JSON格式result
-            JSONUtils.writeResult(response, new Result(true, Constants.LOGIN_SUCCESS));
-        } catch (Exception e) {
-            e.printStackTrace();
-            //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
-        }
-    }
-
-    //学生注册（by周才邦）
-    public void doRegister(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
-            //获取用户输入的验证码
-            String checkCode = (String) request.getSession().getAttribute(Constants.CHECK_CODE);
-            //验证密码，忽略大小写
-            if (checkCode.equalsIgnoreCase(student.getCode())) {
-                studentService.doRegister(student);
-                //注册成功自动登录
-                request.getSession().setAttribute(Constants.STUDENT_SESSION_KEY, student);
-                JSONUtils.writeResult(response, new Result(true, Constants.REGISTER_SUCCESS));
-            } else {
-                JSONUtils.writeResult(response, new Result(false, Constants.WRONG_CHECK_CODE));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
-        }
-    }
-
     //学生info表修改，by郑应啟
     public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -166,29 +126,35 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
+    //跳转到选择导师界面  （zcb）
+    public void toSelectTutor(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("student/selectTutor", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
     //更新学生志愿  (周才邦)
     public void submitPreferences(HttpServletRequest request, HttpServletResponse response) {
         try {
             HttpSession session = request.getSession();
             Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
-            if (student == null) {
-                throw new RuntimeException(Constants.NOT_LOGGED_IN);
+            //更新完志愿后同时更新session中student的属性
+            Preference preference = (Preference) JSONUtils.parseJsonToBean(request, Preference.class);
+            //根据studentId和preference更新学生志愿，返回志愿表更新后的主键
+            if (studentService.hasPreference(student.getId())) {
+                //如果已经填写过志愿，就更新,根据原本id更新id
+                studentService.updatePreference(preference, student.getPreferencesId());
             } else {
-                //更新完志愿后同时更新session中student的属性
-                Preference preference = (Preference) JSONUtils.parseJsonToBean(request, Preference.class);
-                //根据studentId和preference更新学生志愿，返回志愿表更新后的主键
-                if (studentService.hasPreference(student.getId())) {
-                    //如果已经填写过志愿，就更新,根据原本id更新id
-                    studentService.updatePreference(preference, student.getPreferencesId());
-                } else {
-                    //否则添加新志愿
-                    int preferenceId = studentService.addPreference(preference, student.getId());
-                    student.setPreferencesId(preferenceId);
-                }
-                student.setPreference(preference);
-                session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-                JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_PREFERENCE_SUCCESS));
+                //否则添加新志愿
+                int preferenceId = studentService.addPreference(preference, student.getId());
+                student.setPreferencesId(preferenceId);
             }
+            student.setPreference(preference);
+            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_PREFERENCE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, Constants.UPDATE_PREFERENCE_FAIL));
@@ -200,26 +166,22 @@ public class StudentServlet extends ModelBaseServlet {
         try {
             HttpSession session = request.getSession();
             Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
-            if (student == null) {
-                throw new RuntimeException(Constants.NOT_LOGGED_IN);
+            Preference preference = student.getPreference();
+            if (preference != null) {
+                JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preference.getList()));
             } else {
-                Preference preference = student.getPreference();
-                if (preference != null) {
-                    JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES,preference.getList()));
-                } else {
-                    int preferenceId = student.getPreferencesId();
-                    if (preferenceId != 0) {
-                        Preference preferenceIds = studentService.getPreferenceByPreferenceId(preferenceId);
-                        if (preferenceIds != null) { //查询到了Preference,更新session中的对象，并转换成数组返回
-                            student.setPreference(preferenceIds);
-                            session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-                            JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preferenceIds.getList()));
-                        } else { //有id但是却没有查询到id，是一个异常情况
-                            throw new RuntimeException("查询异常");
-                        }
-                    } else { //没有id
-                        JSONUtils.writeResult(response, new Result(true, Constants.NO_PREVIOUS_PREFERENCES));
+                int preferenceId = student.getPreferencesId();
+                if (preferenceId != 0) {
+                    Preference preferenceIds = studentService.getPreferenceByPreferenceId(preferenceId);
+                    if (preferenceIds != null) { //查询到了Preference,更新session中的对象，并转换成数组返回
+                        student.setPreference(preferenceIds);
+                        session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
+                        JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preferenceIds.getList()));
+                    } else { //有id但是却没有查询到id，是一个异常情况
+                        throw new RuntimeException("查询异常");
                     }
+                } else { //没有id
+                    JSONUtils.writeResult(response, new Result(true, Constants.NO_PREVIOUS_PREFERENCES));
                 }
             }
         } catch (Exception e) {
@@ -227,5 +189,7 @@ public class StudentServlet extends ModelBaseServlet {
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
     }
+
+
 
 }

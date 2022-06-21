@@ -1,12 +1,11 @@
 package com.servlet.model;
 
-import com.bean.Result;
-import com.bean.Student;
-import com.bean.Tutor;
-import com.bean.TutorInfo;
+import com.bean.*;
 import com.constant.Constants;
+import com.service.EventService;
 import com.service.StudentService;
 import com.service.TutorService;
+import com.service.impl.EventServiceImpl;
 import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
@@ -21,44 +20,7 @@ import java.util.Map;
 public class TutorServlet extends ModelBaseServlet {
 
     TutorService tutorService = new TutorServiceImpl();
-    StudentService studentService = new StudentServiceImpl();
-
-    //教师登录（by周才邦）
-    public void doLogin(HttpServletRequest request, HttpServletResponse response) {
-        //调用service层处理
-        try {
-            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
-            tutor = tutorService.doLogin(tutor);
-            //没有报错则登录
-            HttpSession session = request.getSession();
-            session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-            JSONUtils.writeResult(response, new Result(true, Constants.LOGIN_SUCCESS));
-        } catch (Exception e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
-        }
-    }
-
-    //教师注册（by周才邦）
-    public void doRegister(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            //获取输入验证码
-            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
-            HttpSession session = request.getSession();
-            String checkCode = (String) session.getAttribute(Constants.CHECK_CODE);
-            if (checkCode.equalsIgnoreCase(tutor.getCode())) {
-                tutorService.doRegister(tutor);
-                //注册成功自动登录
-                session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-                JSONUtils.writeResult(response, new Result(true, Constants.REGISTER_SUCCESS));
-            } else {
-                JSONUtils.writeResult(response, new Result(false, Constants.WRONG_CHECK_CODE));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
-        }
-    }
+    EventService eventService = new EventServiceImpl();
 
     //教师登出
     public void doLogout(HttpServletRequest request, HttpServletResponse response) {
@@ -90,16 +52,6 @@ public class TutorServlet extends ModelBaseServlet {
         } catch (Exception e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
-        }
-    }
-
-    //跳转到选择导师界面  （zcb）
-    public void toSelectTutor(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            processTemplate("student/selectTutor", request, response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
     }
 
@@ -144,12 +96,12 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //学生密码修改，by郑应啟
-    public void updateStudentPassword(HttpServletRequest request, HttpServletResponse response) {
+    //导师密码修改，by郑应啟
+    public void updateTutorPassword(HttpServletRequest request, HttpServletResponse response) {
         String password = request.getParameter("password");
         try {
             HttpSession session = request.getSession();
-            //获取当前登入学生
+            //获取当前登入导师
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             //Service层改密码
             tutor = tutorService.updatePassword(password, tutor);
@@ -160,6 +112,41 @@ public class TutorServlet extends ModelBaseServlet {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //跳转到教师主页面 （周才邦）
+    public void toMain(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/main", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //跳转到发起双选页面 （周才邦）
+    public void toStartEvent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/startEvent", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //新增双选事件  （周才邦）
+    public void addEvent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            Event event = (Event) JSONUtils.parseJsonToBean(request, Event.class);
+            System.out.println(event);
+            eventService.addEventWithTutorId(event, tutor);
+            JSONUtils.writeResult(response, new Result(true, Constants.START_EVENT_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.START_EVENT_FAIL));
         }
     }
 

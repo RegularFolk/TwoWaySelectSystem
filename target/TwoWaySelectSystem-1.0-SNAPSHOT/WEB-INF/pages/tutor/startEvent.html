@@ -25,72 +25,84 @@
     <el-container style="height: 700px; border: 1px solid #eee">
         <el-main>
             <el-row>
-                <el-col :span="24"><div class="grid-content bg-purple-dark">选课时间</div></el-col>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple-dark">选课时间</div>
+                </el-col>
             </el-row>
             <br>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学生提交截止时间" required label-width="180px">
                     <el-col :span="8">
                         <el-form-item prop="date1">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="8">
                         <el-form-item prop="date2">
-                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date2"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="教师第一次选人截止时间" required label-width="180px">
                     <el-col :span="8">
                         <el-form-item prop="date3">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date3" style="width: 100%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date3"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="8">
                         <el-form-item prop="date4">
-                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date4" style="width: 100%;"></el-time-picker>
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date4"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="教师第二次选人截止时间" required label-width="180px">
                     <el-col :span="8">
                         <el-form-item prop="date5">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date5" style="width: 100%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date5"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="8">
                         <el-form-item prop="date6">
-                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date6" style="width: 100%;"></el-time-picker>
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date6"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="教师第三次选人截止时间" required label-width="180px">
                     <el-col :span="8">
                         <el-form-item prop="date7">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date7" style="width: 100%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date7"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="8">
                         <el-form-item prop="date8">
-                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date8" style="width: 100%;"></el-time-picker>
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date8"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="最终结果公布时间" required label-width="180px">
                     <el-col :span="8">
                         <el-form-item prop="date9">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date9" style="width: 100%;"></el-date-picker>
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date9"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="8">
                         <el-form-item prop="date10">
-                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date10" style="width: 100%;"></el-time-picker>
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date10"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -129,34 +141,34 @@
                 },
                 rules: {
                     date1: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     date2: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                     date3: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     date4: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                     date5: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     date6: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                     date7: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     date8: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                     date9: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
                     ],
                     date10: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
                     ],
                 }
             };
@@ -165,9 +177,27 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        axios.post("protected/tutor?method=addEvent", {
+                            "submitTime": this.ruleForm.date1 + "-" + this.ruleForm.date2,
+                            "round1": this.ruleForm.date3 + "-" + this.ruleForm.date4,
+                            "round2": this.ruleForm.date5 + "-" + this.ruleForm.date6,
+                            "round3": this.ruleForm.date7 + "-" + this.ruleForm.date8,
+                            "endTime": this.ruleForm.date9 + "-" + this.ruleForm.date10,
+                            "description": this.ruleForm.desc
+                        }).then(resp => {
+                            if (resp.data.flag) {
+                                this.$alert(resp.data.message, '信息', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        window.location.href = "protected/tutor?method=toShowTutors"
+                                    }
+                                });
+                            } else {
+                                this.$message.error(resp.data.message)
+                            }
+                        })
                     } else {
-                        console.log('error submit!!');
+                        this.$message.error('error submit!!')
                         return false;
                     }
                 });
@@ -181,11 +211,12 @@
     new Ctor().$mount('#app')
 </script>
 <style>
-    .el-transfer-panel{
+    .el-transfer-panel {
         width: 400px;
         height: 500px;
     }
-    .el-transfer-panel__list.is-filterable{
+
+    .el-transfer-panel__list.is-filterable {
         height: 400px;
     }
 </style>

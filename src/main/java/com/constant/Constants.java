@@ -27,4 +27,6 @@ public class Constants {
     public static final String UPDATE_PREFERENCE_FAIL = "更新志愿失败！";
     public static final String GET_PREVIOUS_PREFERENCES = "成功获取从前志愿！";
     public static final String NO_PREVIOUS_PREFERENCES = "没有被记录的志愿！";
+    public static final String START_EVENT_FAIL = "发起双选失败！";
+    public static final String START_EVENT_SUCCESS = "发起双选成功！";
 }

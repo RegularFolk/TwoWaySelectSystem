@@ -74,7 +74,7 @@
         methods: {},
         created() {
             if (this.tutors.length === 0) {
-                axios.get("tutor?method=getFullTutors").then(resp => {
+                axios.get("protected/tutor?method=getFullTutors").then(resp => {
                     if (resp.data.flag) {
                         this.tutors = resp.data.data
                     } else {

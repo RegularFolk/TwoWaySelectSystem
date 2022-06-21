@@ -5,24 +5,28 @@ import java.util.List;
 public class Event {
     private int id;
     private int eventInfoId;
+    private String submitTime;
     private String round1;
     private String round2;
     private String round3;
     private String endTime;
+    private String description;
     private List<Major> majors;
     private EventInfo eventInfo;
 
     public Event() {
     }
 
-    public Event(int id, int rangeId, int eventInfoId, String round1, String round2, String round3, String endTime, List<Major> range, EventInfo eventInfo) {
+    public Event(int id, int eventInfoId, String submitTime, String round1, String round2, String round3, String endTime, String description, List<Major> majors, EventInfo eventInfo) {
         this.id = id;
         this.eventInfoId = eventInfoId;
+        this.submitTime = submitTime;
         this.round1 = round1;
         this.round2 = round2;
         this.round3 = round3;
         this.endTime = endTime;
-        this.majors = range;
+        this.description = description;
+        this.majors = majors;
         this.eventInfo = eventInfo;
     }
 
@@ -31,13 +35,31 @@ public class Event {
         return "Event{" +
                 "id=" + id +
                 ", eventInfoId=" + eventInfoId +
+                ", submitTime='" + submitTime + '\'' +
                 ", round1='" + round1 + '\'' +
                 ", round2='" + round2 + '\'' +
                 ", round3='" + round3 + '\'' +
                 ", endTime='" + endTime + '\'' +
+                ", description='" + description + '\'' +
                 ", majors=" + majors +
                 ", eventInfo=" + eventInfo +
                 '}';
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(String submitTime) {
+        this.submitTime = submitTime;
     }
 
     public int getEventInfoId() {

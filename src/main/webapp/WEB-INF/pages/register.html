@@ -112,28 +112,28 @@
         },
         methods: {
             submitFormAsTutor() {
-                axios.post("tutor?method=doRegister", {
+                axios.post("entrance?method=doTutorRegister", {
                     "name": this.ruleForm.name,
                     "number": this.ruleForm.number,
                     "password": this.ruleForm.pass,
                     "code": this.ruleForm.code
                 }).then(resp => {
                     if (resp.data.flag) {
-                        window.location.href = "student?method=toMain"
+                        window.location.href = "protected/student?method=toMain"
                     } else {
                         this.$message.error(resp.data.message)
                     }
                 })
             },
             submitFormAsStu() {
-                axios.post("student?method=doRegister", {
+                axios.post("entrance?method=doStudentRegister", {
                     "studentName": this.ruleForm.name,
                     "studentNumber": this.ruleForm.number,
                     "password": this.ruleForm.pass,
                     "code": this.ruleForm.code
                 }).then(resp => {
                     if (resp.data.flag) {
-                        window.location.href = "student?method=toMain"
+                        window.location.href = "protected/student?method=toMain"
                     } else {
                         this.$message.error(resp.data.message)
                     }
