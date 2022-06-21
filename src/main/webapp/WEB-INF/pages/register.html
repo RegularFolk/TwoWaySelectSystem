@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+
+<el-form
+        class="form-content"
+        ref="register"
+        :model="register"
+        :rules="rules"
+>
+    <el-form-item prop="name">
+        <i class="el-icon-user-solid"></i>
+        <el-input v-model="register.name" placeholder="用户名:"></el-input>
+    </el-form-item>
+    <el-form-item prop="phone">
+        <i class="el-icon-phone"></i>
+        <el-input v-model="register.phone" placeholder="手机号:"></el-input>
+    </el-form-item>
+    <el-form-item prop="password">
+        <i class="el-icon-lock"></i>
+        <el-input v-model="register.password" placeholder="输入密码:" type="password" show-password></el-input>
+    </el-form-item>
+    <el-form-item prop="checkPass">
+        <i class="el-icon-lock"></i>
+        <el-input v-model="register.checkPass" placeholder="再次确认密码:" type="password" show-password></el-input>
+    </el-form-item>
+    <el-form-item>
+        <el-button class="btn-login" type="primary" @click="registerForStu('register')">Register</el-button>
+        <el-button class="btn-login" type="primary" @click="registerForTutor('register')">Register</el-button>
+    </el-form-item>
+</el-form>
+<script>
+    var Main = {
+        data () {
+            // 密码验证
+            var validatePass = (rule,value,callback)=>{
+                if(value === ''){
+                    callback(new Error('请输入密码'))
+                }else{
+                    if(this.register.checkPass !== ''){
+                        this.$refs.register.validateField('checkPass')
+                    }
+                    callback()
+                }
+            };
+            // 再次确认密码验证
+            var validateCheckPass = (rule,value,callback)=>{
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.register.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            // 手机号码验证
+            var validatePhone = (rule,value,callback)=>{
+                var reg=11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;
+                if (value === '') {
+                    callback(new Error('请输入手机号'));
+                } else if (!reg.test(value)) {
+                    callback(new Error('手机号码格式不正确!'));
+                } else {
+                    callback();
+                }
+            };
+
+
+            return {
+                register: {
+                    name:'',
+                    phone: '',
+                    password:'',
+                    checkPass:'',
+                },
+                rules:{
+                    phone:[{validator: validatePhone, trigger: 'blur'}],
+                    password:[{validator: validatePass, trigger: 'blur'}],
+                    checkPass:[{validator: validateCheckPass, trigger: 'blur'}]
+                },
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+</body>
+</html>
