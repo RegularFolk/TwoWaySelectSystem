@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
     <title>学生导师双选系统</title>
     <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
     <!--使用绝对路径-->
@@ -22,107 +21,87 @@
 </head>
 <body>
 <div id="app">
-    <el-container style="height: 700px; border: 1px solid #eee">
-        <el-container>
-            <el-header style="text-align: right; font-size: 12px">
-                <el-dropdown>
-                    <i class="el-icon-setting" style="margin-right: 15px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>查看</el-dropdown-item>
-                        <el-dropdown-item>新增</el-dropdown-item>
-                        <el-dropdown-item>删除</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <span>{{college}}</span>
-            </el-header>
-            <el-container>
-                <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-                    <el-menu>
-                        <el-submenu v-for="menu in menuList" :index="menu.path">
-                            <template slot="title">
-                                <i class="fa" :class="menu.icon"></i>
-                                {{menu.title}}
-                            </template>
-                            <template v-for="child in menu.children">
-                                <el-menu-item :index="child.path">
-                                    <a :href="child.linkUrl" target="right">{{child.title}}</a>
-                                </el-menu-item>
-                            </template>
-                        </el-submenu>
-                    </el-menu>
-                </el-aside>
-                <el-container>
-                    <iframe name="right" class="el-main" src="tutor?method=toShowTutors" width="90%" height="800px"
-                            frameborder="1"></iframe>
-                </el-container>
-            </el-container>
-        </el-container>
-
-    </el-container>
+    <div class="login-wrap">
+        <el-row type="flex" justify="center">
+            <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
+                <h3>登录</h3>
+                <hr>
+                <el-form-item prop="number" label="学号">
+                    <el-input v-model="user.number" placeholder="请输入学号" prefix-icon></el-input>
+                </el-form-item>
+                <el-form-item id="password" prop="password" label="密码">
+                    <el-input v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <!--                还没做，最后在做这个-->
+                <router-link to="/"></router-link>
+                <!--              这里跳注册页面-->找回密码
+                <router-link to="/register">注册账号</router-link>
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForStu()">学生登录</el-button>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForTutor()">教师登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-row>
+    </div>
 </div>
-</body>
-<style>
-    .el-header {
-        background-color: #B3C0D1;
-        color: #333;
-        line-height: 60px;
-    }
 
-    .el-aside {
-        color: #333;
-    }
-</style>
 <script>
     var vue = new Vue({
-        el: '#app',
+        el: "#app",
         data: {
-            "tutors": [],
-            "college": "教科学院",
-            "menuList": [
-                {
-                    "path": "1",
-                    "title": "学院教师",
-                    "children": [
-                        {
-                            "path": "1-1",
-                            "title": "查看导师信息",
-                            "linkUrl": "tutor?method=toShowTutors"
-                        }
-                    ]
-                },
-                {
-                    "path": "2",
-                    "title": "学生功能",
-                    "children": [
-                        {
-                            "path": "2-1",
-                            "title": "志愿填写",
-                            "linkUrl": "tutor?method=toSelectTutor"
-                        },
-                        {
-                            "path": "2-2",
-                            "title": "查看结果",
-                            "linkUrl": ""
-                        },
-                        {
-                            "path": "2-3",
-                            "title": "私信",
-                            "linkUrl": ""
-                        }
-                    ]
-                },
-                {
-                    "path": "3",
-                    "title": "个人中心",
-                    "children": []
-                }
-            ]
-
+            user: {
+                "number": "",
+                "password": ""
+            }
         },
         methods: {
-
+            doLoginForStu() {
+                if (!this.user.number) {
+                    this.$message.error("请输入学号！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    axios.post("student?method=doLogin", {
+                        "studentNumber": this.user.number,
+                        "password": this.user.password
+                    }).then(res => {
+                        // console.log("输出response.data.status", res.data.status);
+                        if (res.data.flag) {
+                            //这里跳学生端
+                            window.location.href = "student?method=toMain"
+                        } else {
+                            alert(res.data.message);
+                        }
+                    });
+                }
+            },
+            doLoginForTutor() {
+                if (!this.user.number) {
+                    this.$message.error("请输入用户名！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    axios.post("tutor?method=doLogin", {
+                        "number": this.user.number,
+                        "password": this.user.password
+                    }).then(res => {
+                        if (res.data.flag) {
+                            //这里跳教师端
+                            window.location.href = "student?method=toMain"
+                        } else {
+                            alert(res.data.message);
+                        }
+                    });
+                }
+            }
         }
     })
 </script>
-
+</body>
 </html>

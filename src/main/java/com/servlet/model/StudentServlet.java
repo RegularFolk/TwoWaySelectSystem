@@ -11,6 +11,7 @@ import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,10 @@ public class StudentServlet extends ModelBaseServlet {
 
     //学生登录（by周才邦）
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
-        String studentNumber = request.getParameter("studentNumber");
-        String password = request.getParameter("password");
-        Student student = new Student(studentNumber, password);
         //调用service层处理登录
         try {
+            Student student = (Student) JSONUtils.parseJsonToBean(request,Student.class);
+            System.out.println(student);
             student = studentService.doLogin(student);
             //如果没有报错，则登陆成功,将student存入session
             HttpSession session = request.getSession();
@@ -104,14 +104,14 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
     //导师选择学生界面，页面自动查询所有选选导师的学生，by郑应啟     不好
-    public void findAllStudent(HttpServletRequest request, HttpServletResponse response){
+    public void findAllStudent(HttpServletRequest request, HttpServletResponse response) {
 
 
         try {
             HttpSession session = request.getSession();
 
             List<Student> students = studentService.getStudentList();
-            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
+            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, students));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -120,12 +120,12 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
     //根据学生Id查询详细信息，by郑应啟
-    public void findStudentById(HttpServletRequest request, HttpServletResponse response){
+    public void findStudentById(HttpServletRequest request, HttpServletResponse response) {
         String studentId = request.getParameter("studentId");
-        int id= Integer.parseInt(studentId);
+        int id = Integer.parseInt(studentId);
         try {
             Student student = studentService.getStudentById(id);
-            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,student));
+            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, student));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -134,9 +134,19 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
     //学生登出
-    public void doLogout(HttpServletRequest request,HttpServletResponse response){
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
-        JSONUtils.writeResult(response,new Result(true,Constants.LOGOUT));
+        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+    }
+
+    //跳转到学生主页面
+    public void toMain(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("student/main", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
     }
 
 }

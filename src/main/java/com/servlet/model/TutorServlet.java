@@ -20,11 +20,9 @@ public class TutorServlet extends ModelBaseServlet {
 
     //教师登录（by周才邦）
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
-        String number = request.getParameter("number");
-        String password = request.getParameter("password");
-        Tutor tutor = new Tutor(number, password);
         //调用service层处理
         try {
+            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request,Tutor.class);
             tutor = tutorService.doLogin(tutor);
             //没有报错则登录
             HttpSession session = request.getSession();
