@@ -22,15 +22,15 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     }
 
     @Override
-    public void updatePassword(String password,int id) {
+    public void updatePassword(String password, int id) {
         String sql = "update student set password = ? where id=?";
-        update(sql, password,id);
+        update(sql, password, id);
     }
 
     @Override
-    public void updateStatus(int status,int id) {
+    public void updateStatus(int status, int id) {
         String sql = "update student set status = ? where id=?";
-        update(sql, status,id);
+        update(sql, status, id);
     }
 
     @Override
@@ -38,7 +38,6 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         String sql = "select * from student where id = ?";
         return getBean(Student.class, sql, id);
     }
-
 
     @Override
     public List<Student> findByStatus(int status) {
@@ -70,14 +69,16 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         return getBean(Student.class, sql, preferenceId);
     }
 
-
-
-
     @Override
     public void updateInfoId(int infoId, int id) {
         String sql = "update student set self_info_id = ? where id = ?";
         update(sql, infoId, id);
     }
 
+    @Override
+    public void updatePreference(int id, int preferenceId) {
+        String sql = "update student set preferences_id  = ? where id = ?";
+        update(sql, preferenceId, id);
+    }
 
 }

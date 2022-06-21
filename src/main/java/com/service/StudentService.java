@@ -1,7 +1,9 @@
 package com.service;
 
+import com.bean.Preference;
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 
 import java.util.List;
 
@@ -30,4 +32,13 @@ public interface StudentService {
 
     StudentInfo getInfoByStudentId(int studentId);
 
+    List<TutorInfo> getTutorInfoListByStudent(Student studentId);
+
+    void updatePreference(Preference preference, int id);
+
+    boolean hasPreference(int studentId);
+
+    int addPreference(Preference preference, int id);
+
+    Preference getPreferenceByPreferenceId(int preferenceId);
 }

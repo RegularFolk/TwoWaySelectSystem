@@ -24,11 +24,32 @@ AUTHOR: 周才邦（后端）
 
 7.设置了EncodingFilter，设置请求和响应编码格式为utf-8
 
+===============================================
+DATE:  2022年6月20日
+AUTHOR: 王城梓
+
+1.私信查询Dao: findByReceiverId: 传入int id, 返回List<Message>;
+findBySenderId: 传入int id, 返回List<Message>;
+
+2.发送私信Dao: sandById: 传入int senderId, int receiverId, String text, String time 四个参数缺一不可
+
+3.导师查看选自己的学生: Service层先调用findStudentIdsByPreference, 需要传入int类型第几志愿和int类型导师id, 获取志愿id, 再根据志愿id查学生表
+调用findByPreferenceId, 需要传入int类型的志愿id， 获得Student(Service调用时需要循环获得一个List<Student>以供展示)
+
+4.学生查看自己的三个志愿: Service层先调用StudentDao, 根据id获取Student, 在Service层获得PreferenceId之后, 调用PreferenceDao中的
+findTutorIdsByPreferenceId, 获得TutorIds, 再根据TutorId查询
+
+5.ResultDao根据给定的eventId, 查出相关的学生id, 并以List<Integer>类型返回
 =============================================
-前端
-1.所有用到elementUI的页面必须按照以下顺序引入【   <!-- 引入ElementUI样式 -->
-                               <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-                               <script src="https://unpkg.com/vue/dist/vue.js"></script>
-                               <!-- 引入ElementUI组件库 -->
-                               <script src="https://unpkg.com/element-ui/lib/index.js"></script>】
-2.
+DATE:   2022年6月21日
+AUTHOR: 郑应啟（后端）
+
+1.增加Student、studentInfo、tutor、tutorInfo DAO层接口，student、tutorSERVICE层接口
+
+2.学生密码修改：...
+  导师密码修改：...
+
+3.查询所有学生：...
+
+4.通过导师id查询学生：...
+

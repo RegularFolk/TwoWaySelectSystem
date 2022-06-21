@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 700px; border: 1px solid #eee">
+        <el-main>
+            <el-row>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple-dark">选课时间</div>
+                </el-col>
+            </el-row>
+            <br>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="学生提交截止时间" required label-width="180px">
+                    <el-col :span="8">
+                        <el-form-item prop="date1">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="8">
+                        <el-form-item prop="date2">
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date2"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="教师第一次选人截止时间" required label-width="180px">
+                    <el-col :span="8">
+                        <el-form-item prop="date3">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date3"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="8">
+                        <el-form-item prop="date4">
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date4"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="教师第二次选人截止时间" required label-width="180px">
+                    <el-col :span="8">
+                        <el-form-item prop="date5">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date5"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="8">
+                        <el-form-item prop="date6">
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date6"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="教师第三次选人截止时间" required label-width="180px">
+                    <el-col :span="8">
+                        <el-form-item prop="date7">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date7"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="8">
+                        <el-form-item prop="date8">
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date8"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="最终结果公布时间" required label-width="180px">
+                    <el-col :span="8">
+                        <el-form-item prop="date9">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date9"
+                                            style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="8">
+                        <el-form-item prop="date10">
+                            <el-time-picker placeholder="选择时间" v-model="ruleForm.date10"
+                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="双选要求描述" prop="desc" label-width="180px">
+                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">确认发布</el-button>
+                </el-form-item>
+            </el-form>
+        </el-main>
+    </el-container>
+</div>
+</body>
+<script>
+    var Main = {
+        data() {
+            return {
+                ruleForm: {
+                    // name: '',
+                    // region: '',
+                    date1: '',
+                    date2: '',
+                    date3: '',
+                    date4: '',
+                    date5: '',
+                    date6: '',
+                    date7: '',
+                    date8: '',
+                    date9: '',
+                    date10: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                rules: {
+                    date1: [
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    date2: [
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
+                    ],
+                    date3: [
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    date4: [
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
+                    ],
+                    date5: [
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    date6: [
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
+                    ],
+                    date7: [
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    date8: [
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
+                    ],
+                    date9: [
+                        {type: 'string', required: true, message: '请选择日期', trigger: 'change'}
+                    ],
+                    date10: [
+                        {type: 'string', required: true, message: '请选择时间', trigger: 'change'}
+                    ],
+                }
+            };
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        axios.post("protected/tutor?method=addEvent", {
+                            "submitTime": this.ruleForm.date1 + "-" + this.ruleForm.date2,
+                            "round1": this.ruleForm.date3 + "-" + this.ruleForm.date4,
+                            "round2": this.ruleForm.date5 + "-" + this.ruleForm.date6,
+                            "round3": this.ruleForm.date7 + "-" + this.ruleForm.date8,
+                            "endTime": this.ruleForm.date9 + "-" + this.ruleForm.date10,
+                            "description": this.ruleForm.desc
+                        }).then(resp => {
+                            if (resp.data.flag) {
+                                this.$alert(resp.data.message, '信息', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        window.location.href = "protected/tutor?method=toShowTutors"
+                                    }
+                                });
+                            } else {
+                                this.$message.error(resp.data.message)
+                            }
+                        })
+                    } else {
+                        this.$message.error('error submit!!')
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+<style>
+    .el-transfer-panel {
+        width: 400px;
+        height: 500px;
+    }
+
+    .el-transfer-panel__list.is-filterable {
+        height: 400px;
+    }
+</style>
+</html>

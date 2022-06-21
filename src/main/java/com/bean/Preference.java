@@ -1,5 +1,8 @@
 package com.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Preference {
     private int id;
     private int status;
@@ -11,6 +14,21 @@ public class Preference {
     Tutor tutor3;
 
     public Preference() {
+    }
+
+    public Preference(List<Integer> tutorIds) {
+        if (tutorIds.size() == 3) {
+            this.no1 = tutorIds.get(0);
+            this.no2 = tutorIds.get(1);
+            this.no3 = tutorIds.get(2);
+        } else if (tutorIds.size() == 2) {
+            this.no1 = tutorIds.get(0);
+            this.no2 = tutorIds.get(1);
+        } else if (tutorIds.size() == 1) {
+            this.no1 = tutorIds.get(0);
+        } else if (tutorIds.size() != 0) {
+            throw new RuntimeException("Preference初始化错误！");
+        }
     }
 
     public Preference(int id, int status, int no1, int no2, int no3, Tutor tutor1, Tutor tutor2, Tutor tutor3) {
@@ -100,5 +118,19 @@ public class Preference {
 
     public void setNo3(int no3) {
         this.no3 = no3;
+    }
+
+    public List<Integer> getList() {
+        List<Integer> list = new ArrayList<>();
+        if (this.no1 != 0) {
+            list.add(this.no1);
+        }
+        if (this.no2 != 0) {
+            list.add(this.no2);
+        }
+        if (this.no3 != 0) {
+            list.add(this.no3);
+        }
+        return list;
     }
 }

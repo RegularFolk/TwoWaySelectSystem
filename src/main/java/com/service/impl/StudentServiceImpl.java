@@ -1,21 +1,33 @@
 package com.service.impl;
 
+import com.bean.Preference;
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.bean.TutorInfo;
 import com.constant.Constants;
+import com.dao.PreferenceDao;
 import com.dao.StudentDao;
 import com.dao.StudentInfoDao;
+import com.dao.TutorInfoDao;
+import com.dao.impl.PreferenceDaoImpl;
 import com.dao.impl.StudentDaoImpl;
 import com.dao.impl.StudentInfoDaoImpl;
+import com.dao.impl.TutorInfoDaoImpl;
 import com.service.StudentService;
 import com.utils.MD5Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentServiceImpl implements StudentService {
+
     StudentDao studentDao = new StudentDaoImpl();
 
     StudentInfoDao studentInfoDao = new StudentInfoDaoImpl();
+
+    PreferenceDao preferenceDao = new PreferenceDaoImpl();
+
+    TutorInfoDao tutorInfoDao = new TutorInfoDaoImpl();
 
     @Override
     public Student doLogin(Student student) {
@@ -108,7 +120,6 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-
     @Override
     public List<StudentInfo> getInfoList() {
         return studentInfoDao.findAllInfo();
@@ -117,7 +128,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentInfo getInfoByInfoId(int infoId) {
         return studentInfoDao.findInfoById(infoId);
-
     }
 
     @Override
@@ -125,5 +135,40 @@ public class StudentServiceImpl implements StudentService {
         return studentInfoDao.findInfoByStudentId(studentId);
     }
 
+    @Override//查看学生志愿中的导师信息 需要传入Student, 最后返回List<TutorInfo>
+    public List<TutorInfo> getTutorInfoListByStudent(Student student) {
+        Integer preferenceId = student.getPreferencesId();
+        Preference preference = preferenceDao.findTutorIdsByPreferenceId(preferenceId);
+        List<Integer> tutorIdList = preference.getList();
+        List<TutorInfo> tutorInfos = new ArrayList<>();
+        for (Integer integer : tutorIdList) {
+            TutorInfo tutorInfo = tutorInfoDao.findInfoByTutorId(integer);
+            tutorInfos.add(tutorInfo);
+        }
+        return tutorInfos;
+    }
+
+    @Override //根据preferenceId和preference修改原本preference
+    public void updatePreference(Preference preference, int id) {
+        preferenceDao.update(preference, id);
+    }
+
+    @Override //判断学生是否已经有志愿
+    public boolean hasPreference(int studentId) {
+        Student student = studentDao.findById(studentId);
+        return student.getPreferencesId() != 0;
+    }
+
+    @Override //给定studentId和preference，先在preference中添加，再把主键添加到id对应的student表中字段
+    public int addPreference(Preference preference, int id) {
+        int preferenceId = preferenceDao.addPreference(preference);
+        studentDao.updatePreference(id, preferenceId);
+        return preferenceId;
+    }
+
+    @Override
+    public Preference getPreferenceByPreferenceId(int preferenceId) {
+        return preferenceDao.findTutorIdsByPreferenceId(preferenceId);
+    }
 
 }

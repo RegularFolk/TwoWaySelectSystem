@@ -5,9 +5,10 @@ public class Student {
     private int status;
     private int collegeMajor;
     private int selfInfoId;
-    private int preferenceId;
+    private int preferencesId;
     private int majorId;
     private int tutorId;
+    private String code;
     private String studentNumber;  //通过学号和密码登录
     private String password;
     private String studentName;
@@ -30,14 +31,15 @@ public class Student {
         this.major = major;
     }
 
-    public Student(int id, int status, int collegeMajor, int selfInfoId, int preferenceId, int majorId, int tutorId, String studentNumber, String password, String studentName, StudentInfo studentInfo, Preference preference, Major major, Tutor tutor) {
+    public Student(int id, int status, int collegeMajor, int selfInfoId, int preferenceId, int majorId, int tutorId, String code, String studentNumber, String password, String studentName, StudentInfo studentInfo, Preference preference, Major major, Tutor tutor) {
         this.id = id;
         this.status = status;
         this.collegeMajor = collegeMajor;
         this.selfInfoId = selfInfoId;
-        this.preferenceId = preferenceId;
+        this.preferencesId = preferenceId;
         this.majorId = majorId;
         this.tutorId = tutorId;
+        this.code = code;
         this.studentNumber = studentNumber;
         this.password = password;
         this.studentName = studentName;
@@ -54,9 +56,10 @@ public class Student {
                 ", status=" + status +
                 ", collegeMajor=" + collegeMajor +
                 ", selfInfoId=" + selfInfoId +
-                ", preferenceId=" + preferenceId +
+                ", preferencesId=" + preferencesId +
                 ", majorId=" + majorId +
                 ", tutorId=" + tutorId +
+                ", code='" + code + '\'' +
                 ", studentNumber='" + studentNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", studentName='" + studentName + '\'' +
@@ -65,6 +68,14 @@ public class Student {
                 ", major=" + major +
                 ", tutor=" + tutor +
                 '}';
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getStudentName() {
@@ -83,12 +94,12 @@ public class Student {
         this.selfInfoId = selfInfoId;
     }
 
-    public int getPreferenceId() {
-        return preferenceId;
+    public int getPreferencesId() {
+        return preferencesId;
     }
 
-    public void setPreferenceId(int preferenceId) {
-        this.preferenceId = preferenceId;
+    public void setPreferencesId(int preferencesId) {
+        this.preferencesId = preferencesId;
     }
 
     public int getMajorId() {

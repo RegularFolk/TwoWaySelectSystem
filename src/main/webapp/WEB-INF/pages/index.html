@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
     <title>学生导师双选系统</title>
     <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
     <!--使用绝对路径-->
@@ -22,144 +21,90 @@
 </head>
 <body>
 <div id="app">
-    <el-container style="height: 700px; border: 1px solid #eee">
-        <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <el-menu>
-                <el-submenu index="1">
-                    <template slot="title"><i class="el-icon-message"></i>学院教师信息
-                    </template>
-                    <el-menu-item-group :data="tutors" v-for="tutor in tutors">
-                        <el-menu-item>{{tutor.name}}</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title"><i class="el-icon-menu"></i>学生功能</template>
-                    <el-menu-item-group>
-                        <template slot="title">选择导师</template>
-                        <el-menu-item index="2-1" @click="toSelectTutor()">志愿填写</el-menu-item>
-                        <el-menu-item index="2-2">查看结果</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="2-3">私信</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-                <el-submenu index="3">
-                    <template slot="title"><i class="el-icon-setting"></i>个人中心</template>
-                    <el-menu-item-group>
-                        <template slot="title">分组一</template>
-                        <el-menu-item index="3-1">修改个人信息</el-menu-item>
-                        <el-menu-item index="3-2">选项2</el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="3-3">选项3</el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="3-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-            </el-menu>
-        </el-aside>
-
-        <el-container>
-            <el-header style="text-align: right; font-size: 12px">
-                <el-dropdown>
-                    <i class="el-icon-setting" style="margin-right: 15px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>查看</el-dropdown-item>
-                        <el-dropdown-item>新增</el-dropdown-item>
-                        <el-dropdown-item>删除</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <span>教科学院</span>
-            </el-header>
-
-            <el-main>
-                <el-table
-                        :data="tutors"
-                        style="width: 100%"
-                >
-                    <el-table-column
-                            prop="name"
-                            label="导师姓名"
-                            sortable
-                            width="120"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.title"
-                            label="职称"
-                            width="120"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.educationBackground"
-                            label="学历"
-                            width="120"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.researchField"
-                            label="研究领域"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.lessons"
-                            label="任教课程"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                            prop="tutorInfo.selfIntroduction"
-                            label="自我介绍"
-                    >
-                    </el-table-column>
-                </el-table>
-            </el-main>
-        </el-container>
-    </el-container>
+    <div class="login-wrap">
+        <el-row type="flex" justify="center">
+            <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
+                <h3>登录</h3>
+                <hr>
+                <el-form-item prop="number" label="学号">
+                    <el-input v-model="user.number" placeholder="请输入学号" prefix-icon></el-input>
+                </el-form-item>
+                <el-form-item id="password" prop="password" label="密码">
+                    <el-input type="password" v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <!--                还没做，最后在做这个-->
+                <router-link to="/">找回密码</router-link>
+                <!--              这里跳注册页面-->
+                <el-button @click="toRegister()">注册账号</el-button>
+                <el-form-item>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForStu()">学生登录</el-button>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForTutor()">教师登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-row>
+    </div>
 </div>
-</body>
-<style>
-    .el-header {
-        background-color: #B3C0D1;
-        color: #333;
-        line-height: 60px;
-    }
 
-    .el-aside {
-        color: #333;
-    }
-</style>
 <script>
     var vue = new Vue({
-        el: '#app',
+        el: "#app",
         data: {
-            "tutors": []
-        },
-        methods: {
-            toSelectTutor() {
-                window.location.href = "tutor?method=toSelectTutor"
+            user: {
+                "number": "",
+                "password": ""
             }
         },
-        created(){
-            if (this.tutors.length === 0) {
-                axios.get("tutor?method=getFullTutors").then(resp => {
-                    if (resp.data.flag) {
-                        this.tutors = resp.data.data
-                    } else {
-                        this.$message({
-                            message: resp.data.message,
-                            type: "error"
-                        })
-                    }
-                })
+        methods: {
+            doLoginForStu() {
+                if (!this.user.number) {
+                    this.$message.error("请输入学号！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    axios.post("entrance?method=doStudentLogin", {
+                        "studentNumber": this.user.number,
+                        "password": this.user.password
+                    }).then(res => {
+                        // console.log("输出response.data.status", res.data.status);
+                        if (res.data.flag) {
+                            //这里跳学生端
+                            window.location.href = "protected/student?method=toMain"
+                        } else {
+                            alert(res.data.message);
+                        }
+                    });
+                }
+            },
+            doLoginForTutor() {
+                if (!this.user.number) {
+                    this.$message.error("请输入用户名！");
+                    return;
+                } else if (!this.user.password) {
+                    this.$message.error("请输入密码！");
+                    return;
+                } else {
+                    //校验用户名和密码是否正确;
+                    axios.post("entrance?method=doTutorLogin", {
+                        "number": this.user.number,
+                        "password": this.user.password
+                    }).then(res => {
+                        if (res.data.flag) {
+                            //这里跳教师端
+                            window.location.href = "protected/tutor?method=toMain"
+                        } else {
+                            alert(res.data.message);
+                        }
+                    });
+                }
+            },
+            toRegister() {
+                window.location.href = "commonPortal?method=toRegisterPage";
             }
         }
     })
 </script>
-
+</body>
 </html>
