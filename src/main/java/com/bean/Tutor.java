@@ -8,6 +8,7 @@ public class Tutor {
     private String number;
     private String password;
     private String name;
+    private String code;
     private Major major;
     private TutorInfo tutorInfo;
 
@@ -32,7 +33,7 @@ public class Tutor {
         this.major = major;
     }
 
-    public Tutor(int id, int majorId, int tutorInfoId, String authority, String number, String password, String name, Major major, TutorInfo tutorInfo) {
+    public Tutor(int id, int majorId, int tutorInfoId, String authority, String number, String password, String name, String code, Major major, TutorInfo tutorInfo) {
         this.id = id;
         this.majorId = majorId;
         this.tutorInfoId = tutorInfoId;
@@ -40,6 +41,7 @@ public class Tutor {
         this.number = number;
         this.password = password;
         this.name = name;
+        this.code = code;
         this.major = major;
         this.tutorInfo = tutorInfo;
     }
@@ -54,9 +56,18 @@ public class Tutor {
                 ", number='" + number + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
                 ", major=" + major +
                 ", tutorInfo=" + tutorInfo +
                 '}';
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public int getMajorId() {

@@ -68,6 +68,14 @@
         <servlet-name>PortalServlet</servlet-name>
         <servlet-class>com.servlet.model.PortalServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CommonPortalServlet</servlet-name>
+        <servlet-class>com.servlet.model.CommonPortalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CommonPortalServlet</servlet-name>
+        <url-pattern>/commonPortal</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PortalServlet</servlet-name>
         <url-pattern>/index.html</url-pattern>

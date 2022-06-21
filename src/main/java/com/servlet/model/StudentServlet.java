@@ -25,7 +25,7 @@ public class StudentServlet extends ModelBaseServlet {
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
         //调用service层处理登录
         try {
-            Student student = (Student) JSONUtils.parseJsonToBean(request,Student.class);
+            Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
             System.out.println(student);
             student = studentService.doLogin(student);
             //如果没有报错，则登陆成功,将student存入session
@@ -43,16 +43,11 @@ public class StudentServlet extends ModelBaseServlet {
     //学生注册（by周才邦）
     public void doRegister(HttpServletRequest request, HttpServletResponse response) {
         try {
-            //获取所有请求参数
-            Map<String, String[]> parameterMap = request.getParameterMap();
-
             //获取用户输入的验证码
-            String code = parameterMap.get("code")[0];
+            Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
             String checkCode = (String) request.getSession().getAttribute(Constants.CHECK_CODE);
             //验证密码，忽略大小写
-            if (checkCode.equalsIgnoreCase(code)) {
-                Student student = new Student();
-                BeanUtils.populate(student, parameterMap);
+            if (checkCode.equalsIgnoreCase(student.getCode())) {
                 studentService.doRegister(student);
                 //注册成功自动登录
                 request.getSession().setAttribute(Constants.STUDENT_SESSION_KEY, student);

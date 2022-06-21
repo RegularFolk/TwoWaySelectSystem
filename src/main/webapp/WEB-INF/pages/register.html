@@ -22,7 +22,10 @@
 <body>
 <div id="app">
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="学号" prop="number">
+        <el-form-item label="姓名" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" prop="number">
             <el-input v-model.number="ruleForm.number"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pass">
@@ -31,9 +34,14 @@
         <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="请输入验证码">
+            <el-input v-model="ruleForm.code" autocomplete="off"></el-input>
+            <img :src="checkCodePath" width="126px" height="35px" alt="" @click="changeCode"/>
+        </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
-<!--            跳转到登陆页面-->
+            <el-button type="primary" @click="submitFormAsTutor()">以教师注册</el-button>
+            <el-button type="primary" @click="submitFormAsStu()">以学生注册</el-button>
+            <!--            跳转到登陆页面-->
             <el-button @click="resetForm('ruleForm')">登陆</el-button>
         </el-form-item>
     </el-form>
@@ -41,6 +49,11 @@
 <script>
     var Main = {
         data() {
+            var checkName = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('姓名不能为空'));
+                }
+            };
             var checkNumber = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('学号不能为空'));
@@ -49,7 +62,7 @@
                     if (!Number.isInteger(value)) {
                         callback(new Error('请输入数字值'));
                     } else {
-                            callback();
+                        callback();
                     }
                 }, 1000);
             };
@@ -74,33 +87,60 @@
             };
             return {
                 ruleForm: {
+                    name: '',
                     pass: '',
                     checkPass: '',
-                    number: ''
+                    number: '',
+                    code: ''
                 },
                 rules: {
+                    name:[
+                        {validator: checkName, trigger: 'blur'}
+                    ],
                     pass: [
-                        { validator: validatePass, trigger: 'blur' }
+                        {validator: validatePass, trigger: 'blur'}
                     ],
                     checkPass: [
-                        { validator: validatePass2, trigger: 'blur' }
+                        {validator: validatePass2, trigger: 'blur'}
                     ],
                     number: [
-                        { validator: checkNumber, trigger: 'blur' }
+                        {validator: checkNumber, trigger: 'blur'}
                     ]
-                }
+                },
+                checkCodePath: "kaptcha"
             };
         },
         methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('注册成功!');
+            submitFormAsTutor() {
+                axios.post("tutor?method=doRegister", {
+                    "name": this.ruleForm.name,
+                    "number": this.ruleForm.number,
+                    "password": this.ruleForm.pass,
+                    "code": this.ruleForm.code
+                }).then(resp => {
+                    if (resp.data.flag) {
+                        window.location.href = "student?method=toMain"
                     } else {
-                        console.log('注册失败!!');
-                        return false;
+                        this.$message.error(resp.data.message)
                     }
-                });
+                })
+            },
+            submitFormAsStu() {
+                axios.post("student?method=doRegister", {
+                    "studentName": this.ruleForm.name,
+                    "studentNumber": this.ruleForm.number,
+                    "password": this.ruleForm.pass,
+                    "code": this.ruleForm.code
+                }).then(resp => {
+                    if (resp.data.flag) {
+                        window.location.href = "student?method=toMain"
+                    } else {
+                        this.$message.error(resp.data.message)
+                    }
+                })
+            },
+            changeCode() {
+                this.checkCodePath = "kaptcha?time=" + new Date();
             }
         }
     }

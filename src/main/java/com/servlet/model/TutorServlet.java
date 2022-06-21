@@ -22,7 +22,7 @@ public class TutorServlet extends ModelBaseServlet {
     public void doLogin(HttpServletRequest request, HttpServletResponse response) {
         //调用service层处理
         try {
-            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request,Tutor.class);
+            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
             tutor = tutorService.doLogin(tutor);
             //没有报错则登录
             HttpSession session = request.getSession();
@@ -37,14 +37,11 @@ public class TutorServlet extends ModelBaseServlet {
     //教师注册（by周才邦）
     public void doRegister(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Map<String, String[]> parameterMap = request.getParameterMap();
             //获取输入验证码
-            String code = parameterMap.get("code")[0];
+            Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
             HttpSession session = request.getSession();
             String checkCode = (String) session.getAttribute(Constants.CHECK_CODE);
-            if (code.equalsIgnoreCase(checkCode)) {
-                Tutor tutor = new Tutor();
-                BeanUtils.populate(tutor, parameterMap);
+            if (checkCode.equalsIgnoreCase(tutor.getCode())) {
                 tutorService.doRegister(tutor);
                 //注册成功自动登录
                 session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);

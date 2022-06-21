@@ -8,6 +8,7 @@ public class Student {
     private int preferenceId;
     private int majorId;
     private int tutorId;
+    private String code;
     private String studentNumber;  //通过学号和密码登录
     private String password;
     private String studentName;
@@ -30,7 +31,7 @@ public class Student {
         this.major = major;
     }
 
-    public Student(int id, int status, int collegeMajor, int selfInfoId, int preferenceId, int majorId, int tutorId, String studentNumber, String password, String studentName, StudentInfo studentInfo, Preference preference, Major major, Tutor tutor) {
+    public Student(int id, int status, int collegeMajor, int selfInfoId, int preferenceId, int majorId, int tutorId, String code, String studentNumber, String password, String studentName, StudentInfo studentInfo, Preference preference, Major major, Tutor tutor) {
         this.id = id;
         this.status = status;
         this.collegeMajor = collegeMajor;
@@ -38,6 +39,7 @@ public class Student {
         this.preferenceId = preferenceId;
         this.majorId = majorId;
         this.tutorId = tutorId;
+        this.code = code;
         this.studentNumber = studentNumber;
         this.password = password;
         this.studentName = studentName;
@@ -57,6 +59,7 @@ public class Student {
                 ", preferenceId=" + preferenceId +
                 ", majorId=" + majorId +
                 ", tutorId=" + tutorId +
+                ", code='" + code + '\'' +
                 ", studentNumber='" + studentNumber + '\'' +
                 ", password='" + password + '\'' +
                 ", studentName='" + studentName + '\'' +
@@ -65,6 +68,14 @@ public class Student {
                 ", major=" + major +
                 ", tutor=" + tutor +
                 '}';
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getStudentName() {
