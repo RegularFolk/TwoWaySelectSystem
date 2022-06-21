@@ -102,14 +102,24 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //导师选择学生界面，页面自动查询所有选选导师的学生，by郑应啟     不好
+    //查询所有学生，by郑应啟
     public void findAllStudent(HttpServletRequest request, HttpServletResponse response){
-
-
         try {
-            HttpSession session = request.getSession();
-
             List<Student> students = studentService.getStudentList();
+            JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+        }
+    }
+
+    //通过tutorId查学生,  zyq
+    public void findStudentListByTutorId(HttpServletRequest request, HttpServletResponse response){
+        String tutorId = request.getParameter("tutorId");
+        int id= Integer.parseInt(tutorId);
+        try {
+            List<Student> students = studentService.getStudentListByTutorId(id);
             JSONUtils.writeResult(response, new Result(true,Constants.QUERY_SUCCESS ,students));
         } catch (Exception e) {
             e.printStackTrace();
