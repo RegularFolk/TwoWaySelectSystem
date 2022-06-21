@@ -11,7 +11,6 @@ import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
