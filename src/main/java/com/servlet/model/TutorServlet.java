@@ -24,8 +24,13 @@ public class TutorServlet extends ModelBaseServlet {
 
     //教师登出
     public void doLogout(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().invalidate();
-        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+        try {
+            request.getSession().invalidate();
+            processTemplate("index",request,response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response,new Result(false,Constants.LOGOUT_FAIL));
+        }
     }
 
     //教师查看学生志愿（仅自己） by王城梓
@@ -141,7 +146,6 @@ public class TutorServlet extends ModelBaseServlet {
             HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             Event event = (Event) JSONUtils.parseJsonToBean(request, Event.class);
-            System.out.println(event);
             eventService.addEventWithTutorId(event, tutor);
             JSONUtils.writeResult(response, new Result(true, Constants.START_EVENT_SUCCESS));
         } catch (Exception e) {

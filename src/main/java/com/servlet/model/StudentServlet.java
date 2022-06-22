@@ -98,8 +98,13 @@ public class StudentServlet extends ModelBaseServlet {
 
     //学生登出 by王城梓
     public void doLogout(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().invalidate();
-        JSONUtils.writeResult(response, new Result(true, Constants.LOGOUT));
+        try {
+            request.getSession().invalidate();
+            processTemplate("index", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new Result(false, Constants.LOGOUT_FAIL));
+        }
     }
 
     //学生查看志愿对应的三个导师 by王城梓
@@ -189,7 +194,6 @@ public class StudentServlet extends ModelBaseServlet {
             JSONUtils.writeResult(response, new Result(false, e.getMessage()));
         }
     }
-
 
 
 }

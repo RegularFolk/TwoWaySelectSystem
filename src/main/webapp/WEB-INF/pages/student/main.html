@@ -44,7 +44,7 @@
                                 {{menu.title}}
                             </template>
                             <template v-for="child in menu.children">
-                                <el-menu-item :index="child.path">
+                                <el-menu-item :index="child.path" @click="selectLogout(child.path)">
                                     <a :href="child.linkUrl" target="right">{{child.title}}</a>
                                 </el-menu-item>
                             </template>
@@ -113,12 +113,34 @@
                 {
                     "path": "3",
                     "title": "个人中心",
-                    "children": []
+                    "children": [
+                        {
+                            "path": "3-1",
+                            "title": "退出登录"
+                        }
+                    ]
                 }
             ]
 
         },
-        methods: {}
+        methods: {
+            selectLogout(path) {
+                if (path == "3-1") {
+                    this.$confirm('确定退出吗？', '消息提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        window.location.href = "protected/student?method=doLogout"
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消退出'
+                        });
+                    });
+                }
+            }
+        }
     })
 </script>
 
