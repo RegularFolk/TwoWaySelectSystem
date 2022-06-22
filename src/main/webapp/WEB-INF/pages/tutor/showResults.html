@@ -68,6 +68,7 @@
         created() {
             if (this.students.length === 0) {
                 //根据具体方法来
+
                 axios.get("protected/student?method=getFullStudents").then(resp => {
                     if (resp.data.flag) {
                         this.students = resp.data.data
