@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+<!--    <el-main>-->
+<!--        <div style=" overflow: hidden;">-->
+<!--            <el-row>-->
+<!--                <el-col :span="24"><div class="grid-content bg-purple-light"></div></el-col>-->
+<!--            </el-row>-->
+<!--            <el-row>-->
+<!--                <el-col :span="12"><div  :data="historyRecord"></div></el-col>-->
+<!--                <el-col :span="12"><div ></div></el-col>-->
+<!--            </el-row>-->
+
+<!--        </div>-->
+<!--            <el-table-->
+<!--                    :data="message_array"-->
+<!--            style="width: 100%">-->
+<!--&lt;!&ndash;                这里根据侧边按钮显示聊天对象的姓名&ndash;&gt;-->
+<!--                <el-table-column-->
+<!--                        prop="message_array"-->
+<!--                        label="对话框"-->
+<!--                        width="180">-->
+<!--                </el-table-column>-->
+<!--            </el-table>-->
+
+<!--            <ul>-->
+<!--                <li v-for="item in message_array">{{item}}</li>-->
+<!--            </ul>-->
+<!--            <input type="text" v-model="message"/>-->
+<!--            <button v-on:click="dealMessage">add</button>-->
+
+    <div id="messageboard">
+        <el-form ref="form" label-width="50px">
+            <el-form-item label="内容">
+                <el-input v-model="content" placeholder="请输入内容"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button @click="add()">添加</el-button>
+                <el-button @click="handleReset">重置</el-button>
+            </el-form-item>
+            <el-table border :data="mydata">
+                <el-table-column label="留言条数" inline-template :context="_self">
+                    <span>{{$index+1}}</span>
+                </el-table-column>
+                <el-table-column prop="time" label="时间">
+                </el-table-column>
+                <el-table-column prop="content" label="内容">
+                </el-table-column>
+                <el-table-column label="操作" inline-template :context="_self">
+                    <span><el-button size="small" @click="showDialog()">删除</el-button></span>
+                </el-table-column>
+            </el-table>
+            <div style="text-align:right" v-show="mydata.length>0">
+                <el-button size="small" @click="showDelallDialog()">全部删除</el-button>
+            </div>
+        </el-form>
+
+        <el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span v-if="nowIndex==-2">删除全部条留言</span>
+            <span v-else>删除此条留言</span>
+            <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="del(nowIndex)" >确 定</el-button>
+        </span>
+        </el-dialog>
+    </div>
+    </el-main>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#messageboard',
+        data: function() {
+            return {
+                title: '',
+                content: '',
+                mydata: [],
+                dialogVisible: false,
+                nowIndex: -100,
+            }
+        },
+        methods: {
+            add() {
+                if (this.content == '') {
+                    this.$message.error('请填写完整');
+                } else {
+                    this.mydata.push({
+                       // 这里去数据库调 CURRENT_TIMESTAMP
+                        // time:this.,
+                        content: this.content,
+                    });
+                    this.time = '';
+                    this.content = '';
+                }
+            },
+            showDialog() {
+                this.dialogVisible = true;
+            },
+            showDelallDialog() {
+                this.dialogVisible = true;
+                this.nowIndex = -2;
+            },
+            del(n) {
+                if (n == -2) {
+                    this.mydata = [];
+                } else {
+                    this.mydata.splice(n, 1);
+                }
+                this.nowIndex = -100;
+                this.dialogVisible = false;
+            },
+            handleReset() {
+                this.time = '';
+                this.content = '';
+            }
+        },
+    })
+</script>
+
+<style>
+
+</style>
+</html>
