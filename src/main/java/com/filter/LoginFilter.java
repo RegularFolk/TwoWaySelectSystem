@@ -1,8 +1,8 @@
 package com.filter;
 
+import com.bean.ResultMessage;
 import com.bean.Student;
 import com.bean.Tutor;
-import com.bean.Result;
 import com.constant.Constants;
 import com.utils.JSONUtils;
 
@@ -29,7 +29,7 @@ public class LoginFilter implements Filter {
         Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
         if (student == null && tutor == null) {
             //未登录
-            JSONUtils.writeResult(httpServletResponse, new Result(false, Constants.NOT_LOGGED_IN));
+            JSONUtils.writeResult(httpServletResponse, new ResultMessage(false, Constants.NOT_LOGGED_IN));
             return;
         }
         chain.doFilter(request, response);

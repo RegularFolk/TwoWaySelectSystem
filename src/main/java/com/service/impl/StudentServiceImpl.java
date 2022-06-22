@@ -171,4 +171,9 @@ public class StudentServiceImpl implements StudentService {
         return preferenceDao.findTutorIdsByPreferenceId(preferenceId);
     }
 
+    @Override
+    public void setStatusToChose(int id) {
+        studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSE,id);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.bean;
 
+import java.util.List;
+
 public class Tutor {
     private int id;
     private int majorId;
@@ -11,6 +13,7 @@ public class Tutor {
     private String code;
     private Major major;
     private TutorInfo tutorInfo;
+    private List<Student> students;
 
     public Tutor() {
     }
@@ -33,7 +36,7 @@ public class Tutor {
         this.major = major;
     }
 
-    public Tutor(int id, int majorId, int tutorInfoId, String authority, String number, String password, String name, String code, Major major, TutorInfo tutorInfo) {
+    public Tutor(int id, int majorId, int tutorInfoId, String authority, String number, String password, String name, String code, Major major, TutorInfo tutorInfo, List<Student> students) {
         this.id = id;
         this.majorId = majorId;
         this.tutorInfoId = tutorInfoId;
@@ -44,6 +47,7 @@ public class Tutor {
         this.code = code;
         this.major = major;
         this.tutorInfo = tutorInfo;
+        this.students = students;
     }
 
     @Override
@@ -59,7 +63,16 @@ public class Tutor {
                 ", code='" + code + '\'' +
                 ", major=" + major +
                 ", tutorInfo=" + tutorInfo +
+                ", students=" + students +
                 '}';
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public String getCode() {

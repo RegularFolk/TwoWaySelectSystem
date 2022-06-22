@@ -42,7 +42,7 @@
                     <el-col :span="8">
                         <el-form-item prop="date2">
                             <el-time-picker placeholder="选择时间" v-model="ruleForm.date2"
-                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                                            style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -57,7 +57,7 @@
                     <el-col :span="8">
                         <el-form-item prop="date4">
                             <el-time-picker placeholder="选择时间" v-model="ruleForm.date4"
-                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                                            style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -72,7 +72,7 @@
                     <el-col :span="8">
                         <el-form-item prop="date6">
                             <el-time-picker placeholder="选择时间" v-model="ruleForm.date6"
-                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                                            style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -87,7 +87,7 @@
                     <el-col :span="8">
                         <el-form-item prop="date8">
                             <el-time-picker placeholder="选择时间" v-model="ruleForm.date8"
-                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                                            style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -102,7 +102,7 @@
                     <el-col :span="8">
                         <el-form-item prop="date10">
                             <el-time-picker placeholder="选择时间" v-model="ruleForm.date10"
-                                            style="width: 100%;" value-format="HH-mm-ss"></el-time-picker>
+                                            style="width: 100%;" value-format="HH:mm:ss"></el-time-picker>
                         </el-form-item>
                     </el-col>
                 </el-form-item>
@@ -178,11 +178,11 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         axios.post("protected/tutor?method=addEvent", {
-                            "submitTime": this.ruleForm.date1 + "-" + this.ruleForm.date2,
-                            "round1": this.ruleForm.date3 + "-" + this.ruleForm.date4,
-                            "round2": this.ruleForm.date5 + "-" + this.ruleForm.date6,
-                            "round3": this.ruleForm.date7 + "-" + this.ruleForm.date8,
-                            "endTime": this.ruleForm.date9 + "-" + this.ruleForm.date10,
+                            "submitTime": this.ruleForm.date1 + " " + this.ruleForm.date2,
+                            "round1": this.ruleForm.date3 + " " + this.ruleForm.date4,
+                            "round2": this.ruleForm.date5 + " " + this.ruleForm.date6,
+                            "round3": this.ruleForm.date7 + " " + this.ruleForm.date8,
+                            "endTime": this.ruleForm.date9 + " " + this.ruleForm.date10,
                             "description": this.ruleForm.desc
                         }).then(resp => {
                             if (resp.data.flag) {

@@ -28,10 +28,10 @@ public class StudentServlet extends ModelBaseServlet {
             student = studentService.updateStudentInfo(student, studentInfo);
             //跟新session中的student
             session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -46,11 +46,11 @@ public class StudentServlet extends ModelBaseServlet {
             student = studentService.updatePassword(password, student);
             //更新session信息
             session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -59,11 +59,11 @@ public class StudentServlet extends ModelBaseServlet {
         try {
             List<Student> students = studentService.getStudentList();
             students.forEach(student -> student.setStudentInfo(studentService.getInfoByStudentId(student.getSelfInfoId())));
-            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, students));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, students));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -74,11 +74,11 @@ public class StudentServlet extends ModelBaseServlet {
         try {
             List<Student> students = studentService.getStudentListByTutorId(id);
             students.forEach(student -> student.setStudentInfo(studentService.getInfoByStudentId(student.getSelfInfoId())));
-            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, students));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, students));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -88,11 +88,11 @@ public class StudentServlet extends ModelBaseServlet {
         int id = Integer.parseInt(studentId);
         try {
             Student student = studentService.getStudentById(id);
-            JSONUtils.writeResult(response, new Result(true, Constants.QUERY_SUCCESS, student));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, student));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -103,7 +103,7 @@ public class StudentServlet extends ModelBaseServlet {
             processTemplate("index", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, Constants.LOGOUT_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.LOGOUT_FAIL));
         }
     }
 
@@ -114,10 +114,10 @@ public class StudentServlet extends ModelBaseServlet {
         try {
             Student student = studentService.getStudentById(studentId);
             List<TutorInfo> tutorInfos = studentService.getTutorInfoListByStudent(student);
-            JSONUtils.writeResult(response, new Result(true, tutorInfos));
+            JSONUtils.writeResult(response, new ResultMessage(true, tutorInfos));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -127,7 +127,7 @@ public class StudentServlet extends ModelBaseServlet {
             processTemplate("student/main", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -137,7 +137,7 @@ public class StudentServlet extends ModelBaseServlet {
             processTemplate("student/selectTutor", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -157,12 +157,14 @@ public class StudentServlet extends ModelBaseServlet {
                 int preferenceId = studentService.addPreference(preference, student.getId());
                 student.setPreferencesId(preferenceId);
             }
+            studentService.setStatusToChose(student.getId());//将学生的status设置为已做出选择
+            student.setStatus(Constants.STUDENT_STATUS_CHOSE);
             student.setPreference(preference);
             session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_PREFERENCE_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_PREFERENCE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, Constants.UPDATE_PREFERENCE_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.UPDATE_PREFERENCE_FAIL));
         }
     }
 
@@ -173,7 +175,7 @@ public class StudentServlet extends ModelBaseServlet {
             Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
             Preference preference = student.getPreference();
             if (preference != null) {
-                JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preference.getList()));
+                JSONUtils.writeResult(response, new ResultMessage(true, Constants.GET_PREVIOUS_PREFERENCES, preference.getList()));
             } else {
                 int preferenceId = student.getPreferencesId();
                 if (preferenceId != 0) {
@@ -181,17 +183,17 @@ public class StudentServlet extends ModelBaseServlet {
                     if (preferenceIds != null) { //查询到了Preference,更新session中的对象，并转换成数组返回
                         student.setPreference(preferenceIds);
                         session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
-                        JSONUtils.writeResult(response, new Result(true, Constants.GET_PREVIOUS_PREFERENCES, preferenceIds.getList()));
+                        JSONUtils.writeResult(response, new ResultMessage(true, Constants.GET_PREVIOUS_PREFERENCES, preferenceIds.getList()));
                     } else { //有id但是却没有查询到id，是一个异常情况
                         throw new RuntimeException("查询异常");
                     }
                 } else { //没有id
-                    JSONUtils.writeResult(response, new Result(true, Constants.NO_PREVIOUS_PREFERENCES));
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.NO_PREVIOUS_PREFERENCES));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 

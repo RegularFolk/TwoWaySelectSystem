@@ -1,62 +1,62 @@
 package com.bean;
 
-import java.io.Serializable;
+import java.util.List;
 
-/**
- * 封装返回结果
- */
-public class Result implements Serializable {
-    private boolean flag;//执行结果，true为执行成功 false为执行失败
-    private String message;//返回结果信息
-    private Object data;//返回数据
+public class Result {
+    private int eventId;
+    private int studentId;
+    private int tutorId;
+    private List<Tutor> tutors;
 
-    public Result(boolean flag, String message) {
-        super();
-        this.flag = flag;
-        this.message = message;
+    public Result() {
     }
 
-    public Result(boolean flag, Object data) {
-        this.flag = flag;
-        this.data = data;
-    }
-
-    public Result(boolean flag, String message, Object data) {
-        this.flag = flag;
-        this.message = message;
-        this.data = data;
+    public Result(int eventId, int studentId, int tutorId, List<Tutor> tutors) {
+        this.eventId = eventId;
+        this.studentId = studentId;
+        this.tutorId = tutorId;
+        this.tutors = tutors;
     }
 
     @Override
     public String toString() {
         return "Result{" +
-                "flag=" + flag +
-                ", message='" + message + '\'' +
-                ", data=" + data +
+                "eventId=" + eventId +
+                ", studentId=" + studentId +
+                ", tutorId=" + tutorId +
+                ", tutors=" + tutors +
                 '}';
     }
 
-    public boolean getFlag() {
-        return flag;
+    public int getEventId() {
+        return eventId;
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
-    public String getMessage() {
-        return message;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
-    public Object getData() {
-        return data;
+    public int getTutorId() {
+        return tutorId;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setTutorId(int tutorId) {
+        this.tutorId = tutorId;
+    }
+
+    public List<Tutor> getTutors() {
+        return tutors;
+    }
+
+    public void setTutors(List<Tutor> tutors) {
+        this.tutors = tutors;
     }
 }

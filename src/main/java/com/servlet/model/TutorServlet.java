@@ -3,10 +3,8 @@ package com.servlet.model;
 import com.bean.*;
 import com.constant.Constants;
 import com.service.EventService;
-import com.service.StudentService;
 import com.service.TutorService;
 import com.service.impl.EventServiceImpl;
-import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
@@ -29,7 +27,7 @@ public class TutorServlet extends ModelBaseServlet {
             processTemplate("index",request,response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response,new Result(false,Constants.LOGOUT_FAIL));
+            JSONUtils.writeResult(response,new ResultMessage(false,Constants.LOGOUT_FAIL));
         }
     }
 
@@ -41,10 +39,10 @@ public class TutorServlet extends ModelBaseServlet {
         Integer tutorId = Integer.parseInt(tutorIdStr);
         try {
             List<Student> studentList = tutorService.checkStudent(preference, tutorId);
-            JSONUtils.writeResult(response, new Result(true, studentList));
+            JSONUtils.writeResult(response, new ResultMessage(true, studentList));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
 
     }
@@ -53,10 +51,10 @@ public class TutorServlet extends ModelBaseServlet {
     public void getTutors(HttpServletRequest request, HttpServletResponse response) {
         try {
             List<Tutor> tutorList = tutorService.getTutorList();
-            JSONUtils.writeResult(response, new Result(true, tutorList));
+            JSONUtils.writeResult(response, new ResultMessage(true, tutorList));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.QUERY_FAIL));
         }
     }
 
@@ -65,10 +63,10 @@ public class TutorServlet extends ModelBaseServlet {
         try {
             List<Tutor> tutorList = tutorService.getTutorList();
             tutorList.forEach(tutor -> tutor.setTutorInfo(tutorService.getInfoByTutorId(tutor.getTutorInfoId())));
-            JSONUtils.writeResult(response, new Result(true, tutorList));
+            JSONUtils.writeResult(response, new ResultMessage(true, tutorList));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, Constants.QUERY_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.QUERY_FAIL));
         }
 
     }
@@ -79,7 +77,7 @@ public class TutorServlet extends ModelBaseServlet {
             processTemplate("tutor/showTutors", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -94,10 +92,10 @@ public class TutorServlet extends ModelBaseServlet {
             tutor = tutorService.updateTutorInfo(tutor, tutorInfo);
             //跟新session中的student
             session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -112,11 +110,11 @@ public class TutorServlet extends ModelBaseServlet {
             tutor = tutorService.updatePassword(password, tutor);
             //更新session信息
             session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-            JSONUtils.writeResult(response, new Result(true, Constants.UPDATE_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -126,7 +124,7 @@ public class TutorServlet extends ModelBaseServlet {
             processTemplate("tutor/main", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -136,7 +134,7 @@ public class TutorServlet extends ModelBaseServlet {
             processTemplate("tutor/startEvent", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -147,10 +145,10 @@ public class TutorServlet extends ModelBaseServlet {
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             Event event = (Event) JSONUtils.parseJsonToBean(request, Event.class);
             eventService.addEventWithTutorId(event, tutor);
-            JSONUtils.writeResult(response, new Result(true, Constants.START_EVENT_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.START_EVENT_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, Constants.START_EVENT_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.START_EVENT_FAIL));
         }
     }
 

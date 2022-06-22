@@ -1,6 +1,6 @@
 package com.servlet.model;
 
-import com.bean.Result;
+import com.bean.ResultMessage;
 import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
@@ -11,46 +11,52 @@ import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
 
 public class EntranceServlet extends ModelBaseServlet {
     TutorService tutorService = new TutorServiceImpl();
     StudentService studentService = new StudentServiceImpl();
 
+    //登录前处理，清空原本session中的记录
+    private void preHandle(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        session.removeAttribute(Constants.STUDENT_SESSION_KEY);
+        session.removeAttribute(Constants.TUTOR_SESSION_KEY);
+    }
+
     //教师登录（by周才邦）
     public void doTutorLogin(HttpServletRequest request, HttpServletResponse response) {
         //调用service层处理
         try {
+            preHandle(request, response);
             Tutor tutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
             tutor = tutorService.doLogin(tutor);
             //没有报错则登录
             HttpSession session = request.getSession();
             session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-            JSONUtils.writeResult(response, new Result(true, Constants.LOGIN_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.LOGIN_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
     //学生登录（by周才邦）
     public void doStudentLogin(HttpServletRequest request, HttpServletResponse response) {
-
-        Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
         //调用service层处理登录
         try {
+            preHandle(request, response);
+            Student student = (Student) JSONUtils.parseJsonToBean(request, Student.class);
             student = studentService.doLogin(student);
             //如果没有报错，则登陆成功,将student存入session
             HttpSession session = request.getSession();
             session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
             //登陆成功返回登陆成功的JSON格式result
-            JSONUtils.writeResult(response, new Result(true, Constants.LOGIN_SUCCESS));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.LOGIN_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -65,13 +71,13 @@ public class EntranceServlet extends ModelBaseServlet {
                 tutorService.doRegister(tutor);
                 //注册成功自动登录
                 session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor);
-                JSONUtils.writeResult(response, new Result(true, Constants.REGISTER_SUCCESS));
+                JSONUtils.writeResult(response, new ResultMessage(true, Constants.REGISTER_SUCCESS));
             } else {
-                JSONUtils.writeResult(response, new Result(false, Constants.WRONG_CHECK_CODE));
+                JSONUtils.writeResult(response, new ResultMessage(false, Constants.WRONG_CHECK_CODE));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -86,13 +92,13 @@ public class EntranceServlet extends ModelBaseServlet {
                 studentService.doRegister(student);
                 //注册成功自动登录
                 request.getSession().setAttribute(Constants.STUDENT_SESSION_KEY, student);
-                JSONUtils.writeResult(response, new Result(true, Constants.REGISTER_SUCCESS));
+                JSONUtils.writeResult(response, new ResultMessage(true, Constants.REGISTER_SUCCESS));
             } else {
-                JSONUtils.writeResult(response, new Result(false, Constants.WRONG_CHECK_CODE));
+                JSONUtils.writeResult(response, new ResultMessage(false, Constants.WRONG_CHECK_CODE));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 }

@@ -30,4 +30,8 @@ public class Constants {
     public static final String START_EVENT_FAIL = "发起双选失败！";
     public static final String START_EVENT_SUCCESS = "发起双选成功！";
     public static final String LOGOUT_FAIL = "退出登录失败！";
+    public static final Integer STUDENT_STATUS_NOT_CHOOSE = 0;  //学生未进行任何志愿选择
+    public static final Integer STUDENT_STATUS_CHOSE = 1;       //学生已经做出志愿选择
+    public static final Integer STUDENT_STATUS_CHOSEN = 2;      //学生已被选择
+
 }

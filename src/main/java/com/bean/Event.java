@@ -5,6 +5,7 @@ import java.util.List;
 public class Event {
     private int id;
     private int eventInfoId;
+    private int status;
     private String submitTime;
     private String round1;
     private String round2;
@@ -17,9 +18,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(int id, int eventInfoId, String submitTime, String round1, String round2, String round3, String endTime, String description, List<Major> majors, EventInfo eventInfo) {
+    public Event(int id, int eventInfoId, int status, String submitTime, String round1, String round2, String round3, String endTime, String description, List<Major> majors, EventInfo eventInfo) {
         this.id = id;
         this.eventInfoId = eventInfoId;
+        this.status = status;
         this.submitTime = submitTime;
         this.round1 = round1;
         this.round2 = round2;
@@ -35,6 +37,7 @@ public class Event {
         return "Event{" +
                 "id=" + id +
                 ", eventInfoId=" + eventInfoId +
+                ", status=" + status +
                 ", submitTime='" + submitTime + '\'' +
                 ", round1='" + round1 + '\'' +
                 ", round2='" + round2 + '\'' +
@@ -44,6 +47,14 @@ public class Event {
                 ", majors=" + majors +
                 ", eventInfo=" + eventInfo +
                 '}';
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getDescription() {

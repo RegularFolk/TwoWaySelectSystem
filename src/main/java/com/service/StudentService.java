@@ -41,4 +41,6 @@ public interface StudentService {
     int addPreference(Preference preference, int id);
 
     Preference getPreferenceByPreferenceId(int preferenceId);
+
+    void setStatusToChose(int id);
 }

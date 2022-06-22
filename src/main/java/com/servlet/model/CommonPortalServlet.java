@@ -1,10 +1,9 @@
 package com.servlet.model;
 
-import com.bean.Result;
+import com.bean.ResultMessage;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 
@@ -15,7 +14,7 @@ public class CommonPortalServlet extends ModelBaseServlet {
             processTemplate("register", request, response);
         } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new Result(false, e.getMessage()));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 }

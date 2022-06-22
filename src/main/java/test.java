@@ -1,6 +1,6 @@
 import com.bean.*;
 import com.bean.Message;
-import com.bean.Result;
+import com.bean.ResultMessage;
 import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
@@ -10,11 +10,9 @@ import com.service.TutorService;
 import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.utils.JDBCUtil;
-import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +36,11 @@ public class test {
         try {
             tutor = tutorService.doLogin(tutor);
             //没有报错则登录
-            System.out.println(new Result(true, Constants.LOGIN_SUCCESS));
+            System.out.println(new ResultMessage(true, Constants.LOGIN_SUCCESS));
             System.out.println(tutor);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(new Result(false, e.getMessage()));
+            System.out.println(new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -63,12 +61,12 @@ public class test {
                 BeanUtils.populate(tutor, parameterMap);
                 tutorService.doRegister(tutor);
                 //注册成功自动登录
-                System.out.println(new Result(true, Constants.REGISTER_SUCCESS));
+                System.out.println(new ResultMessage(true, Constants.REGISTER_SUCCESS));
             } else {
-                System.out.println(new Result(false, Constants.WRONG_CHECK_CODE));
+                System.out.println(new ResultMessage(false, Constants.WRONG_CHECK_CODE));
             }
         } catch (Exception e) {
-            System.out.println(new Result(false, e.getMessage()));
+            System.out.println(new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -90,13 +88,13 @@ public class test {
                 studentService.doRegister(student);
                 //注册成功自动登录
                 System.out.println(student);
-                System.out.println(new Result(true, Constants.REGISTER_SUCCESS));
+                System.out.println(new ResultMessage(true, Constants.REGISTER_SUCCESS));
             } else {
-                System.out.println(new Result(false, Constants.WRONG_CHECK_CODE));
+                System.out.println(new ResultMessage(false, Constants.WRONG_CHECK_CODE));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(new Result(false, e.getMessage()));
+            System.out.println(new ResultMessage(false, e.getMessage()));
         }
     }
 
@@ -111,11 +109,11 @@ public class test {
             //如果没有报错，则登陆成功,将student存入session
             //登陆成功返回登陆成功的JSON格式result
             System.out.println(student);
-            System.out.println(new Result(true, Constants.LOGIN_SUCCESS));
+            System.out.println(new ResultMessage(true, Constants.LOGIN_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
-            System.out.println(new Result(false, e.getMessage()));
+            System.out.println(new ResultMessage(false, e.getMessage()));
         }
     }
 
