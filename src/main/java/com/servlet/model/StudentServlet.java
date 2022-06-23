@@ -8,6 +8,7 @@ import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
@@ -97,7 +98,6 @@ public class StudentServlet extends ModelBaseServlet {
     }
 
 
-
     //学生查看志愿对应的三个导师 by王城梓
     public void checkPreference(HttpServletRequest request, HttpServletResponse response) {
         String studentIdStr = request.getParameter("studentId");
@@ -140,15 +140,16 @@ public class StudentServlet extends ModelBaseServlet {
             //更新完志愿后同时更新session中student的属性
             Preference preference = (Preference) JSONUtils.parseJsonToBean(request, Preference.class);
             //根据studentId和preference更新学生志愿，返回志愿表更新后的主键
-            if (studentService.hasPreference(student.getId())) {
+            int studentId = student.getId();
+            if (studentService.hasPreference(studentId)) {
                 //如果已经填写过志愿，就更新,根据原本id更新id
                 studentService.updatePreference(preference, student.getPreferencesId());
             } else {
                 //否则添加新志愿
-                int preferenceId = studentService.addPreference(preference, student.getId());
+                int preferenceId = studentService.addPreference(preference, studentId);
                 student.setPreferencesId(preferenceId);
             }
-            studentService.setStatusToChose(student.getId());//将学生的status设置为已做出选择
+            studentService.setStatusToChose(studentId);//将学生的status设置为已做出选择
             student.setStatus(Constants.STUDENT_STATUS_CHOSE);
             student.setPreference(preference);
             session.setAttribute(Constants.STUDENT_SESSION_KEY, student);
@@ -195,6 +196,45 @@ public class StudentServlet extends ModelBaseServlet {
         } catch (IOException e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //学生端的获取正在进行的双选事件
+    public void getOngoingEvent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            ServletContext servletContext = request.getServletContext();
+            Event event = (Event) servletContext.getAttribute(Constants.EVENT_CONTEXT_KEY);
+            if (event == null) {
+                JSONUtils.writeResult(response, new ResultMessage(false, Constants.NO_ONGOING_EVENT));
+            } else {
+                JSONUtils.writeResult(response, new ResultMessage(true, Constants.GET_ONGOING_EVENT, event));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false,
+                    Constants.UPDATE_EVENT_STATUS_FAIL + "\n" + e.getMessage()));
+        }
+    }
+
+    //获取当前登录学生姓名
+    public void getUsername(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            JSONUtils.writeResult(response, new ResultMessage(true, "", student.getStudentName()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.GET_NAME_FAIL));
+        }
+    }
+
+    //跳转到登录欢迎页面
+    public void toWelcome(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("student/welcome", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, Constants.TO_WELCOME_FAIL);
         }
     }
 

@@ -13,5 +13,9 @@ public interface EventService {
 
     Event getOngoingEvent();
 
-    void setEventDisable(int id);
+    void setEventFinished(int id);
+
+    void setEventDisabled(int id);
+
+    Event enableEvent(Integer chosenEventId);
 }

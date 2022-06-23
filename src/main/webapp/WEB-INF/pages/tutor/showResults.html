@@ -24,35 +24,36 @@
 <div id="app">
     <el-main>
         <el-table
-                :data="students"
+                :data="events"
                 style="width: 100%"
         >
             <el-table-column
-                    prop="name"
-                    label="学生姓名"
-                    sortable
-                    width="120"
+                    prop="id"
+                    label="序号"
+                    width="90"
+            ></el-table-column>
+            <el-table-column
+                    prop="eventInfo.initiator"
+                    label="发起人"
             >
             </el-table-column>
-            //根据具体数据库具体字段来
             <el-table-column
-                    prop="studentInfo.major"
-                    label="专业"
-                    width="120"
+                    prop="endTime"
+                    label="结束时间"
             >
             </el-table-column>
-            //根据具体数据库具体字段来
             <el-table-column
-                    prop="studentInfo.educationBackground"
-                    label="年级"
-                    width="120"
+                    prop="eventInfo.description"
+                    label="描述"
             >
             </el-table-column>
-            //根据具体数据库具体字段来
-            <el-table-column
-                    prop="studentInfo.selfIntroduction"
-                    label="自我介绍"
-            >
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+<!--                    跳转第二个页面-->
+                    <el-button
+                            size="mini"
+                            @click="resultDetail(scope.$index, scope.row)">查看详情</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </el-main>
@@ -62,15 +63,17 @@
     var vue = new Vue({
         el: "#app",
         data: {
-            "students": []
+            "events": [],
+            "chosenEvent": {}
         },
-        methods: {},
+        methods: {
+        },
         created() {
-            if (this.students.length === 0) {
-                //根据具体方法来
-                axios.get("protected/student?method=getFullStudents").then(resp => {
+            if (this.events.length === 0) {
+                axios.get("protected/event?method=getFullEvents").then(resp => {
                     if (resp.data.flag) {
-                        this.students = resp.data.data
+                        this.$message.success(resp.data.message)
+                        this.events = resp.data.data
                     } else {
                         this.$message({
                             message: resp.data.message,
@@ -82,4 +85,14 @@
         }
     })
 </script>
+<style>
+    .el-transfer-panel {
+        width: 400px;
+        height: 500px;
+    }
+
+    .el-transfer-panel__list.is-filterable {
+        height: 400px;
+    }
+</style>
 </html>

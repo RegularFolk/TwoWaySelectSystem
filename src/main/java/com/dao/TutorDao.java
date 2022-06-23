@@ -1,6 +1,5 @@
 package com.dao;
 
-import com.bean.Student;
 import com.bean.Tutor;
 
 import java.util.List;
@@ -27,4 +26,10 @@ public interface TutorDao {
     void initializeAllStatus();
 
     List<Tutor> findByLeft();
+
+    void takeStudent(int tutorId, Integer chosenId, int round);
+
+    void updateLeft(int tutorId, int newLeft);
+
+    void removeTaken(int tutorId, int round);
 }

@@ -1,9 +1,6 @@
 package com.service;
 
-import com.bean.Preference;
-import com.bean.Student;
-import com.bean.StudentInfo;
-import com.bean.TutorInfo;
+import com.bean.*;
 
 import java.util.List;
 
@@ -44,5 +41,9 @@ public interface StudentService {
 
     void setStatusToChose(int id);
 
-    void initializeAllStatus();
+    void initialize();
+
+    List<Student> getAvailableStudents(int round, int tutorId);
+
+    List<Integer> getTakenStudentIds(Tutor tutor, int round);
 }

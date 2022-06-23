@@ -73,4 +73,22 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
         String sql = "select * from tutor where left != 0";
         return getBeanList(Tutor.class, sql);
     }
+
+    @Override
+    public void takeStudent(int tutorId, Integer chosenId, int round) {
+        String sql = "insert into tutor_student (tutor_id,student_id,round) values(?,?,?)";
+        update(sql, tutorId, chosenId, round);
+    }
+
+    @Override
+    public void updateLeft(int tutorId, int newLeft) {
+        String sql = "update tutor set left = ? where id = ?";
+        update(sql, newLeft, tutorId);
+    }
+
+    @Override
+    public void removeTaken(int tutorId, int round) {
+        String sql = "delete from tutor_student where tutor_id = ? and round = ?";
+        update(sql, tutorId, round);
+    }
 }

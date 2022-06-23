@@ -1,9 +1,6 @@
 package com.service.impl;
 
-import com.bean.Preference;
-import com.bean.Student;
-import com.bean.Tutor;
-import com.bean.TutorInfo;
+import com.bean.*;
 import com.constant.Constants;
 import com.dao.*;
 import com.dao.impl.*;
@@ -127,6 +124,16 @@ public class TutorServiceImpl implements TutorService {
                 resultDao.addTempResult(tutorId, studentId);
             }
         }
+    }
+
+    @Override
+    public void takeStudents(Tutor tutor, List<Integer> chosenIds, int round) {
+        tutorDao.removeTaken(tutor.getId(), round);
+        for (Integer chosenId : chosenIds) {
+            tutorDao.takeStudent(tutor.getId(), chosenId, round);
+            studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSEN, chosenId);
+        }
+        tutorDao.updateLeft(tutor.getId(), tutor.getLeft() - chosenIds.size());
     }
 
 

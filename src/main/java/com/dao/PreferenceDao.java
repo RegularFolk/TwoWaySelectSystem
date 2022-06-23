@@ -21,4 +21,6 @@ public interface PreferenceDao {
     void update(Preference preference, int id);
 
     int addPreference(Preference preference);
+
+    void initialize();
 }

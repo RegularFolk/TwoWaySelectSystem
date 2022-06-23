@@ -18,9 +18,12 @@ public class Constants {
     public static final String UPDATE_SUCCESS = "修改成功！";
     public static final String QUERY_SUCCESS = "查询成功!";
     public static final String LOGOUT = "登出成功！";
+
+    //三轮志愿
     public static final Integer FIRST_PREFERENCE = 1;
     public static final Integer SECOND_PREFERENCE = 2;
     public static final Integer THIRD_PREFERENCE = 3;
+
     public static final String WRONG_PREFERENCE = "请选择正确的志愿号";
     public static final String QUERY_FAIL = "查询失败！";
     public static final String UPDATE_PREFERENCE_SUCCESS = "更新志愿成功！";
@@ -39,6 +42,7 @@ public class Constants {
     //数据库中的event 的status
     public static final Integer EVENT_DISABLED = 0;
     public static final Integer EVENT_ENABLED = 1;
+    public static final Integer EVENT_FINISHED = 2;
 
     //以下针对servletContext中的 EVENT_STATUS
     public static final Integer EVENT_SHUT = 0; //没有正在进行的双选事件
@@ -57,4 +61,24 @@ public class Constants {
 
     //导师最多拥有四个学生
     public static final Integer TUTOR_MAX_CAPACITY = 4;
+
+    public static final String NO_ONGOING_EVENT = "没有正在进行的双选事件！";
+    public static final String GET_ONGOING_EVENT = "获取到正在进行的双选事件！";
+    public static final String EVENT_EXCEPTION_MESSAGE = "双选事件状态错误！";
+    public static final String SUBMIT_MESSAGE = "当前处于学生提交阶段！";
+    public static final String ROUND1_MESSAGE = "当前处于教师第一轮选择阶段！";
+    public static final String ROUND2_MESSAGE = "当前处于教师第二轮选择阶段！";
+    public static final String ROUND3_MESSAGE = "当前处于教师第三轮选择阶段！";
+    public static final String CANCEL_EVENT_FAIL = "取消事件失败！请联系管理员修正！";
+    public static final String ENABLE_EVENT_SUCCESS = "开启双选事件成功！";
+    public static final String ENABLE_EVENT_FAIL = "开启双选事件失败！请迅速联系管理员修正！";
+    public static final String GET_TUTOR_SUCCESS = "成功查询导师信息!";
+    public static final String GET_PRE_STU_FAIL = "验证已选学生信息失败！请联系管理员！";
+    public static final String GET_CANDIDATES_FAIL = "获取候选学生失败！请联系管理员！";
+    public static final String TAKE_STUDENT_SUCCESS = "选择学生成功！";
+    public static final String TAKE_STUDENT_FAIL = "选择学生失败！请联系管理员！";
+    public static final String TOO_MANY_CHOSEN = "选择了过多的学生！";
+    public static final String GET_PREVIOUS_TAKEN_FAIL = "获取选择记录失败！请联系管理员！";
+    public static final String GET_NAME_FAIL = "获取姓名失败！";
+    public static final String TO_WELCOME_FAIL = "进入欢迎页面失败！请联系管理员！";
 }

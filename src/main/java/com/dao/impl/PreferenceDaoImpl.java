@@ -39,4 +39,9 @@ public class PreferenceDaoImpl extends BaseDao<Preference> implements Preference
         String sql = "insert into preference(no_1,no_2,no_3) values (?,?,?)";
         return generatedKeyUpdate(sql, preference.getNo1(), preference.getNo2(), preference.getNo3());
     }
+
+    @Override
+    public void initialize() {
+        String sql = "delete from preference";
+    }
 }

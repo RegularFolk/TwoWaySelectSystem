@@ -22,35 +22,27 @@
 </head>
 <body>
 <div id="app">
-<!--    <el-main>
-        <div style=" overflow: hidden;">
-            <el-row>
-                <el-col :span="24"><div class="grid-content bg-purple-light"></div></el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12"><div  :data="historyRecord"></div></el-col>
-                <el-col :span="12"><div ></div></el-col>
-            </el-row>
-
-        </div>
-            <el-table
-                    :data="message_array"
-            style="width: 100%">
-&lt;!&ndash;                这里根据侧边按钮显示聊天对象的姓名&ndash;&gt;
-                <el-table-column
-                        prop="message_array"
-                        label="对话框"
-                        width="180">
-                </el-table-column>
-            </el-table>
-
-            <ul>
-                <li v-for="item in message_array">{{item}}</li>
-            </ul>
-            <input type="text" v-model="message"/>
-            <button v-on:click="dealMessage">add</button>-->
-
+    <el-main>
     <div id="messageboard">
+        <el-container>
+        <el-aside>
+            <el-menu
+                    default-active="2"
+                    class="el-menu-vertical-demo"
+                    @open="handleOpen"
+                    @close="handleClose">
+                <el-submenu index="1">
+                    <template slot="title">
+                        <i class="el-icon-menu"></i>
+                        <span>所有好友</span>
+                    </template>
+<!--                    循环数据库里所有人名-->
+                        <el-menu-item :index="names" >{{name}}</el-menu-item>
+                </el-submenu>
+
+            </el-menu>
+
+        </el-aside><el-main>
         <el-form ref="form" label-width="50px">
             <el-form-item label="内容">
                 <el-input v-model="content" placeholder="请输入内容"></el-input>
@@ -83,7 +75,7 @@
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="del(nowIndex)" >确 定</el-button>
         </span>
-        </el-dialog>
+        </el-dialog></el-main></el-container>
     </div>
     </el-main>
 </div>
@@ -103,7 +95,7 @@
         methods: {
             add() {
                 if (this.content == '') {
-                    this.$message.error('请填写完整');
+                    this.$message.error('请填写内容');
                 } else {
                     this.mydata.push({
                        // 这里去数据库调 CURRENT_TIMESTAMP

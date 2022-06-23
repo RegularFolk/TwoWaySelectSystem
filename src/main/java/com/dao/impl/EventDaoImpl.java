@@ -39,8 +39,20 @@ public class EventDaoImpl extends BaseDao<Event> implements EventDao {
     }
 
     @Override
-    public void setEventDisable(int id) {
+    public void setEventFinished(int id) {
+        String sql = "update event set status = ? where id = ?";
+        update(sql, Constants.EVENT_FINISHED, id);
+    }
+
+    @Override
+    public void setEventDisabled(int id) {
         String sql = "update event set status = ? where id = ?";
         update(sql, Constants.EVENT_DISABLED, id);
+    }
+
+    @Override
+    public void enableEvent(Integer chosenEventId) {
+        String sql = "update event set status = ? where id = ?";
+        update(sql, Constants.EVENT_ENABLED, chosenEventId);
     }
 }

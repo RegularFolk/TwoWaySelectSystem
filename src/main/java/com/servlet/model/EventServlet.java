@@ -61,4 +61,34 @@ public class EventServlet extends ModelBaseServlet {
             JSONUtils.writeResult(response, new ResultMessage(false, Constants.GET_ALL_EVENT_FAIL));
         }
     }
+
+    //强制结束当前正在进行的双选事件
+    public void shutCurrentEvent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            ServletContext servletContext = request.getServletContext();
+            Event event = (Event) servletContext.getAttribute(Constants.EVENT_CONTEXT_KEY);
+            eventService.setEventDisabled(event.getId());
+            servletContext.removeAttribute(Constants.EVENT_CONTEXT_KEY);
+            processTemplate("tutor/main", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.CANCEL_EVENT_FAIL));
+        }
+    }
+
+    //开启双选事件
+    public void enableEvent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Integer chosenEventId = Integer.parseInt(request.getParameter("id"));
+            Event event = eventService.enableEvent(chosenEventId);
+            ServletContext servletContext = request.getServletContext();
+            servletContext.setAttribute(Constants.EVENT_CONTEXT_KEY, event);
+            servletContext.setAttribute(Constants.EVENT_STATUS, Constants.EVENT_STUDENT_SUBMITTING);
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.ENABLE_EVENT_SUCCESS));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false,
+                    Constants.ENABLE_EVENT_FAIL + "\n" + e.getMessage()));
+        }
+    }
 }

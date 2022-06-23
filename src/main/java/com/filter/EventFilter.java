@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+//这个filter是本项目的核心科技  周才邦
 public class EventFilter implements Filter {
     EventService eventService = new EventServiceImpl();
     ResultService resultService = new ResultServiceImpl();
@@ -41,6 +42,7 @@ public class EventFilter implements Filter {
             Event contextEvent = (Event) servletContext.getAttribute(Constants.EVENT_CONTEXT_KEY);
             if (contextEvent == null) { //如果全局域event为空，尝试获取
                 contextEvent = eventService.getOngoingEvent();
+                servletContext.setAttribute(Constants.EVENT_CONTEXT_KEY, contextEvent);
             }
             if (contextEvent == null) {//尝试获取之后依旧为空，确认当前没有进行中的event
                 servletContext.setAttribute(Constants.EVENT_STATUS, Constants.EVENT_SHUT);
@@ -55,12 +57,12 @@ public class EventFilter implements Filter {
                                 if (!resultService.hasFinalResult(contextEvent.getId())) {
                                     //启动自动分配
                                     activateRandomAllocation();
-                                    //将结果全部存入result表，初始化所有学生和导师状态
+                                    //将结果全部存入result表，初始化所有学生和导师
                                     resultService.updateResult(contextEvent.getId());
-                                    studentService.initializeAllStatus();
+                                    studentService.initialize();
                                     tutorService.initialize();
                                 }//最终result都已经生成了，选课事件彻底结束了
-                                eventService.setEventDisable(contextEvent.getId()); //将库中的event标记为不生效
+                                eventService.setEventFinished(contextEvent.getId()); //将库中的event标记为已结束
                                 servletContext.removeAttribute(Constants.EVENT_CONTEXT_KEY); //移除全局域的event对象
                                 servletContext.setAttribute(Constants.EVENT_STATUS, Constants.EVENT_SHUT); //设置全局event状态为没有event
                             } else {

@@ -44,15 +44,16 @@
                                 {{menu.title}}
                             </template>
                             <template v-for="child in menu.children">
-                                <el-menu-item :index="child.path" @click="selectLogout(child.path)">
-                                    <a :href="child.linkUrl" target="right">{{child.title}}</a>
+                                <el-menu-item :index="child.path" @click="selectLogout(child.path,child.linkUrl)"
+                                              :disabled="child.notActive">
+                                    {{child.title}}
                                 </el-menu-item>
                             </template>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
                 <el-container>
-                    <iframe name="right" class="el-main" src="protected/tutor?method=toShowTutors" width="90%"
+                    <iframe name="right" class="el-main" src="protected/tutor?method=toWelcome" width="90%"
                             height="800px"
                             frameborder="1"></iframe>
                 </el-container>
@@ -78,6 +79,7 @@
         data: {
             "tutors": [],
             "college": "教科学院",
+            "eventStatus": '',
             "menuList": [
                 {
                     "path": "1",
@@ -86,6 +88,7 @@
                         {
                             "path": "1-1",
                             "title": "查看导师信息",
+                            "notActive": false,
                             "linkUrl": "protected/tutor?method=toShowTutors"
                         }
                     ]
@@ -96,35 +99,47 @@
                     "children": [
                         {
                             "path": "2-1",
-                            "title": "发起双选",
+                            "title": "设置双选",
+                            "notActive": false,
                             "linkUrl": "protected/event?method=toSetEvent"
                         },
                         {
                             "path": "2-2",
                             "title": "开启双选",
+                            "notActive": true,
                             "linkUrl": "protected/event?method=toStartEvent"
                         }, {
                             "path": "2-3",
                             "title": "第一轮选择",
+                            "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=1"
                         }, {
                             "path": "2-4",
                             "title": "第二轮选择",
+                            "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=2"
                         }, {
                             "path": "2-5",
                             "title": "第三轮选择",
+                            "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=3"
                         },
                         {
                             "path": "2-6",
                             "title": "查看结果",
+                            "notActive": false,
                             "linkUrl": "protected/tutor?method=toResult"
                         },
                         {
                             "path": "2-7",
                             "title": "私信",
+                            "notActive": false,
                             "linkUrl": "protected/tutor?method=toMessage"
+                        }, {
+                            "path": "2-8",
+                            "title": "强制结束当前双选事件",
+                            "notActive": true,
+                            "linkUrl": "protected/event?method=shutCurrentEvent"
                         }
                     ]
                 },
@@ -134,6 +149,7 @@
                     "children": [
                         {
                             "path": "3-1",
+                            "notActive": false,
                             "title": "退出登录"
                         }
                     ]
@@ -142,7 +158,7 @@
 
         },
         methods: {
-            selectLogout(path) {
+            selectLogout(path, linkUrl) {
                 if (path == "3-1") {
                     this.$confirm('确定退出吗？', '消息提示', {
                         confirmButtonText: '确定',
@@ -156,8 +172,57 @@
                             message: '已取消退出'
                         });
                     });
+                } else if (path == "2-8") {
+                    this.$confirm('确定要结束吗？\n', '消息提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.sendAsA(linkUrl, '_self')
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+                } else {
+                    this.sendAsA(linkUrl, 'right')
                 }
+            },
+            sendAsA(linkUrl, target) {
+                var a = document.createElement('a')
+                a.setAttribute('href', linkUrl)
+                a.setAttribute('target', target)
+                //防止反复添加
+                if (document.getElementById('js_a')) {
+                    document.body.removeChild(document.getElementById('js_a'))
+                }
+                document.body.appendChild(a);
+                a.click();
             }
+        },
+        created() {
+            axios.get("protected/tutor?method=getOngoingEvent").then(resp => {
+                if (resp.data.flag) {
+                    if (resp.data.data == '0') {//没有正在进行的事件
+                        this.menuList[1].children[1].notActive = false
+                    } else if (resp.data.data == '2') {
+                        this.menuList[1].children[7].notActive = false
+                    } else if (resp.data.data == '3') { //正处于导师第一轮选择状态
+                        this.menuList[1].children[2].notActive = false
+                        this.menuList[1].children[7].notActive = false
+                    } else if (resp.data.data == '4') {
+                        this.menuList[1].children[3].notActive = false
+                        this.menuList[1].children[7].notActive = false
+                    } else if (resp.data.data == '5') {
+                        this.menuList[1].children[4].notActive = false
+                        this.menuList[1].children[7].notActive = false
+                    }
+                    this.$message.success(resp.data.message)
+                } else { //出现异常
+                    this.$message.error(resp.data.message)
+                }
+            })
         }
     })
 </script>

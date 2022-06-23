@@ -1,9 +1,6 @@
 package com.service;
 
-import com.bean.Student;
-import com.bean.StudentInfo;
-import com.bean.Tutor;
-import com.bean.TutorInfo;
+import com.bean.*;
 
 import java.util.List;
 
@@ -34,4 +31,7 @@ public interface TutorService {
     void initialize();
 
     void randomAllocation(List<Student> students);
+
+    void takeStudents(Tutor tutor, List<Integer> chosenIds,int round);
+
 }

@@ -5,7 +5,7 @@ import com.bean.Event;
 import java.util.List;
 
 public interface EventDao {
-    public int addEventWithTutorId(Event event, int tutorId);
+    int addEventWithTutorId(Event event, int tutorId);
 
     int addInfo(String description, String initiator);
 
@@ -15,5 +15,9 @@ public interface EventDao {
 
     List<Event> getOngoingEvent();
 
-    void setEventDisable(int id);
+    void setEventFinished(int id);
+
+    void setEventDisabled(int id);
+
+    void enableEvent(Integer chosenEventId);
 }

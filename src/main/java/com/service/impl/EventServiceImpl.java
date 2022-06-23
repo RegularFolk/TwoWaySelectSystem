@@ -44,7 +44,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void setEventDisable(int id) {
-        eventDao.setEventDisable(id);
+    public void setEventFinished(int id) {
+        eventDao.setEventFinished(id);
+    }
+
+    @Override
+    public void setEventDisabled(int id) {
+        eventDao.setEventDisabled(id);
+    }
+
+    @Override
+    public Event enableEvent(Integer chosenEventId) {
+        eventDao.enableEvent(chosenEventId);
+        return getOngoingEvent();
     }
 }

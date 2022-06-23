@@ -79,7 +79,7 @@
                     }).then(resp => {
                         if (resp.data.flag) {
                             this.$message.success(resp.data.message)
-                            //跳转到页面展示
+                            this.sendAsA("protected/student?method=toWelcome", 'right')
                         } else {
                             this.$message.error(resp.data.message)
                         }
@@ -92,6 +92,17 @@
                     } else {
                         this.$message.success("选择成功！")
                     }
+                },
+                sendAsA(linkUrl, target) {
+                    var a = document.createElement('a')
+                    a.setAttribute('href', linkUrl)
+                    a.setAttribute('target', target)
+                    //防止反复添加
+                    if (document.getElementById('js_a')) {
+                        document.body.removeChild(document.getElementById('js_a'))
+                    }
+                    document.body.appendChild(a);
+                    a.click();
                 }
             },
             created() {
@@ -108,10 +119,10 @@
                     })
                 }
                 axios.get("protected/student?method=getPreference").then(resp => {
-                    if (resp.data.flag){
+                    if (resp.data.flag) {
                         this.chosen = resp.data.data
                         this.$message.success(resp.data.message)
-                    }else {
+                    } else {
                         this.$message.error(resp.data.message)
                     }
                 })

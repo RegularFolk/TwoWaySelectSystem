@@ -78,7 +78,7 @@
                         "params": {
                             "method": "takeStudents",
                             "chosenIds": this.chosen,
-                            "round": 3
+                            "round": 1
                         }
                     }).then(resp => {
                         if (resp.data.flag) {
@@ -131,7 +131,7 @@
                                 "url": "protected/tutor",
                                 "param": {
                                     "method": "getAvailableStudents",
-                                    "round": 3
+                                    "round": 1
                                 }
                             }).then(resp => {
                                 if (resp.data.flag) {
@@ -149,7 +149,7 @@
                                             "url": "protected/tutor",
                                             "param": {
                                                 "method": "getPreviousTaken",
-                                                "round": 3
+                                                "round": 1
                                             }
                                         }).then(resp => {
                                             if (resp.data.flag) {

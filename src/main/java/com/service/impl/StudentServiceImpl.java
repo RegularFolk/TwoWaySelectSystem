@@ -1,18 +1,9 @@
 package com.service.impl;
 
-import com.bean.Preference;
-import com.bean.Student;
-import com.bean.StudentInfo;
-import com.bean.TutorInfo;
+import com.bean.*;
 import com.constant.Constants;
-import com.dao.PreferenceDao;
-import com.dao.StudentDao;
-import com.dao.StudentInfoDao;
-import com.dao.TutorInfoDao;
-import com.dao.impl.PreferenceDaoImpl;
-import com.dao.impl.StudentDaoImpl;
-import com.dao.impl.StudentInfoDaoImpl;
-import com.dao.impl.TutorInfoDaoImpl;
+import com.dao.*;
+import com.dao.impl.*;
 import com.service.StudentService;
 import com.utils.MD5Util;
 
@@ -28,6 +19,8 @@ public class StudentServiceImpl implements StudentService {
     PreferenceDao preferenceDao = new PreferenceDaoImpl();
 
     TutorInfoDao tutorInfoDao = new TutorInfoDaoImpl();
+
+    IntPreferDao intPreferDao = new IntPreferDaoImpl();
 
     @Override
     public Student doLogin(Student student) {
@@ -177,8 +170,33 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void initializeAllStatus() {
+    public void initialize() {
         studentDao.initializeAllStatus();
+        preferenceDao.initialize();
+    }
+
+    @Override
+    public List<Student> getAvailableStudents(int round, int tutorId) {
+        List<Integer> preIds = intPreferDao.getIdsByRoundAndTutorId(round, tutorId);
+        List<Student> candidates = new ArrayList<>();
+        for (Integer preId : preIds) {
+            Student student = studentDao.findByPreferenceId(preId);
+            if (student.getStatus() != Constants.STUDENT_STATUS_CHOSEN) {
+                candidates.add(student);
+            }
+        }
+        return candidates;
+    }
+
+    @Override
+    public List<Integer> getTakenStudentIds(Tutor tutor, int round) {
+        List<Integer> stuIds = intPreferDao.getIdsByRoundAndTutorId(round, tutor.getId());
+        List<Integer> students = new ArrayList<>();
+        for (Integer stuId : stuIds) {
+            Student byId = studentDao.findById(stuId);
+            students.add(byId.getId());
+        }
+        return students;
     }
 
 }

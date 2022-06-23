@@ -30,6 +30,7 @@
             <el-table-column
                     prop="id"
                     label="序号"
+                    width="90"
             ></el-table-column>
             <el-table-column
                     prop="submitTime"
@@ -80,8 +81,8 @@
             getCurrentTime() {
                 //获取当前时间
                 let yy = new Date().getFullYear();
-                let mm = new Date().getMonth() + 1;
-                let dd = new Date().getDate();
+                let mm = new Date().getMonth() + 1 < 10 ? "0" + (new Date().getMonth() + 1) : new Date().getMonth() + 1;
+                let dd = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate();
                 let hh = new Date().getHours();
                 let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes();
                 let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds();
@@ -89,12 +90,55 @@
             },
             enableEvent() {
                 var current = this.getCurrentTime()
+                console.log("current time:" + current + "\n" + "submitTime:" + this.chosenEvent.submitTime)
                 if (current.localeCompare(this.chosenEvent.submitTime) >= 0) {
+                    console.log("current time:" + current + "\n" + "submitTime:" + this.chosenEvent.submitTime)
                     this.$message.error("该事件已过期！")
                 } else {
-                    //这里发送提交请求
-                    console.log(this.chosenEvent.id)
+                    this.$confirm('确定开启选定的事件吗？', '消息提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        axios({
+                            "method": "post",
+                            "url": "protected/event",
+                            "params": {
+                                "method": "enableEvent",
+                                "id": this.chosenEvent.id
+                            }
+                        }).then(resp => {
+                            if (resp.data.flag) {
+                                this.$alert(resp.data.message, '信息', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        /*this.sendAsA('protected/tutor?method=toShowTutors', '_self')*/
+                                        this.sendAsA('protected/tutor?method=toWelcome', 'right')
+                                    }
+                                });
+                            } else {
+                                this.$message.error(resp.data.message)
+                            }
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消开启'
+                        });
+                    });
+
                 }
+            },
+            sendAsA(linkUrl, target) {
+                var a = document.createElement('a')
+                a.setAttribute('href', linkUrl)
+                a.setAttribute('target', target)
+                //防止反复添加
+                if (document.getElementById('js_a')) {
+                    document.body.removeChild(document.getElementById('js_a'))
+                }
+                document.body.appendChild(a);
+                a.click();
             }
         },
         created() {
