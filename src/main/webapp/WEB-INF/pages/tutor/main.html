@@ -97,17 +97,34 @@
                         {
                             "path": "2-1",
                             "title": "发起双选",
-                            "linkUrl": "protected/tutor?method=toStartEvent"
+                            "linkUrl": "protected/event?method=toSetEvent"
                         },
                         {
                             "path": "2-2",
-                            "title": "查看结果",
-                            "linkUrl": ""
+                            "title": "开启双选",
+                            "linkUrl": "protected/event?method=toStartEvent"
+                        }, {
+                            "path": "2-3",
+                            "title": "第一轮选择",
+                            "linkUrl": "protected/tutor?method=toRound&round=1"
+                        }, {
+                            "path": "2-4",
+                            "title": "第二轮选择",
+                            "linkUrl": "protected/tutor?method=toRound&round=2"
+                        }, {
+                            "path": "2-5",
+                            "title": "第三轮选择",
+                            "linkUrl": "protected/tutor?method=toRound&round=3"
                         },
                         {
-                            "path": "2-3",
+                            "path": "2-6",
+                            "title": "查看结果",
+                            "linkUrl": "protected/tutor?method=toResult"
+                        },
+                        {
+                            "path": "2-7",
                             "title": "私信",
-                            "linkUrl": ""
+                            "linkUrl": "protected/tutor?method=toMessage"
                         }
                     ]
                 },
@@ -132,7 +149,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.location.href = "protected/tutor?method=doLogout"
+                        window.location.href = "entrance?method=doLogout"
                     }).catch(() => {
                         this.$message({
                             type: 'info',

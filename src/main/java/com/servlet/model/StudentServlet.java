@@ -96,16 +96,7 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //学生登出 by王城梓
-    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.getSession().invalidate();
-            processTemplate("index", request, response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response, new ResultMessage(false, Constants.LOGOUT_FAIL));
-        }
-    }
+
 
     //学生查看志愿对应的三个导师 by王城梓
     public void checkPreference(HttpServletRequest request, HttpServletResponse response) {
@@ -192,6 +183,16 @@ public class StudentServlet extends ModelBaseServlet {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //跳转到学生私信页面
+    public void toMessage(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("student/message", request, response);
+        } catch (IOException e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }

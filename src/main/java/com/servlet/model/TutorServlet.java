@@ -18,18 +18,6 @@ import java.util.Map;
 public class TutorServlet extends ModelBaseServlet {
 
     TutorService tutorService = new TutorServiceImpl();
-    EventService eventService = new EventServiceImpl();
-
-    //教师登出
-    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.getSession().invalidate();
-            processTemplate("index",request,response);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JSONUtils.writeResult(response,new ResultMessage(false,Constants.LOGOUT_FAIL));
-        }
-    }
 
     //教师查看学生志愿（仅自己） by王城梓
     public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
@@ -128,28 +116,35 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //跳转到发起双选页面 （周才邦）
-    public void toStartEvent(HttpServletRequest request, HttpServletResponse response) {
+    //跳转到导师私信页面
+    public void toMessage(HttpServletRequest request, HttpServletResponse response) {
         try {
-            processTemplate("tutor/startEvent", request, response);
+            processTemplate("tutor/message", request, response);
         } catch (IOException e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 
-    //新增双选事件  （周才邦）
-    public void addEvent(HttpServletRequest request, HttpServletResponse response) {
+    //导师跳转到选择学生页面 未完成
+    public void toRound(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession session = request.getSession();
-            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            Event event = (Event) JSONUtils.parseJsonToBean(request, Event.class);
-            eventService.addEventWithTutorId(event, tutor);
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.START_EVENT_SUCCESS));
-        } catch (Exception e) {
+            processTemplate("tutor/round", request, response);
+        } catch (IOException e) {
             e.printStackTrace();
-            JSONUtils.writeResult(response, new ResultMessage(false, Constants.START_EVENT_FAIL));
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
+
+    //跳转到最终结果页面
+    public void toResult(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/showResults", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
 
 }

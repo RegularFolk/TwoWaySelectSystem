@@ -28,6 +28,7 @@ public interface TutorService {
     TutorInfo getInfoByTutorId(int tutorId);
 
     Tutor updatePassword(String password, Tutor tutor);
+
     List<Student> checkStudent(Integer preference, Integer tutorId);
 
 }

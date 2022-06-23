@@ -12,6 +12,7 @@ import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 
 import javax.servlet.http.*;
+import java.io.IOException;
 
 public class EntranceServlet extends ModelBaseServlet {
     TutorService tutorService = new TutorServiceImpl();
@@ -99,6 +100,17 @@ public class EntranceServlet extends ModelBaseServlet {
         } catch (Exception e) {
             e.printStackTrace();
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //用户登出 by王城梓
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.getSession().invalidate();
+            processTemplate("index", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.LOGOUT_FAIL));
         }
     }
 }

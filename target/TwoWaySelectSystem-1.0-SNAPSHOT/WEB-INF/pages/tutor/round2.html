@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 700px; border: 1px solid #eee">
+        <el-main>
+            <template>
+                <el-transfer
+                        v-model="chosen"
+                        :data="tutors"
+                        :props="{
+                                key:'id',
+                                label:'name'
+                                        }"
+                        :titles="['待选学生', '已选学生']"
+                        target-order="push"
+                        @change="check(right)"
+                >
+                </el-transfer>
+                <el-button @click="submit()">确认第一轮志愿</el-button>
+            </template>
+        </el-main>
+    </el-container>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+            el: '#app',
+            data: {
+                "tutors": [], //获取的导师列表
+                "chosen": [] //穿梭框选择的项目
+            },
+            methods: {
+                submit() {
+                    if (this.chosen.length < 7) {
+                        this.$confirm('未选满六个学生, 是否确定第一轮学生名单?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.doSubmit()
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消提交'
+                            });
+                        });
+                    } else {
+                        this.$message.error("选择了过多的学生！")
+                    }
+                },
+                doSubmit() {
+                    // 请调用新的方法
+                    axios.post("protected/student?method=submitPreferences", {
+                        "no1": this.chosen[0],
+                        "no2": this.chosen[1],
+                        "no3": this.chosen[2]
+                    }).then(resp => {
+                        if (resp.data.flag) {
+                            this.$message.success(resp.data.message)
+                            //跳转到页面展示
+                        } else {
+                            this.$message.error(resp.data.message)
+                        }
+                    })
+                },
+                check() {
+                    if (this.chosen.length > 6) {
+                        this.$message.error("最多选择六个学生!")
+                        this.chosen.pop();
+                    } else {
+                        this.$message.success("选择成功！")
+                    }
+                }
+            },
+            created() {
+                if (this.tutors.length === 0) {
+                    // 请调用新的方法
+                    axios.get("protected/tutor?method=getTutors").then(resp => {
+                        if (resp.data.flag) {
+                            this.tutors = resp.data.data
+                        } else {
+                            this.$message({
+                                message: resp.data.message,
+                                type: "error"
+                            })
+                        }
+                    })
+                }
+                // 请调用新的方法
+                axios.get("protected/student?method=getPreference").then(resp => {
+                    if (resp.data.flag){
+                        this.chosen = resp.data.data
+                        this.$message.success(resp.data.message)
+                    }else {
+                        this.$message.error(resp.data.message)
+                    }
+                })
+            }
+        }
+    )
+</script>
+<style>
+    .el-transfer-panel {
+        width: 400px;
+        height: 500px;
+    }
+
+    .el-transfer-panel__list.is-filterable {
+        height: 400px;
+    }
+</style>
+</html>

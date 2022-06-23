@@ -14,7 +14,7 @@ public class Constants {
     public static final String STUDENT_NUMBER_EXISTS = "账号已存在";
     public static final String CHECK_CODE = "checkCode";
     public static final String TUTOR_SESSION_KEY = "LoginTutor";
-    public static final String NOT_LOGGED_IN = "请先登录！";
+    public static final String NOT_LOGGED_IN = "请先登录！ 或者点击退出登录后重新登录！";
     public static final String UPDATE_SUCCESS = "修改成功！";
     public static final String QUERY_SUCCESS = "查询成功!";
     public static final String LOGOUT = "登出成功！";
@@ -33,5 +33,25 @@ public class Constants {
     public static final Integer STUDENT_STATUS_NOT_CHOOSE = 0;  //学生未进行任何志愿选择
     public static final Integer STUDENT_STATUS_CHOSE = 1;       //学生已经做出志愿选择
     public static final Integer STUDENT_STATUS_CHOSEN = 2;      //学生已被选择
+    public static final String GET_ALL_EVENT_SUCCESS = "获取所有双选事件成功！";
+    public static final String GET_ALL_EVENT_FAIL = "获取所有双选事件失败！";
 
+    //数据库中的event 的status
+    public static final Integer EVENT_DISABLED = 0;
+    public static final Integer EVENT_ENABLED = 1;
+
+    //以下针对servletContext中的 EVENT_STATUS
+    public static final Integer EVENT_SHUT = 0; //没有正在进行的双选事件
+    public static final Integer EVENT_ONGOING = 1; //有双选事件正在进行
+    public static final Integer EVENT_STUDENT_SUBMITTING = 2;//当前处于学生提交阶段
+    public static final Integer EVENT_ROUND1 = 3;//当前处于导师第一轮选择阶段
+    public static final Integer EVENT_ROUND2 = 4;//当前处于导师第二轮选择阶段
+    public static final Integer EVENT_ROUND3 = 5;//当前处于导师第三轮选择阶段
+
+
+    public static final String EVENT_CONTEXT_KEY = "contextEvent";
+    public static final String EVENT_STATUS = "eventStatus";
+
+    public static final String UPDATE_EVENT_STATUS_FAIL = "更新选课事件失败！请迅速联系管理员！";
+    public static final String MORE_THAN_ONE_ONGOING_EVENT = "发生错误！正在进行的选课事件大于一个！请迅速联系管理员修正！";
 }

@@ -177,7 +177,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        axios.post("protected/tutor?method=addEvent", {
+                        axios.post("protected/event?method=addEvent", {
                             "submitTime": this.ruleForm.date1 + " " + this.ruleForm.date2,
                             "round1": this.ruleForm.date3 + " " + this.ruleForm.date4,
                             "round2": this.ruleForm.date5 + " " + this.ruleForm.date6,

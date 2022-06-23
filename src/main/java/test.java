@@ -14,6 +14,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,6 +197,13 @@ public class test {
         Integer senderId = 1;
         List<Message> messageList = messageDao.findBySenderId(senderId);
         System.out.println(messageList);
+    }
+
+    @Test
+    public void testDateFormat(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(new Date());
+        System.out.println(format);
     }
 
 }

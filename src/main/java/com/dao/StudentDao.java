@@ -29,4 +29,6 @@ public interface StudentDao {
     void updateInfoId(int infoId, int id);
 
     void updatePreference(int id, int preferenceId);
+
+    void initializeAllStatus();
 }

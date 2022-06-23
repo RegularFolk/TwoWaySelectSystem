@@ -106,7 +106,7 @@
                         {
                             "path": "2-3",
                             "title": "私信",
-                            "linkUrl": ""
+                            "linkUrl": "protected/student?method=toMessage"
                         }
                     ]
                 },
@@ -131,7 +131,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.location.href = "protected/student?method=doLogout"
+                        window.location.href = "entrance?method=doLogout"
                     }).catch(() => {
                         this.$message({
                             type: 'info',

@@ -173,7 +173,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void setStatusToChose(int id) {
-        studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSE,id);
+        studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSE, id);
+    }
+
+    @Override
+    public void initializeAllStatus() {
+        studentDao.initializeAllStatus();
     }
 
 }

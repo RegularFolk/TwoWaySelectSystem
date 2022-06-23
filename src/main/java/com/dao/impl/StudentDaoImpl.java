@@ -2,6 +2,7 @@ package com.dao.impl;
 
 import com.bean.Student;
 import com.bean.StudentInfo;
+import com.constant.Constants;
 import com.dao.BaseDao;
 import com.dao.StudentDao;
 
@@ -79,6 +80,12 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     public void updatePreference(int id, int preferenceId) {
         String sql = "update student set preferences_id  = ? where id = ?";
         update(sql, preferenceId, id);
+    }
+
+    @Override
+    public void initializeAllStatus() {
+        String sql = "update student set status = ?";
+        update(sql, Constants.STUDENT_STATUS_NOT_CHOOSE);
     }
 
 }
