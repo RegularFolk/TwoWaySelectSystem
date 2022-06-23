@@ -1,7 +1,7 @@
 package com.service;
 
 public interface ResultService {
-    boolean hasResult(int id);
+    boolean hasFinalResult(int id);
 
     void updateResult(int eventId);
 }

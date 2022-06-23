@@ -6,6 +6,7 @@ public class Tutor {
     private int id;
     private int majorId;
     private int tutorInfoId;
+    private int left;
     private String authority;
     private String number;
     private String password;
@@ -36,10 +37,11 @@ public class Tutor {
         this.major = major;
     }
 
-    public Tutor(int id, int majorId, int tutorInfoId, String authority, String number, String password, String name, String code, Major major, TutorInfo tutorInfo, List<Student> students) {
+    public Tutor(int id, int majorId, int tutorInfoId, int left, String authority, String number, String password, String name, String code, Major major, TutorInfo tutorInfo, List<Student> students) {
         this.id = id;
         this.majorId = majorId;
         this.tutorInfoId = tutorInfoId;
+        this.left = left;
         this.authority = authority;
         this.number = number;
         this.password = password;
@@ -56,6 +58,7 @@ public class Tutor {
                 "id=" + id +
                 ", majorId=" + majorId +
                 ", tutorInfoId=" + tutorInfoId +
+                ", left=" + left +
                 ", authority='" + authority + '\'' +
                 ", number='" + number + '\'' +
                 ", password='" + password + '\'' +
@@ -65,6 +68,14 @@ public class Tutor {
                 ", tutorInfo=" + tutorInfo +
                 ", students=" + students +
                 '}';
+    }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public void setLeft(int left) {
+        this.left = left;
     }
 
     public List<Student> getStudents() {

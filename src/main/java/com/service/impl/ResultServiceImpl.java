@@ -14,7 +14,7 @@ public class ResultServiceImpl implements ResultService {
     StudentDao studentDao = new StudentDaoImpl();
 
     @Override
-    public boolean hasResult(int id) {
+    public boolean hasFinalResult(int id) {
         List<Integer> studentIdByEventId = resultDao.findStudentIdByEventId(id);
         return studentIdByEventId.size() > 0;
 

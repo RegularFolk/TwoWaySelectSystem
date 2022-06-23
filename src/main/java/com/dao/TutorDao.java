@@ -22,4 +22,9 @@ public interface TutorDao {
 
     void updatePassword(String password, int id);
 
+    void initializeTempResult();
+
+    void initializeAllStatus();
+
+    List<Tutor> findByLeft();
 }

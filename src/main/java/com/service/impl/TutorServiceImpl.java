@@ -5,14 +5,8 @@ import com.bean.Student;
 import com.bean.Tutor;
 import com.bean.TutorInfo;
 import com.constant.Constants;
-import com.dao.PreferenceDao;
-import com.dao.StudentDao;
-import com.dao.TutorDao;
-import com.dao.TutorInfoDao;
-import com.dao.impl.PreferenceDaoImpl;
-import com.dao.impl.StudentDaoImpl;
-import com.dao.impl.TutorDaoImpl;
-import com.dao.impl.TutorInfoDaoImpl;
+import com.dao.*;
+import com.dao.impl.*;
 import com.service.TutorService;
 import com.utils.MD5Util;
 
@@ -28,6 +22,8 @@ public class TutorServiceImpl implements TutorService {
     PreferenceDao preferenceDao = new PreferenceDaoImpl();
 
     StudentDao studentDao = new StudentDaoImpl();
+
+    ResultDao resultDao = new ResultDaoImpl();
 
     @Override
     public Tutor doLogin(Tutor tutor) {
@@ -111,6 +107,26 @@ public class TutorServiceImpl implements TutorService {
             studentList.add(byPreferenceId);
         }
         return studentList;
+    }
+
+    @Override
+    public void initialize() {
+        tutorDao.initializeTempResult();
+        tutorDao.initializeAllStatus();
+    }
+
+    @Override
+    public void randomAllocation(List<Student> students) {
+        List<Tutor> tutors = tutorDao.findByLeft();
+        int cursor = 0;
+        for (Tutor tutor : tutors) {
+            for (int i = 0; i < tutor.getLeft() && cursor < students.size(); i++, cursor++) {
+                int studentId = students.get(cursor).getId(), tutorId = tutor.getId();
+                studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSEN, studentId);
+                studentDao.updateTutorId(studentId, tutorId);
+                resultDao.addTempResult(tutorId, studentId);
+            }
+        }
     }
 
 

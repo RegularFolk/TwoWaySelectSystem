@@ -54,4 +54,7 @@ public class Constants {
 
     public static final String UPDATE_EVENT_STATUS_FAIL = "更新选课事件失败！请迅速联系管理员！";
     public static final String MORE_THAN_ONE_ONGOING_EVENT = "发生错误！正在进行的选课事件大于一个！请迅速联系管理员修正！";
+
+    //导师最多拥有四个学生
+    public static final Integer TUTOR_MAX_CAPACITY = 4;
 }

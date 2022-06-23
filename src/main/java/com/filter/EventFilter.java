@@ -2,6 +2,7 @@ package com.filter;
 
 import com.bean.Event;
 import com.bean.ResultMessage;
+import com.bean.Student;
 import com.constant.Constants;
 import com.service.EventService;
 import com.service.ResultService;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class EventFilter implements Filter {
     EventService eventService = new EventServiceImpl();
@@ -49,13 +51,14 @@ public class EventFilter implements Filter {
                     if (format.compareTo(contextEvent.getRound1()) >= 0) {//当前时间晚于导师第一轮选择时间
                         if (format.compareTo(contextEvent.getRound2()) >= 0) {//当前时间晚于导师第二轮选择时间
                             if (format.compareTo(contextEvent.getRound3()) >= 0) {//当前时间晚于导师第三轮选择时间
-                                //判断是否已经生成结果，如果结果已经生成，便设置状态为没有选课事件，如果结果还没有生成，先进行自动分配
-                                if (!resultService.hasResult(contextEvent.getId())) {
+                                //判断是否已经生成最终结果，如果已生成，便设置状态为没有选课事件，如果结果还没有生成，先进行自动分配
+                                if (!resultService.hasFinalResult(contextEvent.getId())) {
                                     //启动自动分配
                                     activateRandomAllocation();
-                                    //将结果全部存入result表，初始化所有学生状态
+                                    //将结果全部存入result表，初始化所有学生和导师状态
                                     resultService.updateResult(contextEvent.getId());
                                     studentService.initializeAllStatus();
+                                    tutorService.initialize();
                                 }//最终result都已经生成了，选课事件彻底结束了
                                 eventService.setEventDisable(contextEvent.getId()); //将库中的event标记为不生效
                                 servletContext.removeAttribute(Constants.EVENT_CONTEXT_KEY); //移除全局域的event对象
@@ -82,6 +85,7 @@ public class EventFilter implements Filter {
     }
 
     private void activateRandomAllocation() {
-
+        List<Student> students = studentService.getStudentListByStatus(Constants.STUDENT_STATUS_NOT_CHOOSE);
+        tutorService.randomAllocation(students);
     }
 }

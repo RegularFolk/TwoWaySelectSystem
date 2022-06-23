@@ -17,4 +17,10 @@ public class ResultDaoImpl extends BaseDao<Integer> implements ResultDao {
         String sql = "insert into result(event_id,student_id,tutor_id) values(?,?,?)";
         update(sql, eventId, studentId, tutorId);
     }
+
+    @Override
+    public void addTempResult(int tutorId, int studentId) {
+        String sql = "insert into tutor_student(tutor_id,student_id) values(?,?)";
+        update(sql, tutorId, studentId);
+    }
 }

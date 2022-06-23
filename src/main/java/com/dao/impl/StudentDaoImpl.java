@@ -88,4 +88,10 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         update(sql, Constants.STUDENT_STATUS_NOT_CHOOSE);
     }
 
+    @Override
+    public void updateTutorId(int studentId, int tutorId) {
+        String sql = "update student set tutor_id = ? where id = ?";
+        update(sql, tutorId, studentId);
+    }
+
 }

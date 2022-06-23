@@ -31,4 +31,7 @@ public interface TutorService {
 
     List<Student> checkStudent(Integer preference, Integer tutorId);
 
+    void initialize();
+
+    void randomAllocation(List<Student> students);
 }

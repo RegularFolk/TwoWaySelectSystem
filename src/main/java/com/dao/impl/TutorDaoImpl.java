@@ -1,6 +1,7 @@
 package com.dao.impl;
 
 import com.bean.Tutor;
+import com.constant.Constants;
 import com.dao.BaseDao;
 import com.dao.TutorDao;
 
@@ -34,13 +35,13 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
     @Override
     public Tutor findById(int id) {
         String sql = "select * from tutor where id = ?";
-        return getBean(Tutor.class, sql,id);
+        return getBean(Tutor.class, sql, id);
     }
 
     @Override
     public List<Tutor> findByMajorId(int majorId) {
         String sql = "select * from tutor where major_id = ?";
-        return getBeanList(Tutor.class, sql,majorId);
+        return getBeanList(Tutor.class, sql, majorId);
     }
 
     @Override
@@ -52,6 +53,24 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
     @Override
     public void updatePassword(String password, int id) {
         String sql = "update tutor set password = ? where id=?";
-        update(sql, password,id);
+        update(sql, password, id);
+    }
+
+    @Override
+    public void initializeTempResult() {
+        String sql = "delete from tutor_student";
+        update(sql);
+    }
+
+    @Override
+    public void initializeAllStatus() {
+        String sql = "update tutor set left = ?";
+        update(sql, Constants.TUTOR_MAX_CAPACITY);
+    }
+
+    @Override
+    public List<Tutor> findByLeft() {
+        String sql = "select * from tutor where left != 0";
+        return getBeanList(Tutor.class, sql);
     }
 }
