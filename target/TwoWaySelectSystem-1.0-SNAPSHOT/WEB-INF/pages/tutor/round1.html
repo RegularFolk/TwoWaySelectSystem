@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 700px; border: 1px solid #eee">
+        <el-main>
+            <template>
+                <el-transfer
+                        v-model="chosen"
+                        :data="students"
+                        :props="{
+                                key:'id',
+                                label:'studentName'
+                                        }"
+                        :titles="['待选学生', '已选学生']"
+                        target-order="push"
+                        @change="check(right)"
+                >
+                </el-transfer>
+                <el-button @click="submit()">确认本轮选择</el-button>
+            </template>
+        </el-main>
+    </el-container>
+</div>
+</body>
+<script>
+    var vue = new Vue({
+            el: '#app',
+            data: {
+                "tutor": {}, //自己的信息
+                "students": [],//获取可以选择的学生
+                "chosen": [] //选择的学生的id
+            },
+            methods: {
+                submit() {
+                    if (this.chosen.length < this.tutor.left) {
+                        this.$confirm('未选满' + this.tutor.left + '个学生, 是否确定第一轮学生名单?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.doSubmit()
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消提交'
+                            });
+                        });
+                    } else {
+                        this.$message.error("选择了过多的学生！")
+                    }
+                },
+                doSubmit() {
+                    axios({
+                        "method": "post",
+                        "url": "protected/tutor",
+                        /*"traditional": true,*/
+                        "params": {
+                            "method": "takeStudents",
+                            "chosenIds": this.chosen,
+                            "round": 1
+                        }
+                    }).then(resp => {
+                        if (resp.data.flag) {
+                            this.$alert(resp.data.message, '信息', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    this.sendAsA('protected/tutor?method=toMain', '_self')
+                                }
+                            });
+                        } else {
+                            this.$message.error(resp.data.message)
+                        }
+                    })
+                },
+                check() {
+                    if (this.chosen.length > this.tutor.left) {
+                        this.$message.error("最多选择" + this.tutor.left + "个学生!")
+                        this.chosen.pop();
+                    } else {
+                        this.$message.success("选择成功！")
+                    }
+                },
+                sendAsA(linkUrl, target) {
+                    var a = document.createElement('a')
+                    a.setAttribute('href', linkUrl)
+                    a.setAttribute('target', target)
+                    //防止反复添加
+                    if (document.getElementById('js_a')) {
+                        document.body.removeChild(document.getElementById('js_a'))
+                    }
+                    document.body.appendChild(a);
+                    a.click();
+                }
+            },
+            created() {
+                //首先获得导师自己的剩余名额,若大于0则再获取可以选择的学生
+                axios({
+                    "method": "get",
+                    "url": "protected/tutor",
+                    "params": {
+                        "method": "getTutorSelf"
+                    }
+                }).then(resp => {
+                    if (resp.data.flag) {
+                        this.tutor = resp.data.data;
+                        if (this.tutor.left > 0) {
+                            this.$message.info(resp.data.message)
+                            axios({
+                                "method": "get",
+                                "url": "protected/tutor",
+                                "param": {
+                                    "method": "getAvailableStudents",
+                                    "round": 1
+                                }
+                            }).then(resp => {
+                                if (resp.data.flag) {
+                                    this.students = resp.data.data
+                                    if (this.students.length < 1) {
+                                        this.$alert("抱歉，您已没有候选人！", '信息', {
+                                            confirmButtonText: '确定',
+                                            callback: action => {
+                                                this.sendAsA('protected/tutor?method=toMain', '_self')
+                                            }
+                                        });
+                                    } else {//请求记录
+                                        axios({
+                                            "method": "get",
+                                            "url": "protected/tutor",
+                                            "param": {
+                                                "method": "getPreviousTaken",
+                                                "round": 1
+                                            }
+                                        }).then(resp => {
+                                            if (resp.data.flag) {
+                                                this.chosen = resp.data.data
+                                            } else {
+                                                this.$message.error(resp.data.message)
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    this.$message.error(resp.data.message)
+                                }
+                            })
+                        } else {
+                            this.$alert("抱歉，您的选择名额已用尽！", '信息', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    this.sendAsA('protected/tutor?method=toMain', '_self')
+                                }
+                            });
+                        }
+                    } else {
+                        this.$message.error(resp.data.message)
+                    }
+                })
+            }
+        }
+    )
+</script>
+<style>
+    .el-transfer-panel {
+        width: 400px;
+        height: 500px;
+    }
+
+    .el-transfer-panel__list.is-filterable {
+        height: 400px;
+    }
+</style>
+</html>
