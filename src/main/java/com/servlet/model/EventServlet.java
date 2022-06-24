@@ -5,7 +5,11 @@ import com.bean.ResultMessage;
 import com.bean.Tutor;
 import com.constant.Constants;
 import com.service.EventService;
+import com.service.StudentService;
+import com.service.TutorService;
 import com.service.impl.EventServiceImpl;
+import com.service.impl.StudentServiceImpl;
+import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 
@@ -16,6 +20,8 @@ import java.util.List;
 
 public class EventServlet extends ModelBaseServlet {
     EventService eventService = new EventServiceImpl();
+    StudentService studentService = new StudentServiceImpl();
+    TutorService tutorService = new TutorServiceImpl();
 
     //跳转到新建双选页面 （周才邦）
     public void toSetEvent(HttpServletRequest request, HttpServletResponse response) {
@@ -68,6 +74,8 @@ public class EventServlet extends ModelBaseServlet {
             ServletContext servletContext = request.getServletContext();
             Event event = (Event) servletContext.getAttribute(Constants.EVENT_CONTEXT_KEY);
             eventService.setEventDisabled(event.getId());
+            studentService.initialize();
+            tutorService.initialize();
             servletContext.removeAttribute(Constants.EVENT_CONTEXT_KEY);
             processTemplate("tutor/main", request, response);
         } catch (IOException e) {
