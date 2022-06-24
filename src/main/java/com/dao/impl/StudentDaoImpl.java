@@ -94,4 +94,10 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
         update(sql, tutorId, studentId);
     }
 
+    @Override
+    public void initializeAllPreference() {
+        String sql = "update student set preferences_id = null";
+        update(sql);
+    }
+
 }

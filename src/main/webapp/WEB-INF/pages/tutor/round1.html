@@ -117,6 +117,7 @@
                 //首先获得导师自己的剩余名额,若大于0则再获取可以选择的学生
                 axios({
                     "method": "get",
+                    "async": false,
                     "url": "protected/tutor",
                     "params": {
                         "method": "getTutorSelf"
@@ -128,6 +129,7 @@
                             this.$message.info(resp.data.message)
                             axios({
                                 "method": "get",
+                                "async": false,
                                 "url": "protected/tutor",
                                 "param": {
                                     "method": "getAvailableStudents",
@@ -146,6 +148,7 @@
                                     } else {//请求记录
                                         axios({
                                             "method": "get",
+                                            "async": false,
                                             "url": "protected/tutor",
                                             "param": {
                                                 "method": "getPreviousTaken",

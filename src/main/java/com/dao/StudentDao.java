@@ -33,4 +33,7 @@ public interface StudentDao {
     void initializeAllStatus();
 
     void updateTutorId(int studentId, int tutorId);
+
+    void initializeAllPreference();
+
 }

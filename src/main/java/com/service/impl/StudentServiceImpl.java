@@ -172,6 +172,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void initialize() {
         studentDao.initializeAllStatus();
+        studentDao.initializeAllPreference();
         preferenceDao.initialize();
     }
 
