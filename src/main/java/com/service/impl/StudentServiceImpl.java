@@ -178,10 +178,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAvailableStudents(int round, int tutorId) {
-        List<Integer> preIds = intPreferDao.getIdsByRoundAndTutorId(round, tutorId);
+        List<IntBean> preIds = intPreferDao.getIdsByRoundAndTutorId(round, tutorId);
         List<Student> candidates = new ArrayList<>();
-        for (Integer preId : preIds) {
-            Student student = studentDao.findByPreferenceId(preId);
+        for (IntBean preId : preIds) {
+            Student student = studentDao.findByPreferenceId(preId.getId());
             if (student.getStatus() != Constants.STUDENT_STATUS_CHOSEN) {
                 candidates.add(student);
             }
@@ -191,10 +191,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Integer> getTakenStudentIds(Tutor tutor, int round) {
-        List<Integer> stuIds = intPreferDao.getIdsByRoundAndTutorId(round, tutor.getId());
+        List<IntBean> stuIds = intPreferDao.getTakenIds(round, tutor.getId());
         List<Integer> students = new ArrayList<>();
-        for (Integer stuId : stuIds) {
-            Student byId = studentDao.findById(stuId);
+        for (IntBean stuId : stuIds) {
+            Student byId = studentDao.findById(stuId.getId());
             students.add(byId.getId());
         }
         return students;

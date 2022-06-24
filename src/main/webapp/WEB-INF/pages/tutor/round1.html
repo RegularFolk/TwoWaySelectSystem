@@ -122,20 +122,20 @@
                     "params": {
                         "method": "getTutorSelf"
                     }
-                }).then(resp => {
+                }).then(async resp => {
                     if (resp.data.flag) {
                         this.tutor = resp.data.data;
                         if (this.tutor.left > 0) {
                             this.$message.info(resp.data.message)
-                            axios({
+                            await axios({
                                 "method": "get",
                                 "async": false,
                                 "url": "protected/tutor",
-                                "param": {
+                                "params": {
                                     "method": "getAvailableStudents",
                                     "round": 1
                                 }
-                            }).then(resp => {
+                            }).then(async resp => {
                                 if (resp.data.flag) {
                                     this.students = resp.data.data
                                     if (this.students.length < 1) {
@@ -146,15 +146,15 @@
                                             }
                                         });
                                     } else {//请求记录
-                                        axios({
+                                        await axios({
                                             "method": "get",
                                             "async": false,
                                             "url": "protected/tutor",
-                                            "param": {
+                                            "params": {
                                                 "method": "getPreviousTaken",
                                                 "round": 1
                                             }
-                                        }).then(resp => {
+                                        }).then(async resp => {
                                             if (resp.data.flag) {
                                                 this.chosen = resp.data.data
                                             } else {
