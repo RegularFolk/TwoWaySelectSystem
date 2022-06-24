@@ -64,7 +64,7 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
 
     @Override
     public void initializeAllStatus() {
-        String sql = "update tutor set left = ?";
+        String sql = "update tutor set tutor.left = ?";
         update(sql, Constants.TUTOR_MAX_CAPACITY);
     }
 
