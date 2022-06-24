@@ -82,7 +82,7 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
 
     @Override
     public void updateLeft(int tutorId, int newLeft) {
-        String sql = "update tutor set left = ? where id = ?";
+        String sql = "update tutor set tutor.left = ? where id = ?";
         update(sql, newLeft, tutorId);
     }
 
