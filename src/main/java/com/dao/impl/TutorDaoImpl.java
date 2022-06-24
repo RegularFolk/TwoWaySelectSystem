@@ -70,7 +70,7 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
 
     @Override
     public List<Tutor> findByLeft() {
-        String sql = "select * from tutor where left > 0";
+        String sql = "select * from tutor where tutor.left > 0";
         return getBeanList(Tutor.class, sql);
     }
 
