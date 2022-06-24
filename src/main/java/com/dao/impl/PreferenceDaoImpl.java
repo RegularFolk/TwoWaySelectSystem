@@ -43,5 +43,6 @@ public class PreferenceDaoImpl extends BaseDao<Preference> implements Preference
     @Override
     public void initialize() {
         String sql = "delete from preference";
+        update(sql);
     }
 }
