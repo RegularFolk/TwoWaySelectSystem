@@ -38,7 +38,7 @@
                 <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="请输入验证码">
-                <el-input v-model="ruleForm.code" autocomplete="off"></el-input>
+                <el-input v-model="ruleForm.code" autocomplete="off" prop="checkCode"></el-input>
                 <img :src="checkCodePath" width="126px" height="35px" alt="" @click="changeCode"/>
             </el-form-item>
             <el-form-item>
@@ -52,14 +52,147 @@
     </el-row>
 </div>
 <script>
-  /*  var Main = {
-        data() {
-            var checkName = (rule, value, callback) => {
+      var Main = {
+          data() {
+              var checkName = (rule, value, callback) => {
+                  if (!value) {
+                      return callback(new Error('姓名不能为空'));
+                  }
+              };
+              var checkNumber = (rule, value, callback) => {
+                  if (!value) {
+                      return callback(new Error('学号不能为空'));
+                  }
+                  setTimeout(() => {
+                      if (!Number.isInteger(value)) {
+                          callback(new Error('请输入数字值'));
+                      } else {
+                          callback();
+                      }
+                  }, 1000);
+              };
+              var validatePass = (rule, value, callback) => {
+                  if (value === '') {
+                      callback(new Error('请输入密码'));
+                  } else {
+                      if (this.ruleForm.checkPass !== '') {
+                          this.$refs.ruleForm.validateField('checkPass');
+                      }
+                      callback();
+                  }
+              };
+              var validatePass2 = (rule, value, callback) => {
+                  if (value === '') {
+                      callback(new Error('请再次输入密码'));
+                  } else if (value !== this.ruleForm.pass) {
+                      callback(new Error('两次输入密码不一致!'));
+                  } else {
+                      callback();
+                  }
+              };
+              var checkCode = (rule, value, callback) => {
+                  if (!value) {
+                      return callback(new Error('验证码不能为空'));
+                  }
+              };
+              return {
+                  ruleForm: {
+                      name: '',
+                      pass: '',
+                      checkPass: '',
+                      number: '',
+                      code: ''
+                  },
+                  rules: {
+                      name: [
+                          {validator: checkName, trigger: 'blur'}
+                      ],
+                      pass: [
+                          {validator: validatePass, trigger: 'blur'}
+                      ],
+                      checkPass: [
+                          {validator: validatePass2, trigger: 'blur'}
+                      ],
+                      number: [
+                          {validator: checkNumber, trigger: 'blur'}
+                      ],
+                      code: [
+                          {validator: checkCode, trigger: 'blur'}
+                      ]
+                  },
+                  checkCodePath: "kaptcha"
+              };
+          },
+          methods: {
+              submitFormAsTutor() {
+                  axios.post("entrance?method=doTutorRegister", {
+                      "name": this.ruleForm.name,
+                      "number": this.ruleForm.number,
+                      "password": this.ruleForm.pass,
+                      "code": this.ruleForm.code
+                  }).then(resp => {
+                      if (resp.data.flag) {
+                          window.location.href = "protected/student?method=toMain"
+                      } else {
+                          this.$message.error(resp.data.message)
+                      }
+                  })
+              },
+              submitFormAsStu() {
+                  axios.post("entrance?method=doStudentRegister", {
+                      "studentName": this.ruleForm.name,
+                      "studentNumber": this.ruleForm.number,
+                      "password": this.ruleForm.pass,
+                      "code": this.ruleForm.code
+                  }).then(resp => {
+                      if (resp.data.flag) {
+                          window.location.href = "protected/student?method=toMain"
+                      } else {
+                          this.$message.error(resp.data.message)
+                      }
+                  })
+              },
+              changeCode() {
+                  this.checkCodePath = "kaptcha?time=" + new Date();
+              }
+          }
+      }
+      var Ctor = Vue.extend(Main)
+      new Ctor().$mount('#app')
+    /*var vue = new Vue({
+        el: "#app",
+        data: {
+            ruleForm: {
+                name: '',
+                pass: '',
+                checkPass: '',
+                number: '',
+                code: ''
+            },
+            rules: {
+                name: [
+                    {validator: checkName, trigger: 'blur'}
+                ],
+                pass: [
+                    {validator: validatePass, trigger: 'blur'}
+                ],
+                checkPass: [
+                    {validator: validatePass2, trigger: 'blur'}
+                ],
+                number: [
+                    {validator: checkNumber, trigger: 'blur'}
+                ],
+                code: [
+                    {validator: checkCode, trigger: 'blur'}
+                ]
+            },
+            checkCodePath: "kaptcha",
+            var: checkName = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('姓名不能为空'));
                 }
-            };
-            var checkNumber = (rule, value, callback) => {
+            },
+            var: checkNumber = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('学号不能为空'));
                 }
@@ -70,8 +203,8 @@
                         callback();
                     }
                 }, 1000);
-            };
-            var validatePass = (rule, value, callback) => {
+            },
+            var: validatePass = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请输入密码'));
                 } else {
@@ -80,8 +213,8 @@
                     }
                     callback();
                 }
-            };
-            var validatePass2 = (rule, value, callback) => {
+            },
+            var: validatePass2 = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码'));
                 } else if (value !== this.ruleForm.pass) {
@@ -89,39 +222,12 @@
                 } else {
                     callback();
                 }
-            };
-            var checkCode = (rule, value, callback) => {
+            },
+            var: checkCode = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('验证码不能为空'));
                 }
-            };
-            return {
-                ruleForm: {
-                    name: '',
-                    pass: '',
-                    checkPass: '',
-                    number: '',
-                    code: ''
-                },
-                rules: {
-                    name: [
-                        {validator: checkName, trigger: 'blur'}
-                    ],
-                    pass: [
-                        {validator: validatePass, trigger: 'blur'}
-                    ],
-                    checkPass: [
-                        {validator: validatePass2, trigger: 'blur'}
-                    ],
-                    number: [
-                        {validator: checkNumber, trigger: 'blur'}
-                    ],
-                    code: [
-                        {validator: checkCode(), trigger: 'blur'}
-                    ]
-                },
-                checkCodePath: "kaptcha"
-            };
+            }
         },
         methods: {
             submitFormAsTutor() {
@@ -156,83 +262,7 @@
                 this.checkCodePath = "kaptcha?time=" + new Date();
             }
         }
-    }
-    var Ctor = Vue.extend(Main)
-    new Ctor().$mount('#app')
-*/
-    var vue = new Vue({
-        el: "#app",
-        data: {
-            ruleForm: {
-                name: '',
-                pass: '',
-                checkPass: '',
-                number: '',
-                code: ''
-            },
-            rules: {
-                name: [
-                    {validator: this.checkName, trigger: 'blur'}
-                ],
-                pass: [
-                    {validator: this.validatePass, trigger: 'blur'}
-                ],
-                checkPass: [
-                    {validator: this.validatePass2, trigger: 'blur'}
-                ],
-                number: [
-                    {validator: this.checkNumber, trigger: 'blur'}
-                ],
-                code: [
-                    {validator: this.checkCode, trigger: 'blur'}
-                ]
-            },
-            checkCodePath: "kaptcha"
-        },
-        methods: {
-            checkName(rule, value, callback) {
-                if (!value) {
-                    return callback(new Error('姓名不能为空'));
-                }
-            },
-            checkNumber(rule, value, callback) {
-                if (!value) {
-                    return callback(new Error('学号不能为空'));
-                }
-                setTimeout(() => {
-                    if (!Number.isInteger(value)) {
-                        callback(new Error('请输入数字值'));
-                    } else {
-                        callback();
-                    }
-                }, 1000);
-            },
-            validatePass(rule, value, callback) {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else {
-                    if (this.ruleForm.checkPass !== '') {
-                        this.$refs.ruleForm.validateField('checkPass');
-                    }
-                    callback();
-                }
-            },
-            validatePass2(rule, value, callback) {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.ruleForm.pass) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                    callback();
-                }
-            },
-            checkCode(rule, value, callback) {
-                if (!value) {
-                    return callback(new Error('验证码不能为空'));
-                }
-            }
-        }
-    })
+    })*/
 </script>
 <style>
 
