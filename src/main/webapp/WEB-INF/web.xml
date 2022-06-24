@@ -49,8 +49,8 @@
     </filter>
     <filter-mapping>
         <filter-name>EventFilter</filter-name>
-        <url-pattern>/tutor</url-pattern>
-        <url-pattern>/student</url-pattern>
+        <url-pattern>/protected/tutor</url-pattern>
+        <url-pattern>/protected/student</url-pattern>
     </filter-mapping>
 
     <!--配置kpatchaServlet的映射路径-->
