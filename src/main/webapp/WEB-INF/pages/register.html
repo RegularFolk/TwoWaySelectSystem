@@ -52,7 +52,7 @@
     </el-row>
 </div>
 <script>
-    var Main = {
+  /*  var Main = {
         data() {
             var checkName = (rule, value, callback) => {
                 if (!value) {
@@ -159,6 +159,80 @@
     }
     var Ctor = Vue.extend(Main)
     new Ctor().$mount('#app')
+*/
+    var vue = new Vue({
+        el: "#app",
+        data: {
+            ruleForm: {
+                name: '',
+                pass: '',
+                checkPass: '',
+                number: '',
+                code: ''
+            },
+            rules: {
+                name: [
+                    {validator: this.checkName, trigger: 'blur'}
+                ],
+                pass: [
+                    {validator: this.validatePass, trigger: 'blur'}
+                ],
+                checkPass: [
+                    {validator: this.validatePass2, trigger: 'blur'}
+                ],
+                number: [
+                    {validator: this.checkNumber, trigger: 'blur'}
+                ],
+                code: [
+                    {validator: this.checkCode, trigger: 'blur'}
+                ]
+            },
+            checkCodePath: "kaptcha"
+        },
+        methods: {
+            checkName(rule, value, callback) {
+                if (!value) {
+                    return callback(new Error('姓名不能为空'));
+                }
+            },
+            checkNumber(rule, value, callback) {
+                if (!value) {
+                    return callback(new Error('学号不能为空'));
+                }
+                setTimeout(() => {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('请输入数字值'));
+                    } else {
+                        callback();
+                    }
+                }, 1000);
+            },
+            validatePass(rule, value, callback) {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.ruleForm.checkPass !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            },
+            validatePass2(rule, value, callback) {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm.pass) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            },
+            checkCode(rule, value, callback) {
+                if (!value) {
+                    return callback(new Error('验证码不能为空'));
+                }
+            }
+        }
+    })
 </script>
 <style>
 
