@@ -21,30 +21,35 @@
 </head>
 <body>
 <div id="app">
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="姓名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="账号" prop="number">
-            <el-input v-model.number="ruleForm.number"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="请输入验证码">
-            <el-input v-model="ruleForm.code" autocomplete="off"></el-input>
-            <img :src="checkCodePath" width="126px" height="35px" alt="" @click="changeCode"/>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitFormAsTutor()">以教师注册</el-button>
-            <el-button type="primary" @click="submitFormAsStu()">以学生注册</el-button>
-            <!--            跳转到登陆页面-->
-            <el-button @click="resetForm('ruleForm')">登陆</el-button>
-        </el-form-item>
-    </el-form>
+    <img class="logo_img" alt="" src="static/imgs/zhaohui1.jpg"/>
+    <el-row type="flex" justify="center">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+
+            <el-form-item label="姓名" prop="name">
+                <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="账号" prop="number">
+                <el-input v-model.number="ruleForm.number"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pass">
+                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPass">
+                <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="请输入验证码">
+                <el-input v-model="ruleForm.code" autocomplete="off"></el-input>
+                <img :src="checkCodePath" width="126px" height="35px" alt="" @click="changeCode"/>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitFormAsTutor()">以教师注册</el-button>
+                <el-button type="primary" @click="submitFormAsStu()">以学生注册</el-button>
+                <!--            跳转到登陆页面-->
+                <el-button @click="resetForm('ruleForm')">登陆</el-button>
+            </el-form-item>
+
+        </el-form>
+    </el-row>
 </div>
 <script>
     var Main = {
@@ -85,6 +90,11 @@
                     callback();
                 }
             };
+            var checkCode = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('验证码不能为空'));
+                }
+            };
             return {
                 ruleForm: {
                     name: '',
@@ -94,7 +104,7 @@
                     code: ''
                 },
                 rules: {
-                    name:[
+                    name: [
                         {validator: checkName, trigger: 'blur'}
                     ],
                     pass: [
@@ -105,6 +115,9 @@
                     ],
                     number: [
                         {validator: checkNumber, trigger: 'blur'}
+                    ],
+                    code: [
+                        {validator: checkCode(), trigger: 'blur'}
                     ]
                 },
                 checkCodePath: "kaptcha"
@@ -147,5 +160,69 @@
     var Ctor = Vue.extend(Main)
     new Ctor().$mount('#app')
 </script>
+<style>
+
+    .logo_img {
+        /*设置背景图片自适应全屏*/
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
+        width: 100%;
+
+        height: 100%;
+
+        min-width: 1000px;
+
+        z-index: -10;
+
+        zoom: 1;
+
+        background-color: #fff;
+
+        /*background: url("static/pictures/libarary.jpg");*/
+
+        background-repeat: no-repeat;
+
+        background-size: cover;
+
+        -webkit-background-size: cover;
+
+        -o-background-size: cover;
+
+        background-position: center 0;
+
+    }
+
+</style>
+<style lang="less" scoped>
+
+    .el-form {
+
+        width: 500px;
+
+        border: 1px solid #000;
+
+        padding: 40px;
+
+        margin: 0 auto;
+
+        margin-top: 340px;
+
+        padding-left: 20px;
+
+        padding-bottom: 20px;
+
+        border-radius: 10px;
+
+        background: #f0f0f0;
+        /*自适应*/
+        top: 50%;
+        position: absolute;
+        transform: translateY(-50%); /* 使用css3的transform来实现 */
+    }
+</style>
 </body>
 </html>
