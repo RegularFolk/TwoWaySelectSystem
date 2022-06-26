@@ -62,6 +62,44 @@
             >
             </el-table-column>
         </el-table>
+
+
+<!--        //该div是循环卡片列表-->
+        <div style="margin-left:1%;margin-right:1%">
+            <el-row>
+                <el-col :span="4" v-for="(item) in tutors" :key="item.id" :offset="1" >
+                    <div style="margin-top:15px">
+                        <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+                            <div>
+                                <span>导师姓名：{{item.name}}</span><br>
+                                <span>科研成就：{{item.name}}</span><br>
+                                <span>自我介绍：{{tutorInfo.selfIntroduction}}</span><br>
+<!--                                <div class="bottom clearfix">-->
+<!--                                    <time class="time"><strong>创建时间:</strong>{{item.classCreatetime}}</time>-->
+<!--                                    <el-button type="text" class="button" @click="add(item)">查看</el-button>-->
+<!--                                </div>-->
+                            </div>
+                        </el-card>
+                    </div>
+                </el-col>
+            </el-row>
+            </div>
+
+<!--        <el-row>-->
+<!--            <el-col :span="8" v-for="(tutors, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">-->
+<!--                <el-card :body-style="{ padding: '0px' }" shadow="hover">-->
+<!--                    <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
+<!--                    <div style="padding: 14px;">-->
+<!--                        <span>好吃的汉堡</span>-->
+<!--                        <div class="bottom clearfix">-->
+<!--                            <time class="time">{{tutorInfo.selfIntroduction}}</time>-->
+<!--                            <el-button type="text" class="button">操作按钮</el-button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </el-card>-->
+<!--            </el-col>-->
+<!--        </el-row>-->
     </el-main>
 </div>
 </body>
@@ -88,4 +126,35 @@
         }
     })
 </script>
+<style>
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+
+    .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+    }
+
+    .button {
+        padding: 0;
+        float: right;
+    }
+
+    .image {
+        width: 100%;
+        display: block;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+</style>
 </html>

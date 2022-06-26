@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:margin="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>学生导师双选系统</title>
+    <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+    <!--使用绝对路径-->
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="static/plugins/elementui/index.css">
+    <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="static/js/vue.js"></script>
+    <script src="static/plugins/elementui/index.js"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="login-wrap">
+
+        <br>
+            <el-steps :active="active" finish-status="success" align-center >
+                <el-step title="第一轮双选" ></el-step>
+                <el-step title="第二轮双选"></el-step>
+                <el-step title="第三轮双选"></el-step>
+                <el-step title="最终结果"></el-step>
+        </el-steps>
+        <center>
+            <el-button style="margin-top: 30px;" @click="next" >下一步</el-button>
+        </center>
+
+    </div>
+</div>
+
+<script>
+    var Main = {
+        data() {
+            return {
+                active: 0
+            };
+        },
+
+        methods: {
+            next() {
+                if (this.active++ > 2) this.active = 0;
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+<style>
+    #haha{
+        font-size: 50px;
+    }
+    .logo_img {
+        /*设置背景图片自适应全屏*/
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
+        width: 100%;
+
+        height: 100%;
+
+        min-width: 1000px;
+
+        z-index: -10;
+
+        zoom: 1;
+
+        background-color: #fff;
+
+        /*background: url("static/pictures/libarary.jpg");*/
+
+        background-repeat: no-repeat;
+
+        background-size: cover;
+
+        -webkit-background-size: cover;
+
+        -o-background-size: cover;
+
+        background-position: center 0;
+
+    }
+
+</style>
+<style lang="less" scoped>
+
+    .el-step__title {
+
+
+        font-size:27px;
+
+        /*padding: 40px;*/
+
+        /*margin: 0 auto;*/
+
+        /*margin-top: 200px;*/
+
+        /*padding-left: 20px;*/
+
+        /*padding-bottom: 20px;*/
+
+        /*border-radius: 10px;*/
+
+    }
+</style>
+</body>
+</html>

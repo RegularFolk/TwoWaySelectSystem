@@ -13,9 +13,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="TwoWaySelectSystem" />
         </element>
-        <element id="directory" name="lib">
-          <element id="library" level="project" name="lib2" />
-        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/TwoWaySelectSystem-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="TwoWaySelectSystem/web/Web" />
     </root>

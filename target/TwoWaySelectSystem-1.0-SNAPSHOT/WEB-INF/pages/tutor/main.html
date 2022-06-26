@@ -99,56 +99,82 @@
                     "children": [
                         {
                             "path": "2-1",
-                            "title": "设置双选",
-                            "notActive": false,
-                            "linkUrl": "protected/event?method=toSetEvent"
-                        },
-                        {
-                            "path": "2-2",
-                            "title": "开启双选",
-                            "notActive": true,
-                            "linkUrl": "protected/event?method=toStartEvent"
-                        }, {
-                            "path": "2-3",
                             "title": "第一轮选择",
                             "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=1"
                         }, {
-                            "path": "2-4",
+                            "path": "2-2",
                             "title": "第二轮选择",
                             "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=2"
                         }, {
-                            "path": "2-5",
+                            "path": "2-3",
                             "title": "第三轮选择",
                             "notActive": true,
                             "linkUrl": "protected/tutor?method=toRound&round=3"
                         },
                         {
-                            "path": "2-6",
+                            "path": "2-4",
                             "title": "查看结果",
                             "notActive": false,
                             "linkUrl": "protected/tutor?method=toResult"
                         },
                         {
-                            "path": "2-7",
+                            "path": "2-5",
                             "title": "私信",
                             "notActive": false,
                             "linkUrl": "protected/tutor?method=toMessage"
-                        }, {
-                            "path": "2-8",
-                            "title": "强制结束当前双选事件",
-                            "notActive": true,
-                            "linkUrl": "protected/event?method=shutCurrentEvent"
                         }
                     ]
                 },
                 {
                     "path": "3",
-                    "title": "个人中心",
+                    "title": "管理员功能",
                     "children": [
                         {
                             "path": "3-1",
+                            "title": "设置双选",
+                            "notActive": false,
+                            "linkUrl": "protected/event?method=toSetEvent"
+                        },
+                        {
+                            "path": "3-2",
+                            "title": "开启双选",
+                            "notActive": false,
+                            "linkUrl": "protected/event?method=toStartEvent"
+                        },
+                        {
+                            "path": "3-3",
+                            "title": "调整双选",
+                            "notActive": true,
+                            "linkUrl": "protected/event?method=toStartEvent"
+                        },
+                        {
+                            "path": "3-4",
+                            "title": "强制结束当前双选事件",
+                            "notActive": true,
+                            "linkUrl": "protected/event?method=shutCurrentEvent"
+                        },
+                        {
+                            "path": "3-5",
+                            "title": "查看结果",
+                            "notActive": false,
+                            "linkUrl": "protected/tutor?method=toResult"
+                        },
+                        {
+                            "path": "3-6",
+                            "title": "私信",
+                            "notActive": false,
+                            "linkUrl": "protected/tutor?method=toMessage"
+                        }
+                    ]
+                },
+                {
+                    "path": "4",
+                    "title": "个人中心",
+                    "children": [
+                        {
+                            "path": "4-1",
                             "notActive": false,
                             "title": "退出登录"
                         }
@@ -159,7 +185,7 @@
         },
         methods: {
             selectLogout(path, linkUrl) {
-                if (path == "3-1") {
+                if (path == "4-1") {
                     this.$confirm('确定退出吗？', '消息提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',

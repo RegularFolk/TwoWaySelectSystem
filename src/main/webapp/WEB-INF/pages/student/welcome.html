@@ -31,6 +31,13 @@
             </el-card>
             <img class="logo_img" alt="" src="static/imgs/stu_bg.jpg"/>
         </el-row>
+        <br>
+            <el-steps :active="active" finish-status="success" align-center>
+            <el-step title="第一轮双选"></el-step>
+            <el-step title="第二轮双选"></el-step>
+            <el-step title="第三论双选"></el-step>
+                <el-step title="最终结果"></el-step>
+        </el-steps>
     </div>
 </div>
 
