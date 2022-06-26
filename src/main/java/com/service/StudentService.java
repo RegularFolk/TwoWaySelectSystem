@@ -19,7 +19,7 @@ public interface StudentService {
 
     List<Student> getStudentListByTutorId(int tutorId);
 
-    List<Student> getStudentListByStatus(int status);
+    List<Student> getNotChosen();
 
     Student getStudentById(int studentId);
 

@@ -117,41 +117,44 @@
                 //首先获得导师自己的剩余名额,若大于0则再获取可以选择的学生
                 axios({
                     "method": "get",
+                    "async": false,
                     "url": "protected/tutor",
                     "params": {
                         "method": "getTutorSelf"
                     }
-                }).then(resp => {
+                }).then(async resp => {
                     if (resp.data.flag) {
                         this.tutor = resp.data.data;
                         if (this.tutor.left > 0) {
                             this.$message.info(resp.data.message)
-                            axios({
+                            await axios({
                                 "method": "get",
+                                "async": false,
                                 "url": "protected/tutor",
-                                "param": {
+                                "params": {
                                     "method": "getAvailableStudents",
                                     "round": 3
                                 }
-                            }).then(resp => {
+                            }).then(async resp => {
                                 if (resp.data.flag) {
                                     this.students = resp.data.data
                                     if (this.students.length < 1) {
                                         this.$alert("抱歉，您已没有候选人！", '信息', {
                                             confirmButtonText: '确定',
                                             callback: action => {
-                                                this.sendAsA('protected/tutor?method=toMain', '_self')
+                                                this.sendAsA('protected/tutor?method=toWelcome', '_self')
                                             }
                                         });
                                     } else {//请求记录
-                                        axios({
+                                        await axios({
                                             "method": "get",
+                                            "async": false,
                                             "url": "protected/tutor",
-                                            "param": {
+                                            "params": {
                                                 "method": "getPreviousTaken",
                                                 "round": 3
                                             }
-                                        }).then(resp => {
+                                        }).then(async resp => {
                                             if (resp.data.flag) {
                                                 this.chosen = resp.data.data
                                             } else {
@@ -167,7 +170,7 @@
                             this.$alert("抱歉，您的选择名额已用尽！", '信息', {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    this.sendAsA('protected/tutor?method=toMain', '_self')
+                                    this.sendAsA('protected/tutor?method=toWelcome', '_self')
                                 }
                             });
                         }

@@ -86,8 +86,9 @@ public class EventFilter implements Filter {
         }
     }
 
+    //自动分配完之后student表中每个student都应该有tutorId字段
     private void activateRandomAllocation() {
-        List<Student> students = studentService.getStudentListByStatus(Constants.STUDENT_STATUS_NOT_CHOOSE);
+        List<Student> students = studentService.getNotChosen();
         tutorService.randomAllocation(students);
     }
 }

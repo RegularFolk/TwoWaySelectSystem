@@ -101,8 +101,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getStudentListByStatus(int status) {
-        return studentDao.findByStatus(status);
+    public List<Student> getNotChosen() {
+        return studentDao.getNotChosen();
     }
 
     @Override
@@ -171,8 +171,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void initialize() {
-        studentDao.initializeAllStatus();
-        studentDao.initializeAllPreference();
+        //初始化学生的status，preference_id,tutor_id
+        studentDao.initialize();
         preferenceDao.initialize();
     }
 
@@ -194,8 +194,7 @@ public class StudentServiceImpl implements StudentService {
         List<IntBean> stuIds = intPreferDao.getTakenIds(round, tutor.getId());
         List<Integer> students = new ArrayList<>();
         for (IntBean stuId : stuIds) {
-            Student byId = studentDao.findById(stuId.getId());
-            students.add(byId.getId());
+            students.add(stuId.getId());
         }
         return students;
     }

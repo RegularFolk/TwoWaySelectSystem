@@ -130,9 +130,12 @@ public class TutorServiceImpl implements TutorService {
     public void takeStudents(Tutor tutor, List<Integer> chosenIds, int round) {
         tutorDao.removeTaken(tutor.getId(), round);
         for (Integer chosenId : chosenIds) {
+            //存入缓存结果表
             tutorDao.takeStudent(tutor.getId(), chosenId, round);
             studentDao.updateStatus(Constants.STUDENT_STATUS_CHOSEN, chosenId);
-        }
+            //在学生表中更新导师信息
+            studentDao.updateTutorId(chosenId, tutor.getId());
+        }//更新导师剩余名额信息
         tutorDao.updateLeft(tutor.getId(), tutor.getLeft() - chosenIds.size());
     }
 

@@ -1,7 +1,6 @@
 package com.dao;
 
 import com.bean.Student;
-import com.bean.StudentInfo;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface StudentDao {
 
     Student findById(int id);
 
-    List<Student> findByStatus(int status);
+    List<Student> getNotChosen();
 
     List<Student> findByMajorId(int majorId);
 
@@ -30,10 +29,8 @@ public interface StudentDao {
 
     void updatePreference(int id, int preferenceId);
 
-    void initializeAllStatus();
-
     void updateTutorId(int studentId, int tutorId);
 
-    void initializeAllPreference();
+    void initialize();
 
 }
