@@ -34,28 +34,39 @@
                             <div class="name-role">
                                 <span class="sender"> 你好，{{dataForm.name}}</span>
                             </div>
-<!--                            <div class="registe-info">-->
-<!--          <span class="registe-info">-->
-<!--            注册时间：-->
-<!--            <li class="fa fa-clock-o"></li>-->
-<!--             2020/4/10 9:40:33-->
-<!--          </span>-->
-<!--                            </div>-->
+                            <!--                            <div class="registe-info">-->
+                            <!--          <span class="registe-info">-->
+                            <!--            注册时间：-->
+                            <!--            <li class="fa fa-clock-o"></li>-->
+                            <!--             2020/4/10 9:40:33-->
+                            <!--          </span>-->
+                            <!--                            </div>-->
                             <el-divider></el-divider>
                             <div class="personal-relation">
-                                <div class="relation-item">性别： <div style="float: right; padding-right:20px;">{{dataForm.gender}}</div></div>
+                                <div class="relation-item">性别：
+                                    <div style="float: right; padding-right:20px;">{{dataForm.gender}}</div>
+                                </div>
                             </div>
                             <div class="personal-relation">
-                                <div class="relation-item">职位:  <div style="float: right; padding-right:20px;">{{dataForm.title}}</div></div>
+                                <div class="relation-item">职位:
+                                    <div style="float: right; padding-right:20px;">{{dataForm.title}}</div>
+                                </div>
                             </div>
                             <div class="personal-relation">
-                                <div class="relation-item">政治面貌:  <div style="float: right; padding-right:20px;">{{dataForm.education_background}}</div></div>
+                                <div class="relation-item">政治面貌:
+                                    <div style="float: right; padding-right:20px;">{{dataForm.education_background}}
+                                    </div>
+                                </div>
                             </div>
                             <div class="personal-relation">
-                                <div class="relation-item">获奖荣誉:  <div style="float: right; padding-right:20px;">{{dataForm.research_field}}</div></div>
+                                <div class="relation-item">获奖荣誉:
+                                    <div style="float: right; padding-right:20px;">{{dataForm.research_field}}</div>
+                                </div>
                             </div>
                             <div class="personal-relation">
-                                <div class="relation-item">自我介绍:  <div style="float: right; padding-right:20px;">{{dataForm.self_introduction}}</div></div>
+                                <div class="relation-item">自我介绍:
+                                    <div style="float: right; padding-right:20px;">{{dataForm.self_introduction}}</div>
+                                </div>
                             </div>
                         </el-card>
                     </div>
@@ -69,27 +80,27 @@
                             <div>
                                 <el-form label-width="80px" v-model="dataFrom" size="small" label-position="right">
                                     <el-form-item label="姓名" prop="name">
-                                        <el-input  auto-complete="off" v-model="dataForm.name"></el-input>
+                                        <el-input auto-complete="off" v-model="dataForm.name"></el-input>
                                     </el-form-item>
                                     <el-form-item label="性别" prop="gender">
                                         <el-input auto-complete="off" v-model="dataForm.gender"></el-input>
                                     </el-form-item>
                                     <el-form-item label="职称" prop="title">
-                                        <el-input  maxlength="18" v-model="dataForm.title"></el-input>
+                                        <el-input maxlength="18" v-model="dataForm.title"></el-input>
                                     </el-form-item>
                                     <el-form-item label="学历" prop="education_background">
-                                        <el-input  maxlength="18" v-model="dataForm.education_background"></el-input>
+                                        <el-input maxlength="18" v-model="dataForm.education_background"></el-input>
                                     </el-form-item>
                                     <el-form-item label="研究领域" prop="research_field">
-                                        <el-input  maxlength="18" v-model="research_field"></el-input>
+                                        <el-input maxlength="18" v-model="research_field"></el-input>
                                     </el-form-item>
                                     <el-form-item label="自我介绍" prop="self_introduction">
-                                        <el-input  maxlength="18" v-model="dataForm.self_introduction"></el-input>
+                                        <el-input maxlength="18" v-model="dataForm.self_introduction"></el-input>
                                     </el-form-item>
                                 </el-form>
                                 <div slot="footer" class="dialog-footer">
                                     <el-button size="mini" type="primary">提交</el-button>
-                                    <el-button size="mini" type="warning" >关闭</el-button>
+                                    <el-button size="mini" type="warning">关闭</el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -107,8 +118,8 @@
         el: "#app",
         data() {
             // "tutors": []
-            return{
-                dataForm:{
+            return {
+                dataForm: {
                     name: 'akko',
 
                 }
@@ -147,6 +158,7 @@
         display: table;
         content: "";
     }
+
     .clearfix:after {
         clear: both
     }
@@ -154,19 +166,23 @@
     .box-card {
         width: 100%;
     }
+
     /*//文本样式区*/
-      .name-role {
-          font-size: 16px;
-          padding: 5px;
-          text-align:center;
-      }
-    .sender{
-        text-align:center;
-    }
-    .registe-info{
+    .name-role {
+        font-size: 16px;
+        padding: 5px;
         text-align: center;
-        padding-top:10px;
     }
+
+    .sender {
+        text-align: center;
+    }
+
+    .registe-info {
+        text-align: center;
+        padding-top: 10px;
+    }
+
     .personal-relation {
         font-size: 16px;
         padding: 0px 5px 15px;
@@ -178,33 +194,43 @@
         padding: 12px;
 
     }
-    .dialog-footer{
-        padding-top:10px ;
+
+    .dialog-footer {
+        padding-top: 10px;
         padding-left: 10%;
     }
+
     /*//布局样式区*/
-      .el-row {
-          margin-bottom: 20px;
-    &:last-child {
-         margin-bottom: 0;
-     }
+    .el-row {
+        margin-bottom: 20px;
+
+    &
+    :last-child {
+        margin-bottom: 0;
+    }
+
     }
     .el-col {
         border-radius: 4px;
     }
+
     .bg-purple-dark {
         background: #99a9bf;
     }
+
     .bg-purple {
         background: #d3dce6;
     }
+
     .bg-purple-light {
         background: #e5e9f2;
     }
+
     .grid-content {
         border-radius: 4px;
         min-height: 36px;
     }
+
     .row-bg {
         padding: 10px 0;
         background-color: #f9fafc;

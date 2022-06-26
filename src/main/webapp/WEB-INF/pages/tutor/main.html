@@ -129,60 +129,18 @@
                 },
                 {
                     "path": "3",
-                    "title": "管理员功能",
-                    "children": [
-                        {
-                            "path": "3-1",
-                            "title": "设置双选",
-                            "notActive": false,
-                            "linkUrl": "protected/event?method=toSetEvent"
-                        },
-                        {
-                            "path": "3-2",
-                            "title": "开启双选",
-                            "notActive": false,
-                            "linkUrl": "protected/event?method=toStartEvent"
-                        },
-                        {
-                            "path": "3-3",
-                            "title": "调整双选",
-                            "notActive": true,
-                            "linkUrl": "protected/event?method=toStartEvent"
-                        },
-                        {
-                            "path": "3-4",
-                            "title": "强制结束当前双选事件",
-                            "notActive": true,
-                            "linkUrl": "protected/event?method=shutCurrentEvent"
-                        },
-                        {
-                            "path": "3-5",
-                            "title": "查看结果",
-                            "notActive": false,
-                            "linkUrl": "protected/tutor?method=toResult"
-                        },
-                        {
-                            "path": "3-6",
-                            "title": "私信",
-                            "notActive": false,
-                            "linkUrl": "protected/tutor?method=toMessage"
-                        }
-                    ]
-                },
-                {
-                    "path": "4",
                     "title": "个人中心",
                     "children": [
                         {
-                            "path": "4-1",
+                            "path": "3-1",
                             "notActive": false,
                             "title": "退出登录"
                         },
                         {
-                            "path": "4-2",
+                            "path": "3-2",
                             "notActive": false,
                             "title": "修改密码",
-                            "linkUrl":""
+                            "linkUrl": ""
                         }
                     ]
                 }
@@ -191,7 +149,7 @@
         },
         methods: {
             selectLogout(path, linkUrl) {
-                if (path == "4-1") {
+                if (path == "3-1") {
                     this.$confirm('确定退出吗？', '消息提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -204,19 +162,19 @@
                             message: '已取消退出'
                         });
                     });
-                } else if (path == "2-8") {
-                    this.$confirm('确定要结束吗？\n', '消息提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        this.sendAsA(linkUrl, '_self')
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        });
-                    });
+                    // } else if (path == "2-8") {
+                    //     this.$confirm('确定要结束吗？\n', '消息提示', {
+                    //         confirmButtonText: '确定',
+                    //         cancelButtonText: '取消',
+                    //         type: 'warning'
+                    //     }).then(() => {
+                    //         this.sendAsA(linkUrl, '_self')
+                    //     }).catch(() => {
+                    //         this.$message({
+                    //             type: 'info',
+                    //             message: '已取消'
+                    //         });
+                    //     });
                 } else {
                     this.sendAsA(linkUrl, 'right')
                 }

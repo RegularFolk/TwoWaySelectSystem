@@ -41,6 +41,7 @@
                     <el-button type="primary" icon="el-icon-upload" @click="doLoginForStu()">学生登录</el-button>
                     <el-button type="primary" icon="el-icon-upload" @click="doLoginForTutor()">教师登录</el-button>
                     <el-button type="primary" icon="el-icon-upload" @click="toRegister()">注册账号</el-button>
+                    <el-button type="primary" icon="el-icon-upload" @click="doLoginForAdmin()">管理员登陆</el-button>
                 </el-form-item>
             </el-form>
         </el-row>
@@ -83,7 +84,7 @@
             doLoginForTutor() {
                 if (!this.user.number) {
                     this.$message.error("请输入用户名！");
-                    return;
+                    // return;
                 } else if (!this.user.password) {
                     this.$message.error("请输入密码！");
                     return;
@@ -102,6 +103,28 @@
                     });
                 }
             },
+        doLoginForAdmin() {
+            if (!this.user.number) {
+                this.$message.error("请输入用户名！");
+                // return;
+            } else if (!this.user.password) {
+                this.$message.error("请输入密码！");
+                return;
+            } else {
+                //校验用户名和密码是否正确;
+                axios.post("entrance?method=doTutorLogin", {
+                    "number": this.user.number,
+                    "password": this.user.password
+                }).then(res => {
+                    if (res.data.flag) {
+                        //这里跳管理员端
+                        window.location.href = "protected/admin?method=toMain"
+                    } else {
+                        alert(res.data.message);
+                    }
+                });
+            }
+        },
             toRegister() {
                 window.location.href = "commonPortal?method=toRegisterPage";
             }
@@ -149,7 +172,7 @@
 
                        .el-form {
 
-                           width: 500px;
+                           width: 700px;
 
                            border: 1px solid #000;
 
