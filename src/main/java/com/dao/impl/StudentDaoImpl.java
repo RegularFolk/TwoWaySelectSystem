@@ -1,10 +1,15 @@
 package com.dao.impl;
 
+import com.bean.IntBean;
 import com.bean.Student;
+import com.bean.StudentInfo;
+import com.bean.Tutor;
 import com.constant.Constants;
 import com.dao.BaseDao;
 import com.dao.StudentDao;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
@@ -81,6 +86,12 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     }
 
     @Override
+    public void initializeAllStatus() {
+        String sql = "update student set status = ?";
+        update(sql, Constants.STUDENT_STATUS_NOT_CHOOSE);
+    }
+
+    @Override
     public void updateTutorId(int studentId, int tutorId) {
         String sql = "update student set tutor_id = ? where id = ?";
         update(sql, tutorId, studentId);
@@ -96,6 +107,17 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     public void initializeSingle(Integer takenStudentId) {
         String sql = "update student set preference_id = null , status = 0 , tutor_id = null where id = ?";
         update(sql, takenStudentId);
+    }
+
+    @Override
+    public List<Student> findStudentResult(List<IntBean> intBeans) {
+        String sql = "select  * from student where id =?";
+        List<Student> list = new ArrayList<>();
+        for (IntBean intBean : intBeans) {
+            Student student = getBean(Student.class, sql, intBean.getId());
+            list.add(student);
+        }
+        return list;
     }
 
 }

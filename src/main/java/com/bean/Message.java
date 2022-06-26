@@ -5,6 +5,24 @@ public class Message {
     private int receiverId;
     private String text;
     private String time;
+    private String senderName;
+    private String receiverName;
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
 
     public Message() {
     }
@@ -23,6 +41,8 @@ public class Message {
                 ", receiverId=" + receiverId +
                 ", text='" + text + '\'' +
                 ", time='" + time + '\'' +
+                ", senderName='" + senderName + '\'' +
+                ", receiverName='" + receiverName + '\'' +
                 '}';
     }
 

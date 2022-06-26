@@ -16,6 +16,8 @@ public interface TutorService {
 
     Tutor getTutorById(int tutorId);
 
+
+
     List<Tutor> getTutorByMajorId(int majorId);
 
     List<TutorInfo> getInfoList();
@@ -35,6 +37,7 @@ public interface TutorService {
     void takeStudents(Tutor tutor, List<Integer> chosenIds,int round);
 
     List<Integer> getTakenStudentIds(Tutor tutor, int round);
+
 
 
 }

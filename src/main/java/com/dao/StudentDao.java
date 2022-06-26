@@ -1,6 +1,9 @@
 package com.dao;
 
+import com.bean.IntBean;
 import com.bean.Student;
+import com.bean.StudentInfo;
+import com.bean.Tutor;
 
 import java.util.List;
 
@@ -34,4 +37,7 @@ public interface StudentDao {
     void initialize();
 
     void initializeSingle(Integer takenStudentId);
+    List<Student> findStudentResult(List<IntBean> intBeans);
+
+
 }

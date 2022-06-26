@@ -1,10 +1,12 @@
 package com.dao.impl;
 
+import com.bean.IntBean;
 import com.bean.Tutor;
 import com.constant.Constants;
 import com.dao.BaseDao;
 import com.dao.TutorDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
@@ -90,5 +92,16 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
     public void removeTaken(int tutorId, int round) {
         String sql = "delete from tutor_student where tutor_id = ? and round = ?";
         update(sql, tutorId, round);
+    }
+
+    public List<Tutor> findTutorResult(List<IntBean> intBeans) {
+        String sql = "select  * from tutor where id =?";
+        List<Tutor> list = new ArrayList<>();
+        for (IntBean intBean : intBeans) {
+            Tutor tutor = getBean(Tutor.class, sql, intBean.getId());
+            list.add(tutor);
+        }
+        return list;
+
     }
 }

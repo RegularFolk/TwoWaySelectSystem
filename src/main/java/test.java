@@ -4,21 +4,32 @@ import com.bean.ResultMessage;
 import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
+import com.dao.ResultDao;
+import com.dao.StudentDao;
+import com.dao.TutorDao;
 import com.dao.impl.MessageDaoImpl;
+import com.dao.impl.ResultDaoImpl;
+import com.dao.impl.StudentDaoImpl;
+import com.dao.impl.TutorDaoImpl;
+import com.service.MessageService;
+import com.service.ResultService;
 import com.service.StudentService;
 import com.service.TutorService;
+import com.service.impl.MessageServiceImpl;
+import com.service.impl.ResultServiceImpl;
 import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.utils.JDBCUtil;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.dbutils.*;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class test {
     public static void main(String[] args) {
@@ -28,6 +39,11 @@ public class test {
 
     TutorService tutorService = new TutorServiceImpl();
     StudentService studentService = new StudentServiceImpl();
+    MessageService messageService=new MessageServiceImpl();
+    ResultService resultService=new ResultServiceImpl();
+    ResultDao resultDao=new ResultDaoImpl();
+    TutorDao tutorDao=new TutorDaoImpl();
+    StudentDao studentDao=new StudentDaoImpl();
 
     @Test  //测试教师登录
     public void testTutorDoLogin() {
@@ -204,6 +220,41 @@ public class test {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sdf.format(new Date());
         System.out.println(format);
+    }
+
+    @Test
+    public void testMessage(){
+//        Date date=new Date();
+//        Timestamp timestamp=new Timestamp(date.getTime());
+//        String time= String.valueOf(timestamp);
+//        messageService.sendMessageById(-1,+1,"text",time);
+//        List<Message> messages=messageService.getMessage(+1,-1);
+//        List<Message> list = messageService.getMessageList(4);
+        List<Student> students = studentService.getStudentList();
+        System.out.println(students);
+    }
+
+    @Test
+    public void testResult(){
+
+        List<IntBean> tutorList = resultDao.findTutorByEventId(8);
+//
+////        for (IntBean intBean:tutorList){
+////            s = s +","+ String.valueOf(intBean.getId());
+////        }
+//
+//        List<Tutor> tutors = tutorDao.findTutorResult(tutorList);
+//
+//        Result r = resultService.getResultByEventId(8);
+//
+//        System.out.println(tutorList.size());
+
+//        resultDao.findStudentByEventIdTutor(8,4);
+//        List<IntBean> studentList = resultDao.findStudentByEventIdTutor(8, 4);
+//        List<Student> students = studentDao.findStudentResult(studentList);
+        Result resultByEventId = resultService.getResultByEventId(8);
+        System.out.println(resultByEventId);
+
     }
 
 }
