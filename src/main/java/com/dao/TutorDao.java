@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.bean.IntBean;
 import com.bean.Tutor;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface TutorDao {
     void updateLeft(int tutorId, int newLeft);
 
     void removeTaken(int tutorId, int round);
+
+    List<Tutor> findTutorResult(List<IntBean> intBeans);
 }

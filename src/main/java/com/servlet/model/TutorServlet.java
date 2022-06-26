@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -268,12 +269,12 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //获取我的学生，（私信对象） 郑应啟
+    //获取学生，（私信对象） 郑应啟
     public void getMyStudents(HttpServletRequest request, HttpServletResponse response){
         try {
             HttpSession session=request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            List<Student> students = studentService.getStudentListByTutorId(tutor.getId());
+            List<Student> students = studentService.getStudentList();
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, students));
         } catch (Exception e) {
             e.printStackTrace();
@@ -287,13 +288,12 @@ public class TutorServlet extends ModelBaseServlet {
         Message message = (Message) JSONUtils.parseJsonToBean(request, Message.class);
 
         try {
-            Date date=new Date();
-            Timestamp timestamp=new Timestamp(date.getTime());
-            String time= String.valueOf(timestamp);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = sdf.format(new Date());
             HttpSession session=request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             //学生id 负数，导师id 正数
-            messageService.sendMessageById(+tutor.getId(),-message.getReceiverId(),message.getText(),time);
+            messageService.sendMessageById(+tutor.getId(),-message.getReceiverId(),message.getText(),format);
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.SEND_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,6 +311,20 @@ public class TutorServlet extends ModelBaseServlet {
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             List<Message> messages=messageService.getMessage(-studentId,+tutor.getId());
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.RECEIVE_SUCCESS,messages));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //查询所有私信 郑应啟
+    public void getMessageList(HttpServletRequest request, HttpServletResponse response){
+        try {
+            HttpSession session=request.getSession();
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            List<Message> messages=messageService.getMessageList(+tutor.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,messages));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息

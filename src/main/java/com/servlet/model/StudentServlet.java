@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -246,13 +247,13 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
-    //获取我的导师，（私信对象） 郑应啟
+    //获取导师，（私信对象） 郑应啟
     public void getMyTutor(HttpServletRequest request, HttpServletResponse response){
         try {
             HttpSession session=request.getSession();
             Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
-            Tutor tutor = tutorService.getTutorById(student.getTutorId());
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, tutor));
+            List<Tutor> tutorList = tutorService.getTutorList();
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, tutorList));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -266,13 +267,12 @@ public class StudentServlet extends ModelBaseServlet {
 
         Message message = (Message) JSONUtils.parseJsonToBean(request, Message.class);
         try {
-            Date date=new Date();
-            Timestamp timestamp=new Timestamp(date.getTime());
-            String time= String.valueOf(timestamp);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = sdf.format(new Date());
             HttpSession session=request.getSession();
             Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
             //学生id 负数，导师id 正数
-            messageService.sendMessageById(-student.getId(),+message.getReceiverId(),message.getText(),time);
+            messageService.sendMessageById(-student.getId(),+message.getReceiverId(),message.getText(),format);
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.SEND_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();

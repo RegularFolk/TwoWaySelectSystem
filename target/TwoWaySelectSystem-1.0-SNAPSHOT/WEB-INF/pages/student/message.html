@@ -40,7 +40,7 @@
                             <div>
                                 <el-menu-item :index="names">莎士比亚</el-menu-item>
                             </div>
-                            <div @click="getReceiverId(tutor.id,tutor.name)">
+                            <div v-for="tutor in tutors" @click="getReceiverId(tutor.id,tutor.name)">
                                 <el-menu-item :index="names">{{tutor.name}}</el-menu-item>
                             </div>
                         </el-submenu>
@@ -55,7 +55,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="add()">发送</el-button>
-                            <el-button @click="cleatReceiver()"><strong>接收人：{{receiverName}}</strong>
+                            <el-button @click="clearReceiver()"><strong>接收人：{{receiverName}}</strong>
                             </el-button>
                         </el-form-item>
 
@@ -65,19 +65,13 @@
                             <!--                            </el-table-column>-->
                             <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">
                             </el-table-column>
-                            <el-table-column prop="senderName" label="发送人" :show-overflow-tooltip="true">
+                            <el-table-column prop="senderName" sortable label="发送人" :show-overflow-tooltip="true">
                             </el-table-column>
-                            <el-table-column prop="receiverName" label="接收人" :show-overflow-tooltip="true">
+                            <el-table-column prop="receiverName" sortable label="接收人" :show-overflow-tooltip="true">
                             </el-table-column>
                             <el-table-column prop="text" label="内容" :show-overflow-tooltip="true">
                             </el-table-column>
-                            <el-table-column label="操作">
-                                <template slot-scope="scope">
-                                    <el-button
-                                            size="mini"
-                                            @click="">查看详情</el-button>
-                                </template>
-                            </el-table-column>
+
                         </el-table>
 
 
@@ -113,7 +107,7 @@
                 mydata: [],
                 dialogVisible: false,
                 nowIndex: -100,
-                tutor: '',
+                tutors: [],
                 index: 0,
                 messages: [],
                 receiverId: "",
@@ -126,7 +120,7 @@
                 this.receiverId = id;
                 this.receiverName = name;
             },
-            cleatReceiver() {
+            clearReceiver() {
                 this.receiverId = "";
                 this.receiverName = "未选择";
             }
@@ -135,8 +129,7 @@
                 var _this = this;
                 if (this.content === '') {
                     this.$message.error('请填写内容');
-                }
-                else if (this.receiverName === "未选择") {
+                } else if (this.receiverName === "未选择") {
                     this.$message.error('请选择接收人');
                 } else {
                     axios.post("protected/student?method=sendMessageToTutor", {
@@ -144,7 +137,7 @@
                         "text": _this.content
                     }).then(resp => {
                         if (resp.data.flag) {
-                            window.location.href="protected/student?method=toMessage";
+                            window.location.href = "protected/student?method=toMessage";
                             this.$message.success(resp.data.message)
                         } else {
                             this.$message.error(resp.data.message)
@@ -196,7 +189,7 @@
             axios.all([getTutor(), getMessages()])
                 .then(axios.spread((tutorResp, messageResp) => {
                     if (tutorResp.data.flag) {
-                        _this.tutor = tutorResp.data.data
+                        _this.tutors = tutorResp.data.data
                         _this.$message.success(tutorResp.data.message)
                         _this.mydata = messageResp.data.data
                     } else {

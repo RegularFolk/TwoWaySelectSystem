@@ -18,6 +18,10 @@ public class Result {
         this.tutors = tutors;
     }
 
+    public Result(int eventId) {
+        this.eventId = eventId;
+    }
+
     @Override
     public String toString() {
         return "Result{" +

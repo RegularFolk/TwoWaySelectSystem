@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>学生导师双选系统</title>
+  <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+  <!--使用绝对路径-->
+  <!--引入 element-ui 的样式，-->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 必须先引入vue，  后使用element-ui -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <!-- 引入element 的组件库-->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="static/plugins/elementui/index.css">
+  <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+  <script src="static/js/vue.js"></script>
+  <script src="static/plugins/elementui/index.js"></script>
+  <script type="text/javascript" src="static/js/jquery.min.js"></script>
+  <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+  <el-main>
+    <el-table
+            :data="events"
+            style="width: 100%"
+    >
+      <el-table-column
+              prop="id"
+              label="序号"
+              width="90"
+      ></el-table-column>
+      <el-table-column
+              prop="eventInfo.initiator"
+              label="发起人"
+      >
+      </el-table-column>
+      <el-table-column
+              prop="endTime"
+              label="结束时间"
+      >
+      </el-table-column>
+      <el-table-column
+              prop="eventInfo.description"
+              label="描述"
+      >
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <!--                    跳转第二个页面-->
+          <el-button
+                  size="mini"
+                  @click="resultDetail(scope.$index, scope.row)">查看详情</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-main>
+</div>
+</body>
+<script>
+  var vue = new Vue({
+    el: "#app",
+    data: {
+      "events": [],
+      "chosenEvent": {}
+    },
+    methods: {
+    },
+    created() {
+
+        axios.get("protected/event?method=getResult").then(resp => {
+          if (resp.data.flag) {
+            this.$message.success(resp.data.message)
+            this.events = resp.data.data
+          } else {
+            this.$message({
+              message: resp.data.message,
+              type: "error"
+            })
+          }
+        })
+      }
+
+  })
+</script>
+<style>
+  .el-transfer-panel {
+    width: 400px;
+    height: 500px;
+  }
+
+  .el-transfer-panel__list.is-filterable {
+    height: 400px;
+  }
+</style>
+</html>

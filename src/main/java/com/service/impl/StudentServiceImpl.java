@@ -78,20 +78,20 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getStudentList() {
         List<Student> students = studentDao.findAll();
-//        for (Student student:students){
-//            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
-//            student.setStudentInfo(info);
-//        }
+        for (Student student:students){
+            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+            student.setStudentInfo(info);
+        }
         return students;
     }
 
     @Override
     public List<Student> getStudentListByMajorId(int majorId) {
         List<Student> students = studentDao.findByMajorId(majorId);
-//        for (Student student:students){
-//            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
-//            student.setStudentInfo(info);
-//        }
+        for (Student student:students){
+            StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+            student.setStudentInfo(info);
+        }
         return students;
     }
 

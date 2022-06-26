@@ -1,13 +1,13 @@
 package com.servlet.model;
 
-import com.bean.Event;
-import com.bean.ResultMessage;
-import com.bean.Tutor;
+import com.bean.*;
 import com.constant.Constants;
 import com.service.EventService;
+import com.service.ResultService;
 import com.service.StudentService;
 import com.service.TutorService;
 import com.service.impl.EventServiceImpl;
+import com.service.impl.ResultServiceImpl;
 import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
@@ -22,6 +22,7 @@ public class EventServlet extends ModelBaseServlet {
     EventService eventService = new EventServiceImpl();
     StudentService studentService = new StudentServiceImpl();
     TutorService tutorService = new TutorServiceImpl();
+    ResultService resultService=new ResultServiceImpl();
 
     //跳转到新建双选页面 （周才邦）
     public void toSetEvent(HttpServletRequest request, HttpServletResponse response) {
@@ -97,6 +98,21 @@ public class EventServlet extends ModelBaseServlet {
             e.printStackTrace();
             JSONUtils.writeResult(response, new ResultMessage(false,
                     Constants.ENABLE_EVENT_FAIL + "\n" + e.getMessage()));
+        }
+    }
+
+
+    //
+    public void getResult(HttpServletRequest request, HttpServletResponse response){
+        try {
+            IntBean intBean= (IntBean) JSONUtils.parseJsonToBean(request, IntBean.class);
+            Integer id = intBean.getId();
+            Result result = resultService.getResultByEventId(id);
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
 }
