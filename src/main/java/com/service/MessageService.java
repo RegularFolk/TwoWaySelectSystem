@@ -11,4 +11,7 @@ public interface MessageService {
 
     List<Message> findBySenderId(int id);
 
+    List<Message> getMessage(int senderId, int receiverId);
+
+    List<Message> getMessageList(int id);
 }

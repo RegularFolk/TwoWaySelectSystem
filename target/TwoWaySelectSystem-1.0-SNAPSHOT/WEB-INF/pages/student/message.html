@@ -23,87 +23,142 @@
 <body>
 <div id="app">
     <el-main>
-    <div id="messageboard">
-        <el-container>
-        <el-aside>
-            <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    @open="handleOpen"
-                    @close="handleClose">
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-menu"></i>
-                        <span>所有好友</span>
-                    </template>
-<!--                    循环数据库里所有人名-->
-                        <el-menu-item :index="names" >{{name}}</el-menu-item>
-                </el-submenu>
+        <div id="messageboard">
+            <el-container>
+                <el-aside>
+                    <el-menu
+                            default-active="2"
+                            class="el-menu-vertical-demo"
+                            @open="handleOpen"
+                            @close="handleClose">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-menu"></i>
+                                <span>所有好友</span>
+                            </template>
+                            <!--                    循环数据库里所有人名-->
+                            <div>
+                                <el-menu-item :index="names">莎士比亚</el-menu-item>
+                            </div>
+                            <div @click="getReceiverId(tutor.id,tutor.name)">
+                                <el-menu-item :index="names">{{tutor.name}}</el-menu-item>
+                            </div>
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+                <el-main>
 
-            </el-menu>
 
-        </el-aside><el-main>
-        <el-form ref="form" label-width="50px">
-            <el-form-item label="内容">
-                <el-input v-model="content" placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button @click="add()">添加</el-button>
-                <el-button @click="handleReset">重置</el-button>
-            </el-form-item>
-            <el-table border :data="mydata">
-                <el-table-column label="留言条数" inline-template :context="_self">
-                    <span>{{$index+1}}</span>
-                </el-table-column>
-                <el-table-column prop="time" label="时间">
-                </el-table-column>
-                <el-table-column prop="content" label="内容">
-                </el-table-column>
-                <el-table-column label="操作" inline-template :context="_self">
-                    <span><el-button size="small" @click="showDialog()">删除</el-button></span>
-                </el-table-column>
-            </el-table>
-            <div style="text-align:right" v-show="mydata.length>0">
-                <el-button size="small" @click="showDelallDialog()">全部删除</el-button>
-            </div>
-        </el-form>
+                    <el-form ref="form" label-width="50px">
+                        <el-form-item label="内容">
+                            <el-input v-model="content" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="add()">发送</el-button>
+                            <el-button @click="cleatReceiver()"><strong>接收人：{{receiverName}}</strong>
+                            </el-button>
+                        </el-form-item>
 
-        <el-dialog title="提示" v-model="dialogVisible" size="tiny">
-            <span v-if="nowIndex==-2">删除全部条留言</span>
-            <span v-else>删除此条留言</span>
-            <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="del(nowIndex)" >确 定</el-button>
-        </span>
-        </el-dialog></el-main></el-container>
-    </div>
+                        <el-table border :data="mydata">
+                            <!--                            <el-table-column label="留言条数" inline-template :context="_self">-->
+                            <!--                                <span>{{$index + 1}}</span>-->
+                            <!--                            </el-table-column>-->
+                            <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">
+                            </el-table-column>
+                            <el-table-column prop="senderName" label="发送人" :show-overflow-tooltip="true">
+                            </el-table-column>
+                            <el-table-column prop="receiverName" label="接收人" :show-overflow-tooltip="true">
+                            </el-table-column>
+                            <el-table-column prop="text" label="内容" :show-overflow-tooltip="true">
+                            </el-table-column>
+                            <el-table-column label="操作">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            size="mini"
+                                            @click="">查看详情</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+
+                        <!--                        <div style="text-align:right" v-show="mydata.length>0">-->
+                        <!--                            <el-button size="small" @click="showDelallDialog()">全部删除</el-button>-->
+                        <!--                        </div>-->
+                    </el-form>
+
+                    <!--                    <el-dialog title="提示" v-model="dialogVisible" size="tiny">-->
+                    <!--                        <span v-if="nowIndex==-2">删除全部条留言</span>-->
+                    <!--                        <span v-else>删除此条留言</span>-->
+                    <!--                        <span slot="footer" class="dialog-footer">-->
+                    <!--          <el-button @click="dialogVisible = false">取 消</el-button>-->
+                    <!--          <el-button type="primary" @click="del(nowIndex)">确 定</el-button>-->
+                    <!--        </span>-->
+                    </el-dialog>
+                </el-main>
+            </el-container>
+        </div>
+
+
     </el-main>
 </div>
 </body>
 <script>
     new Vue({
         el: '#messageboard',
-        data: function() {
+        data() {
             return {
                 title: '',
                 content: '',
+                time: '',
                 mydata: [],
                 dialogVisible: false,
                 nowIndex: -100,
+                tutor: '',
+                index: 0,
+                messages: [],
+                receiverId: "",
+                receiverName: "未选择"
             }
-        },
+        }
+        ,
         methods: {
+            getReceiverId(id, name) {
+                this.receiverId = id;
+                this.receiverName = name;
+            },
+            cleatReceiver() {
+                this.receiverId = "";
+                this.receiverName = "未选择";
+            }
+            ,
             add() {
-                if (this.content == '') {
+                var _this = this;
+                if (this.content === '') {
                     this.$message.error('请填写内容');
+                }
+                else if (this.receiverName === "未选择") {
+                    this.$message.error('请选择接收人');
                 } else {
-                    this.mydata.push({
-                       // 这里去数据库调 CURRENT_TIMESTAMP
-                        // time:this.,
-                        content: this.content,
+                    axios.post("protected/student?method=sendMessageToTutor", {
+                        "receiverId": _this.receiverId,
+                        "text": _this.content
+                    }).then(resp => {
+                        if (resp.data.flag) {
+                            window.location.href="protected/student?method=toMessage";
+                            this.$message.success(resp.data.message)
+                        } else {
+                            this.$message.error(resp.data.message)
+                        }
                     });
-                    this.time = '';
-                    this.content = '';
+
+
+                    // this.mydata.push({
+                    //     // 这里去数据库调 CURRENT_TIMESTAMP
+                    //     // time:this.,
+                    //     content: this.content,
+                    // });
+                    // this.time = '123';
+                    // this.content = '123';
                 }
             },
             showDialog() {
@@ -127,6 +182,45 @@
                 this.content = '';
             }
         },
+        mounted() {
+            var _this = this;
+
+            function getTutor() {
+                return axios.get("protected/student?method=getMyTutor");
+            }
+
+            function getMessages() {
+                return axios.get("protected/student?method=getMessageList");
+            }
+
+            axios.all([getTutor(), getMessages()])
+                .then(axios.spread((tutorResp, messageResp) => {
+                    if (tutorResp.data.flag) {
+                        _this.tutor = tutorResp.data.data
+                        _this.$message.success(tutorResp.data.message)
+                        _this.mydata = messageResp.data.data
+                    } else {
+                        _this.$message.error(tutorResp.data.message)
+                    }
+                }));
+
+            // axios.get("protected/student?method=getMyTutor").then(resp => {
+            //     if (resp.data.flag) {
+            //         this.tutor = resp.data.data
+            //         this.$message.success(resp.data.message)
+            //     } else {
+            //         this.$message.error(resp.data.message)
+            //     }
+            // });
+            // axios.get("protected/student?method=getMessageList").then(resp=>{
+            //     if (resp.data.flag) {
+            //         this.mydata = resp.data.data
+            //         this.$message.success(resp.data.message)
+            //     } else {
+            //         this.$message.error(resp.data.message)
+            //     }
+            // });
+        }
     })
 </script>
 

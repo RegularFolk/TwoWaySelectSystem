@@ -16,6 +16,8 @@ public interface TutorService {
 
     Tutor getTutorById(int tutorId);
 
+
+
     List<Tutor> getTutorByMajorId(int majorId);
 
     List<TutorInfo> getInfoList();
@@ -33,5 +35,6 @@ public interface TutorService {
     void randomAllocation(List<Student> students);
 
     void takeStudents(Tutor tutor, List<Integer> chosenIds,int round);
+
 
 }

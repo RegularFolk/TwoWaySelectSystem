@@ -5,8 +5,10 @@ import com.bean.Student;
 import com.bean.Tutor;
 import com.constant.Constants;
 import com.dao.impl.MessageDaoImpl;
+import com.service.MessageService;
 import com.service.StudentService;
 import com.service.TutorService;
+import com.service.impl.MessageServiceImpl;
 import com.service.impl.StudentServiceImpl;
 import com.service.impl.TutorServiceImpl;
 import com.utils.JDBCUtil;
@@ -14,6 +16,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ public class test {
 
     TutorService tutorService = new TutorServiceImpl();
     StudentService studentService = new StudentServiceImpl();
+    MessageService messageService=new MessageServiceImpl();
 
     @Test  //测试教师登录
     public void testTutorDoLogin() {
@@ -204,6 +208,17 @@ public class test {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sdf.format(new Date());
         System.out.println(format);
+    }
+
+    @Test
+    public void testMessage(){
+//        Date date=new Date();
+//        Timestamp timestamp=new Timestamp(date.getTime());
+//        String time= String.valueOf(timestamp);
+//        messageService.sendMessageById(-1,+1,"text",time);
+        List<Message> messages=messageService.getMessage(+1,-1);
+        List<Message> list = messageService.getMessageList(4);
+        System.out.println(list);
     }
 
 }

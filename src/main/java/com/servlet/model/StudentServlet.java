@@ -2,8 +2,12 @@ package com.servlet.model;
 
 import com.bean.*;
 import com.constant.Constants;
+import com.service.MessageService;
 import com.service.StudentService;
+import com.service.TutorService;
+import com.service.impl.MessageServiceImpl;
 import com.service.impl.StudentServiceImpl;
+import com.service.impl.TutorServiceImpl;
 import com.servlet.base.ModelBaseServlet;
 import com.utils.JSONUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -11,12 +15,16 @@ import org.apache.commons.beanutils.BeanUtils;
 import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class StudentServlet extends ModelBaseServlet {
 
     StudentService studentService = new StudentServiceImpl();
+    TutorService tutorService=new TutorServiceImpl();
+    MessageService messageService=new MessageServiceImpl();
 
     //学生info表修改，by郑应啟
     public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
@@ -238,5 +246,69 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
+    //获取我的导师，（私信对象） 郑应啟
+    public void getMyTutor(HttpServletRequest request, HttpServletResponse response){
+        try {
+            HttpSession session=request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            Tutor tutor = tutorService.getTutorById(student.getTutorId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, tutor));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //学生给导师 发送私信 郑应啟
+    public void sendMessageToTutor(HttpServletRequest request, HttpServletResponse response){
+
+
+        Message message = (Message) JSONUtils.parseJsonToBean(request, Message.class);
+        try {
+            Date date=new Date();
+            Timestamp timestamp=new Timestamp(date.getTime());
+            String time= String.valueOf(timestamp);
+            HttpSession session=request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            //学生id 负数，导师id 正数
+            messageService.sendMessageById(-student.getId(),+message.getReceiverId(),message.getText(),time);
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.SEND_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //学生接受私信 郑应啟
+    public void getMessageFromTutor(HttpServletRequest request, HttpServletResponse response){
+        String t = request.getParameter("tutorId");
+        int tutorId= Integer.parseInt(t);
+        try {
+            HttpSession session=request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            List<Message> messages=messageService.getMessage(+tutorId,-student.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.RECEIVE_SUCCESS,messages));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //查询所有私信
+    public void getMessageList(HttpServletRequest request, HttpServletResponse response){
+        try {
+            HttpSession session=request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            List<Message> messages=messageService.getMessageList(-student.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,messages));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
 
 }

@@ -10,4 +10,7 @@ public interface MessageDao {
     void sandById(int senderId, int receiverId, String text, String time);
 
 
+    List<Message> get(int senderId, int receiverId);
+
+    List<Message> findMessageList(int id);
 }

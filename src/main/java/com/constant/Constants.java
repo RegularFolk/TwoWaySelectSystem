@@ -18,7 +18,8 @@ public class Constants {
     public static final String UPDATE_SUCCESS = "修改成功！";
     public static final String QUERY_SUCCESS = "查询成功!";
     public static final String LOGOUT = "登出成功！";
-
+    public static final String SEND_SUCCESS="发送成功！";
+    public static final String RECEIVE_SUCCESS="接收成功！";
     //三轮志愿
     public static final Integer FIRST_PREFERENCE = 1;
     public static final Integer SECOND_PREFERENCE = 2;
