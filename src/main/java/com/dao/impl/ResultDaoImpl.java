@@ -20,7 +20,7 @@ public class ResultDaoImpl extends BaseDao<Integer> implements ResultDao {
 
     @Override
     public void addTempResult(int tutorId, int studentId) {
-        String sql = "insert into tutor_student(tutor_id,student_id) values(?,?)";
+        String sql = "insert into tutor_student(tutor_id,student_id,round) values(?,?,0)";
         update(sql, tutorId, studentId);
     }
 }
