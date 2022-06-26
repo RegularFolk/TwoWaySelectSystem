@@ -26,7 +26,7 @@ public class IntPreferDaoImpl extends BaseDao<IntBean> implements IntPreferDao {
 
     @Override
     public List<IntBean> getTakenIds(int round, int tutorId) {
-        String sql = "select student_id from tutor_student where tutor_id = ? and round = ?";
+        String sql = "select student_id as id from tutor_student where tutor_id = ? and round = ?";
         return getBeanList(IntBean.class, sql, tutorId, round);
     }
 }

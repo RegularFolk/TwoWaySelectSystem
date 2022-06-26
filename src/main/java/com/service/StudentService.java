@@ -45,5 +45,4 @@ public interface StudentService {
 
     List<Student> getAvailableStudents(int round, int tutorId);
 
-    List<Integer> getTakenStudentIds(Tutor tutor, int round);
 }

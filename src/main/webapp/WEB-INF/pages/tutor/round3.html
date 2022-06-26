@@ -53,39 +53,30 @@
             },
             methods: {
                 submit() {
-                    if (this.chosen.length < this.tutor.left) {
-                        this.$confirm('未选满' + this.tutor.left + '个学生, 是否确定第一轮学生名单?', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                            type: 'warning'
-                        }).then(() => {
-                            this.doSubmit()
-                        }).catch(() => {
-                            this.$message({
-                                type: 'info',
-                                message: '已取消提交'
-                            });
+                    this.$confirm('确定提交吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.doSubmit()
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消提交'
                         });
-                    } else {
-                        this.$message.error("选择了过多的学生！")
-                    }
-                },
+                    });
+                }
+                ,
                 doSubmit() {
-                    axios({
-                        "method": "post",
-                        "url": "protected/tutor",
-                        /*"traditional": true,*/
-                        "params": {
-                            "method": "takeStudents",
-                            "chosenIds": this.chosen,
-                            "round": 3
-                        }
+                    axios.post("protected/tutor?method=takeStudents", {
+                        "chosenIds": this.chosen,
+                        "round": 3
                     }).then(resp => {
                         if (resp.data.flag) {
                             this.$alert(resp.data.message, '信息', {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    this.sendAsA('protected/tutor?method=toMain', '_self')
+                                    this.sendAsA('protected/tutor?method=toWelcome', '_self')
                                 }
                             });
                         } else {
@@ -115,69 +106,39 @@
             },
             created() {
                 //首先获得导师自己的剩余名额,若大于0则再获取可以选择的学生
+                //不必获得剩余名额，是否符合应该给后端判断
                 axios({
                     "method": "get",
                     "async": false,
                     "url": "protected/tutor",
                     "params": {
-                        "method": "getTutorSelf"
+                        "method": "getAvailableStudents",
+                        "round": 3
                     }
                 }).then(async resp => {
                     if (resp.data.flag) {
-                        this.tutor = resp.data.data;
-                        if (this.tutor.left > 0) {
-                            this.$message.info(resp.data.message)
-                            await axios({
-                                "method": "get",
-                                "async": false,
-                                "url": "protected/tutor",
-                                "params": {
-                                    "method": "getAvailableStudents",
-                                    "round": 3
-                                }
-                            }).then(async resp => {
-                                if (resp.data.flag) {
-                                    this.students = resp.data.data
-                                    if (this.students.length < 1) {
-                                        this.$alert("抱歉，您已没有候选人！", '信息', {
-                                            confirmButtonText: '确定',
-                                            callback: action => {
-                                                this.sendAsA('protected/tutor?method=toWelcome', '_self')
-                                            }
-                                        });
-                                    } else {//请求记录
-                                        await axios({
-                                            "method": "get",
-                                            "async": false,
-                                            "url": "protected/tutor",
-                                            "params": {
-                                                "method": "getPreviousTaken",
-                                                "round": 3
-                                            }
-                                        }).then(async resp => {
-                                            if (resp.data.flag) {
-                                                this.chosen = resp.data.data
-                                            } else {
-                                                this.$message.error(resp.data.message)
-                                            }
-                                        })
-                                    }
-                                } else {
-                                    this.$message.error(resp.data.message)
-                                }
-                            })
-                        } else {
-                            this.$alert("抱歉，您的选择名额已用尽！", '信息', {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    this.sendAsA('protected/tutor?method=toWelcome', '_self')
-                                }
-                            });
-                        }
+                        this.students = resp.data.data //拿的是student对象集合
+                        //请求记录
+                        await axios({
+                            "method": "get",
+                            "async": false,
+                            "url": "protected/tutor",
+                            "params": {
+                                "method": "getPreviousTaken",
+                                "round": 3
+                            }
+                        }).then(async resp => {
+                            if (resp.data.flag) {
+                                this.chosen = resp.data.data  //拿的是studentId的int集合
+                            } else {
+                                this.$message.error(resp.data.message)
+                            }
+                        })
                     } else {
                         this.$message.error(resp.data.message)
                     }
                 })
+
             }
         }
     )

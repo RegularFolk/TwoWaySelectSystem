@@ -81,4 +81,5 @@ public class Constants {
     public static final String GET_PREVIOUS_TAKEN_FAIL = "获取选择记录失败！请联系管理员！";
     public static final String GET_NAME_FAIL = "获取姓名失败！";
     public static final String TO_WELCOME_FAIL = "进入欢迎页面失败！请联系管理员！";
+    public static final Object SHOW_PROGRESS_FAIL = "查看当前进度失败！请联系管理员！";
 }

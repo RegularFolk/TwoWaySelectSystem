@@ -33,4 +33,5 @@ public interface StudentDao {
 
     void initialize();
 
+    void initializeSingle(Integer takenStudentId);
 }

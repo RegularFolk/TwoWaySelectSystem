@@ -182,21 +182,12 @@ public class StudentServiceImpl implements StudentService {
         List<Student> candidates = new ArrayList<>();
         for (IntBean preId : preIds) {
             Student student = studentDao.findByPreferenceId(preId.getId());
-            if (student.getStatus() != Constants.STUDENT_STATUS_CHOSEN) {
+            if (student.getTutorId() == tutorId || student.getTutorId() == 0) {
                 candidates.add(student);
             }
         }
         return candidates;
     }
 
-    @Override
-    public List<Integer> getTakenStudentIds(Tutor tutor, int round) {
-        List<IntBean> stuIds = intPreferDao.getTakenIds(round, tutor.getId());
-        List<Integer> students = new ArrayList<>();
-        for (IntBean stuId : stuIds) {
-            students.add(stuId.getId());
-        }
-        return students;
-    }
 
 }

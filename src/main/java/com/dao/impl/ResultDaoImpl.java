@@ -18,7 +18,7 @@ public class ResultDaoImpl extends BaseDao<Integer> implements ResultDao {
         update(sql, eventId, studentId, tutorId);
     }
 
-    @Override
+    @Override //设置round为0，表示是自动分配的
     public void addTempResult(int tutorId, int studentId) {
         String sql = "insert into tutor_student(tutor_id,student_id,round) values(?,?,0)";
         update(sql, tutorId, studentId);

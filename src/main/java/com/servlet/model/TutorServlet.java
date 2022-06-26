@@ -214,9 +214,6 @@ public class TutorServlet extends ModelBaseServlet {
             List<Integer> chosenIds = integers.getChosenIds();
             HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            if (tutor.getLeft() < chosenIds.size()) {
-                throw new RuntimeException(Constants.TOO_MANY_CHOSEN);
-            }
             tutorService.takeStudents(tutor, chosenIds, integers.getRound());
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.TAKE_STUDENT_SUCCESS));
         } catch (Exception e) {
@@ -232,7 +229,7 @@ public class TutorServlet extends ModelBaseServlet {
             int round = Integer.parseInt(request.getParameter("round"));
             HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            List<Integer> takenStudentIds = studentService.getTakenStudentIds(tutor, round);
+            List<Integer> takenStudentIds = tutorService.getTakenStudentIds(tutor, round);
             JSONUtils.writeResult(response, new ResultMessage(true, takenStudentIds));
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,4 +260,13 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
+    //跳转到查看进度页面
+    public void toShowProgress(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/viewProgress",request,response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response,Constants.SHOW_PROGRESS_FAIL);
+        }
+    }
 }

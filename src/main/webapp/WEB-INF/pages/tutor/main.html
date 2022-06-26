@@ -132,11 +132,17 @@
                         },
                         {
                             "path": "2-7",
+                            "title": "查看进度",
+                            "notActive": true,
+                            "linkUrl": "protected/event?method=toShowProgress"
+                        },
+                        {
+                            "path": "2-8",
                             "title": "私信",
                             "notActive": false,
                             "linkUrl": "protected/tutor?method=toMessage"
                         }, {
-                            "path": "2-8",
+                            "path": "2-9",
                             "title": "强制结束当前双选事件",
                             "notActive": true,
                             "linkUrl": "protected/event?method=shutCurrentEvent"
@@ -172,7 +178,7 @@
                             message: '已取消退出'
                         });
                     });
-                } else if (path == "2-8") {
+                } else if (path == "2-9") {
                     this.$confirm('确定要结束吗？\n', '消息提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
@@ -206,17 +212,22 @@
                 if (resp.data.flag) {
                     if (resp.data.data == '0') {//没有正在进行的事件
                         this.menuList[1].children[1].notActive = false
+                        this.menuList[1].children[6].notActive = false//本行测试用
                     } else if (resp.data.data == '2') {
-                        this.menuList[1].children[7].notActive = false
+                        this.menuList[1].children[8].notActive = false
+                        this.menuList[1].children[6].notActive = false
                     } else if (resp.data.data == '3') { //正处于导师第一轮选择状态
                         this.menuList[1].children[2].notActive = false
-                        this.menuList[1].children[7].notActive = false
+                        this.menuList[1].children[8].notActive = false
+                        this.menuList[1].children[6].notActive = false
                     } else if (resp.data.data == '4') {
                         this.menuList[1].children[3].notActive = false
-                        this.menuList[1].children[7].notActive = false
+                        this.menuList[1].children[8].notActive = false
+                        this.menuList[1].children[6].notActive = false
                     } else if (resp.data.data == '5') {
                         this.menuList[1].children[4].notActive = false
-                        this.menuList[1].children[7].notActive = false
+                        this.menuList[1].children[8].notActive = false
+                        this.menuList[1].children[6].notActive = false
                     }
                     this.$message.success(resp.data.message)
                 } else { //出现异常

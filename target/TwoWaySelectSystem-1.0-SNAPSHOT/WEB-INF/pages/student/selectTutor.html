@@ -54,7 +54,7 @@
                 submit() {
                     if (this.chosen.length === 3) {
                         this.doSubmit()
-                    } else if (this.chosen.length < 3) {
+                    } else if (this.chosen.length < 3 && this.chosen.length > 0) {
                         this.$confirm('未选满三个志愿, 是否继续?', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -67,6 +67,8 @@
                                 message: '已取消提交'
                             });
                         });
+                    } else if (this.chosen.length === 0) {
+                        this.$message.error("您没有做出任何选择！")
                     } else {
                         this.$message.error("选择了过多的导师！")
                     }

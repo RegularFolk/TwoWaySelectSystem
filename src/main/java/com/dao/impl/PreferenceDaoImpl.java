@@ -31,13 +31,17 @@ public class PreferenceDaoImpl extends BaseDao<Preference> implements Preference
     @Override
     public void update(Preference preference, int id) {
         String sql = "update preference set no_1 = ? , no_2 = ? , no_3 = ? where id = ?";
-        update(sql, preference.getNo1(), preference.getNo2(), preference.getNo3(), id);
+        update(sql, preference.getNo1() == 0 ? null : preference.getNo1(),
+                preference.getNo2() == 0 ? null : preference.getNo2(),
+                preference.getNo3() == 0 ? null : preference.getNo3(), id);
     }
 
     @Override
     public int addPreference(Preference preference) {
         String sql = "insert into preference(no_1,no_2,no_3) values (?,?,?)";
-        return generatedKeyUpdate(sql, preference.getNo1(), preference.getNo2(), preference.getNo3());
+        return generatedKeyUpdate(sql, preference.getNo1() == 0 ? null : preference.getNo1(),
+                preference.getNo2() == 0 ? null : preference.getNo2(),
+                preference.getNo3() == 0 ? null : preference.getNo3());
     }
 
     @Override

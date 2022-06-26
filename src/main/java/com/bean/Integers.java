@@ -5,12 +5,14 @@ import java.util.List;
 public class Integers {
     Integer round;
     List<Integer> chosenIds;
+    String method;
 
     @Override
     public String toString() {
         return "Integers{" +
                 "round=" + round +
                 ", chosenIds=" + chosenIds +
+                ", method='" + method + '\'' +
                 '}';
     }
 
@@ -22,9 +24,18 @@ public class Integers {
         this.round = round;
     }
 
-    public Integers(Integer round, List<Integer> chosenIds) {
+    public Integers(Integer round, List<Integer> chosenIds, String method) {
         this.round = round;
         this.chosenIds = chosenIds;
+        this.method = method;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public List<Integer> getChosenIds() {
