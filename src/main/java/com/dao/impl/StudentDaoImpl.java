@@ -86,12 +86,6 @@ public class StudentDaoImpl extends BaseDao<Student> implements StudentDao {
     }
 
     @Override
-    public void initializeAllStatus() {
-        String sql = "update student set status = ?";
-        update(sql, Constants.STUDENT_STATUS_NOT_CHOOSE);
-    }
-
-    @Override
     public void updateTutorId(int studentId, int tutorId) {
         String sql = "update student set tutor_id = ? where id = ?";
         update(sql, tutorId, studentId);

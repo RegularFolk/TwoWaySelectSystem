@@ -130,11 +130,11 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public void takeStudents(Tutor tutor, List<Integer> chosenIds, int round) {
-        tutorDao.removeTaken(tutor.getId(), round);//针对tutor_student临时表
         List<Integer> takenStudentIds = getTakenStudentIds(tutor, round); //获得之前提交的学生
         if (tutor.getLeft() + takenStudentIds.size() - chosenIds.size() < 0) {
             throw new RuntimeException(Constants.TOO_MANY_CHOSEN + "\n" + "最大提交数为:" + (tutor.getLeft() + takenStudentIds.size()));
         }
+        tutorDao.removeTaken(tutor.getId(), round);//针对tutor_student临时表
         for (Integer takenStudentId : takenStudentIds) {
             studentDao.initializeSingle(takenStudentId);
         }
