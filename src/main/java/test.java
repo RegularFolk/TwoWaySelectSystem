@@ -253,7 +253,9 @@ public class test {
 //        List<IntBean> studentList = resultDao.findStudentByEventIdTutor(8, 4);
 //        List<Student> students = studentDao.findStudentResult(studentList);
         Result resultByEventId = resultService.getResultByEventId(8);
-        System.out.println(resultByEventId);
+        Result result = resultService.getResultByEventId(8);
+        List<Tutor> tutors = result.getTutors();
+        System.out.println(tutors);
 
     }
 

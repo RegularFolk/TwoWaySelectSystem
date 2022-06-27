@@ -148,6 +148,8 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到最终结果页面
     public void toResult(HttpServletRequest request, HttpServletResponse response) {
         try {
+            request.setCharacterEncoding("utf-8");
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/showResults", request, response);
         } catch (IOException e) {
             e.printStackTrace();

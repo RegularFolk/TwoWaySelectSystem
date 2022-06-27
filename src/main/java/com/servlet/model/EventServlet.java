@@ -102,17 +102,28 @@ public class EventServlet extends ModelBaseServlet {
     }
 
 
-    //
+    //返回双选结果，郑应啟
     public void getResult(HttpServletRequest request, HttpServletResponse response){
         try {
             IntBean intBean= (IntBean) JSONUtils.parseJsonToBean(request, IntBean.class);
             Integer id = intBean.getId();
             Result result = resultService.getResultByEventId(id);
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,result));
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,result.getTutors()));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
+
+    //跳转ShowResultDetail页面，郑应啟
+    public void toShowResultDetail(HttpServletRequest request, HttpServletResponse response){
+        try {
+            processTemplate("tutor/showResultDetail", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
 }
+

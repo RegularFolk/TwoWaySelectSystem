@@ -14,6 +14,7 @@ public class Event {
     private String description;
     private List<Major> majors;
     private EventInfo eventInfo;
+    private Result result;
 
     public Event() {
     }
@@ -46,6 +47,7 @@ public class Event {
                 ", description='" + description + '\'' +
                 ", majors=" + majors +
                 ", eventInfo=" + eventInfo +
+                ", result=" + result +
                 '}';
     }
 
@@ -135,5 +137,13 @@ public class Event {
 
     public void setMajors(List<Major> majors) {
         this.majors = majors;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 }
