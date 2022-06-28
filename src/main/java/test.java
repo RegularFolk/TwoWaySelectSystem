@@ -7,10 +7,8 @@ import com.constant.Constants;
 import com.dao.ResultDao;
 import com.dao.StudentDao;
 import com.dao.TutorDao;
-import com.dao.impl.MessageDaoImpl;
-import com.dao.impl.ResultDaoImpl;
-import com.dao.impl.StudentDaoImpl;
-import com.dao.impl.TutorDaoImpl;
+import com.dao.TutorInfoDao;
+import com.dao.impl.*;
 import com.service.MessageService;
 import com.service.ResultService;
 import com.service.StudentService;
@@ -39,11 +37,12 @@ public class test {
 
     TutorService tutorService = new TutorServiceImpl();
     StudentService studentService = new StudentServiceImpl();
-    MessageService messageService=new MessageServiceImpl();
-    ResultService resultService=new ResultServiceImpl();
-    ResultDao resultDao=new ResultDaoImpl();
-    TutorDao tutorDao=new TutorDaoImpl();
-    StudentDao studentDao=new StudentDaoImpl();
+    MessageService messageService = new MessageServiceImpl();
+    ResultService resultService = new ResultServiceImpl();
+    ResultDao resultDao = new ResultDaoImpl();
+    TutorDao tutorDao = new TutorDaoImpl();
+    TutorInfoDao tutorInfoDao = new TutorInfoDaoImpl();
+    StudentDao studentDao = new StudentDaoImpl();
 
     @Test  //测试教师登录
     public void testTutorDoLogin() {
@@ -165,27 +164,29 @@ public class test {
     }
 
     @Test //tutor信息增删改查
-    public void testTutor(){
-        List<Tutor> list;
-        List<TutorInfo> list1;
+    public void testTutor() {
+//        List<Tutor> list;
+//        List<TutorInfo> list1;
+//
+        Tutor tutorById = tutorService.getTutorById(20);
+//        List<Tutor> tutorList = tutorService.getTutorList();
+//
+//        TutorInfo infoByTutorId = tutorService.getInfoByTutorId(1);
+//
+//        TutorInfo infoByInfoId = tutorService.getInfoByInfoId(1);
+//        List<TutorInfo> infoList = tutorService.getInfoList();
+//
+//        TutorInfo tutorInfo = new TutorInfo();
+//        tutorInfo.setGender(11);
+//
+//        Tutor tutor = tutorService.updateTutorInfo(tutorById, tutorInfo);
+//
+//        System.out.println(tutor);
+//
+//        List<Tutor> tutorByMajorId = tutorService.getTutorByMajorId(1);
+//        System.out.println(tutorByMajorId);
 
-        Tutor tutorById = tutorService.getTutorById(1);
-        List<Tutor> tutorList = tutorService.getTutorList();
-
-        TutorInfo infoByTutorId = tutorService.getInfoByTutorId(1);
-
-        TutorInfo infoByInfoId = tutorService.getInfoByInfoId(1);
-        List<TutorInfo> infoList = tutorService.getInfoList();
-
-        TutorInfo tutorInfo=new TutorInfo();
-        tutorInfo.setGender(11);
-
-        Tutor tutor = tutorService.updateTutorInfo(tutorById, tutorInfo);
-
-        System.out.println(tutor);
-
-        List<Tutor> tutorByMajorId = tutorService.getTutorByMajorId(1);
-        System.out.println(tutorByMajorId);
+        tutorService.updatePassword("123456",tutorById);
 
     }
 
@@ -200,7 +201,7 @@ public class test {
     }
 
     @Test //测试私信查询ByReceiverId
-    public void testFindByReceiverId(){
+    public void testFindByReceiverId() {
         MessageDaoImpl messageDao = new MessageDaoImpl();
         Integer receiverId = 1;
         List<Message> messageList = messageDao.findByReceiverId(receiverId);
@@ -208,7 +209,7 @@ public class test {
     }
 
     @Test //测试私信查询BySenderId
-    public void testFindBySenderId(){
+    public void testFindBySenderId() {
         MessageDaoImpl messageDao = new MessageDaoImpl();
         Integer senderId = 1;
         List<Message> messageList = messageDao.findBySenderId(senderId);
@@ -216,14 +217,14 @@ public class test {
     }
 
     @Test
-    public void testDateFormat(){
+    public void testDateFormat() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = sdf.format(new Date());
         System.out.println(format);
     }
 
     @Test
-    public void testMessage(){
+    public void testMessage() {
 //        Date date=new Date();
 //        Timestamp timestamp=new Timestamp(date.getTime());
 //        String time= String.valueOf(timestamp);
@@ -235,7 +236,7 @@ public class test {
     }
 
     @Test
-    public void testResult(){
+    public void testResult() {
 
         List<IntBean> tutorList = resultDao.findTutorByEventId(8);
 //
@@ -259,4 +260,19 @@ public class test {
 
     }
 
+    @Test
+    public void testDAo() {
+
+        TutorInfo tutorInfo=new TutorInfo();
+        Tutor tutor=new Tutor();
+        tutor=tutorDao.findById(1);
+        tutorInfo.setGender(1);
+        tutorInfo.setLessons("123");
+        tutorInfoDao.updateInfo(1, tutorInfo);
+        Tutor id = tutorService.getTutorById(1);
+        System.out.println(id);
+        tutorService.updateTutorInfo(tutor,tutorInfo);
+
+
+    }
 }

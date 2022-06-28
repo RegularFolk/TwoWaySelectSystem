@@ -37,4 +37,5 @@ public interface TutorService {
     void takeStudents(Tutor tutor, List<Integer> chosenIds,int round);
 
 
+    Tutor updateTutor(Tutor updateTutor, Tutor tutor);
 }

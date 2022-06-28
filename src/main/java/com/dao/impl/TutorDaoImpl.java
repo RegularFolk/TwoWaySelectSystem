@@ -98,7 +98,7 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
 
     public List<Tutor> findTutorResult(List<IntBean> intBeans) {
         String sql = "select  * from tutor where id =?";
-        MajorDao majorDao=new MajorDaoImpl();
+        MajorDao majorDao = new MajorDaoImpl();
         List<Tutor> list = new ArrayList<>();
         for (IntBean intBean : intBeans) {
             Tutor tutor = getBean(Tutor.class, sql, intBean.getId());
@@ -108,5 +108,11 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
         }
         return list;
 
+    }
+
+    @Override
+    public void updateTutor(Tutor tutor) {
+        String sql = "update tutor set name=?,major_id=?,authority=? where id =?";
+        update(sql, tutor.getName(), tutor.getMajorId(), tutor.getAuthority(), tutor.getId());
     }
 }
