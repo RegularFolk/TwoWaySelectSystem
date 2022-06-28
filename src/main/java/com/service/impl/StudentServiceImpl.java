@@ -22,6 +22,8 @@ public class StudentServiceImpl implements StudentService {
 
     IntPreferDao intPreferDao = new IntPreferDaoImpl();
 
+    MajorDao majorDao=new MajorDaoImpl();
+
     @Override
     public Student doLogin(Student student) {
         Student byStudentNumber = studentDao.findByNumber(student.getStudentNumber());
@@ -107,10 +109,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(int id) {
-        Student student = studentDao.findById(id);
-        StudentInfo info = studentInfoDao.findInfoByStudentId(id);
-        student.setStudentInfo(info);
-        return student;
+        Student byId = studentDao.findById(id);
+        StudentInfo info=new StudentInfo();
+        Major major=new Major();
+        if (byId.getMajorId()!=0){
+            major=majorDao.findMajor(byId.getMajorId());
+        }
+        if (byId.getSelfInfoId()!=0){
+            info=studentInfoDao.findInfoByStudentId(id);
+        }
+        byId.setMajor(major);
+        byId.setStudentInfo(info);
+        return byId;
     }
 
     @Override

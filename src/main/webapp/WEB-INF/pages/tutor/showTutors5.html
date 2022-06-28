@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>学生导师双选系统</title>
+  <base th:href="@{/}" href="/TwoWaySelectSystem/"/><!--base标签，设置基准访问路径,如果某个路径要基于base编写，那么就不可以用斜杠开头-->
+  <!--使用绝对路径-->
+  <!--引入 element-ui 的样式，-->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 必须先引入vue，  后使用element-ui -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <!-- 引入element 的组件库-->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="static/plugins/elementui/index.css">
+  <link rel="stylesheet" href="static/plugins/font-awesome/css/font-awesome.min.css">
+  <script src="static/js/vue.js"></script>
+  <script src="static/plugins/elementui/index.js"></script>
+  <script type="text/javascript" src="static/js/jquery.min.js"></script>
+  <script src="static/js/axios-0.18.0.js"></script>
+</head>
+<body>
+<div id="app">
+  <el-main>
+
+    <div id="pro_form" style="position: relative;width: 100%;height: 1000px;">
+      <div style="position: relative;top: 100px;left:130px;">
+        <el-row>
+
+          <el-col :span="4" v-for="(tutor, index) in tutors" :key="index" :offset="1"
+                  style="margin-bottom:40px">
+
+            <el-card :body-style="{ padding: '10px', height:'360px'}" shadow="hover"
+                     style="width: 260px;height: 320px;" >
+
+              <div style="padding: 6px;height: 310px;">
+                <div>
+                  <div style="font-size: 5px"><font size="5">{{tutor.tutorInfo.lessons}}</font></div>
+
+                </div>
+
+                <div>
+<!--                  职称{{tutor.tutorInfo.lessons}}-->
+                  <el-popover
+                          placement="bottom"
+                          title="自我介绍"
+                          width="200px"
+                          trigger="click">
+
+                    <div slot="content" class="tips">
+
+                      <div class="content">
+
+                      </div>
+                    </div>
+
+                    <el-button slot="reference">查看</el-button>
+
+                  </el-popover>
+
+                </div>
+
+
+              </div>
+
+            </el-card>
+
+          </el-col>
+
+        </el-row>
+
+      </div>
+    </div>
+  </el-main>
+</div>
+</body>
+<script>
+  var vue = new Vue({
+    el:"#app",
+    data() {
+      return {
+        tutors: []
+        // tutorInfos:{},
+        // const tutorInfos = array.tutors.flatMap(i => i.tutorInfos)
+        // console.log(tutorInfos);
+      }
+    },
+
+    methods: {
+      //
+      // getTutorInfo() {
+      //     this.data.tutorInfo = tutorInfo;
+      // }
+
+    },
+    created() {
+      //改变this指向，因为promise中的this指向promise实例
+      var _this = this;
+      const output = []
+      if (_this.tutors.length === 0) {
+        axios.get("protected/tutor?method=getFullTutors").then(resp => {
+          if (resp.data.flag) {
+            console.log(resp.data);
+            _this.tutors = resp.data.data;
+            // var res = list.map(item => item.id);
+            console.log(_this.tutors);
+            // console.log(_this.tutors.tutorInfo["title"]);
+            //
+            // const tutorInfos = array.tutors.map(item => {
+            //     return item.tutorInfos;
+            // });
+            // console.log(tutorInfos);
+            //_this.tutorInfos = resp.data.data.map(tutorInfo => tutorInfo["title"]);
+            //_this.tutorInfos = resp.data.map(tutorInfo => tutorInfo["title"]);
+            //console.log(_this.tutorInfos);
+
+          } else {
+            this.$message({
+              message: resp.data.message,
+              type: "error"
+            })
+          }
+          // const tutorInfos = array.tutors.flatMap(i => i.tutorInfos)
+          // let tutordata = Array.from(tutorInfos);
+          // console.log(tutordata);
+        })
+      }
+
+    }
+  })
+</script>
+</html>

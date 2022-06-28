@@ -40,7 +40,21 @@ public class TutorInfoDaoImpl extends BaseDao<TutorInfo> implements TutorInfoDao
 
     @Override
     public void updateInfo(int tutorInfoId, TutorInfo tutorInfo) {
-        String sql = "update tutor_info set gender = ?, title=?, education_background = ?, research_field = ?, lessons = ?, self_introduction = ? where id=?";
-        update(sql, tutorInfo.getGender(), tutorInfo.getTitle(), tutorInfo.getEducationBackground(), tutorInfo.getResearchField(), tutorInfo.getLessons(), tutorInfo.getSelfIntroduction(),tutorInfoId);
+//        if (tutorInfo.getGender()!=-1){
+//
+//        }
+        String sql = "update tutor_info set  title=?, education_background = ?, research_field = ?, lessons = ?, self_introduction = ? where id=?";
+        update(sql,
+                tutorInfo.getTitle()==null?"null":tutorInfo.getTitle(),
+                tutorInfo.getEducationBackground()==null?"null":tutorInfo.getEducationBackground(),
+                tutorInfo.getResearchField()==null?"null":tutorInfo.getResearchField(),
+                tutorInfo.getLessons()==null?"null":tutorInfo.getLessons(),
+                tutorInfo.getSelfIntroduction()==null?"null":tutorInfo.getSelfIntroduction(),
+                tutorInfoId);
     }
+
+//    newInfo 只有一属性     oldInfo有所有属性
+//
+//    newInfo.getGender==null? oldInfo.gender==null?"null"::newInfo.gender
+
 }

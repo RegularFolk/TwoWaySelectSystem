@@ -40,8 +40,14 @@ public class StudentInfoDaoImpl extends BaseDao<StudentInfo> implements StudentI
 
     @Override
     public void updateInfo(int selfInfoId, StudentInfo studentInfo) {
-        String sql = "update student_info set gender = ?, birthday = ?, politics_status = ?, phone_number = ?, email = ?, planning = ?, honor= ? where id = ?";
-        update(sql, studentInfo.getGender(), studentInfo.getBirthday(), studentInfo.getPoliticsStatus(), studentInfo.getPhoneNumber(), studentInfo.getEmail(), studentInfo.getPlanning(), studentInfo.getHonor(), selfInfoId);
+        String sql = "update student_info set  birthday = ?, politics_status = ?, phone_number = ?, email = ?, planning = ?, honor= ? where id = ?";
+        update(sql,  studentInfo.getBirthday()==null?"null":studentInfo.getBirthday(),
+                studentInfo.getPoliticsStatus()==null?"null":studentInfo.getPoliticsStatus(),
+                studentInfo.getPhoneNumber()==null?"null":studentInfo.getPhoneNumber(),
+                studentInfo.getEmail()==null?"null":studentInfo.getEmail(),
+                studentInfo.getPlanning()==null?"null":studentInfo.getPlanning(),
+                studentInfo.getHonor()==null?"null":studentInfo.getHonor(),
+                selfInfoId);
     }
 
 

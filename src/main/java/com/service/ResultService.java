@@ -8,4 +8,6 @@ public interface ResultService {
     void updateResult(int eventId);
 
     Result getResultByEventId(int eventId);
+
+    Result getResultByEventIdStudentId(int id, int id1);
 }

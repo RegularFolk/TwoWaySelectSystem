@@ -33,6 +33,12 @@ public class EventDaoImpl extends BaseDao<Event> implements EventDao {
     }
 
     @Override
+    public List<Event> getAllEventsByStudentId(int id) {
+        String sql = "SELECT e.* from `event` as e,result as r WHERE e.id=r.event_id and r.student_id= ?";
+        return getBeanList(Event.class, sql,id);
+    }
+
+    @Override
     public List<Event> getOngoingEvent() {
         String sql = "select * from event where status = ?";
         return getBeanList(Event.class, sql, Constants.EVENT_ENABLED);

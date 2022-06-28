@@ -34,10 +34,22 @@ public class ResultDaoImpl extends BaseDao<IntBean> implements ResultDao {
     }
 
     @Override
+    public List<IntBean> findTutorByEventIdStudentId(int eventId,int studentId) {
+        String sql = "select DISTINCT tutor_id as id from result where event_id = ? and student_id=?";
+        return getBeanList(IntBean.class, sql, eventId,studentId);
+    }
+
+    @Override
     public List<IntBean> findStudentByEventIdTutor(int eventId, int tutorId) {
         String sql = "select DISTINCT student_id as id from result where event_id = ? and tutor_id=?";
         return getBeanList(IntBean.class, sql, eventId, tutorId);
 
+    }
+
+    @Override
+    public List<IntBean> findEventByStudentId(int id) {
+        String sql = "select DISTINCT  event_id as id from result where  student_id = ? ";
+        return getBeanList(IntBean.class, sql, id);
     }
 
 }

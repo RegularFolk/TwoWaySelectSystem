@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
@@ -30,17 +21,17 @@
     <script src="static/js/axios-0.18.0.js"></script>
 </head>
 <body>
+
 <div id="app">
     <el-main>
         <el-card>
-            <!--                <el-button type="primary" round @click="newInfo()">新建个人信息</el-button>-->
             <el-form class="margin-top" title="简介" :column="2" border>
 
                 <el-form-item>
                     <template slot="label">
                         学生姓名
                     </template>
-                    {{student.name}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    {{student.studentName}}&nbsp;&nbsp;&nbsp;&nbsp;
                 </el-form-item>
 
                 <el-form-item label-with="500px">
@@ -52,13 +43,18 @@
 
                 <el-form-item>
                     <template slot="label">
-
                         性别
                     </template>
-                    {{ student.studentInfo.gender===0?"女":"男" }}&nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ student.studentInfo.gender === 0 ? "女" : "男" }}&nbsp;&nbsp;&nbsp;&nbsp;
                     <el-button type="small" icon="el-icon-edit" @click="open('性别')"></el-button>
+                </el-form-item>
 
-
+                <el-form-item>
+                    <template slot="label">
+                        生日
+                    </template>
+                    {{ student.studentInfo.birthday }}&nbsp;&nbsp;&nbsp;&nbsp;
+                    <el-button type="small" icon="el-icon-edit" @click="open('生日')"></el-button>
                 </el-form-item>
 
                 <el-form-item>
@@ -66,8 +62,6 @@
                         学院
                     </template>
                     {{ student.major.collegeName }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <!--                    <el-button type="small" icon="el-icon-edit" @click="openTutor('学院')"></el-button>-->
-
                 </el-form-item>
 
                 <el-form-item>
@@ -75,9 +69,6 @@
                         班级
                     </template>
                     {{ student.major.major }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('职称')"></el-button>
-
-
                 </el-form-item>
 
                 <el-form-item>
@@ -85,30 +76,15 @@
                         政治面貌
                     </template>
                     {{ student.studentInfo.politicsStatus }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('学历')"></el-button>
-
-
+                    <el-button type="small" icon="el-icon-edit" @click="open('政治面貌')"></el-button>
                 </el-form-item>
-
-                <!--                <el-form-item>-->
-                <!--                    <template slot="label">-->
-
-                <!--                        职权-->
-                <!--                    </template>-->
-                <!--                    {{ tutor.authority }}-->
-                <!--                    <el-button type="small" icon="el-icon-edit" @click="openTutor('职权')"></el-button>-->
-
-                <!--                </el-form-item>-->
 
                 <el-form-item>
                     <template slot="label">
-
                         电话号码
                     </template>
                     {{ student.studentInfo.phoneNumber }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('课程')"></el-button>
-
-
+                    <el-button type="small" icon="el-icon-edit" @click="open('电话号码')"></el-button>
                 </el-form-item>
 
                 <el-form-item>
@@ -116,29 +92,26 @@
                         电子邮箱
                     </template>
                     {{ student.studentInfo.email }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('研究领域')"></el-button>
+                    <el-button type="small" icon="el-icon-edit" @click="open('电子邮箱')"></el-button>
                 </el-form-item>
 
                 <el-form-item>
                     <template slot="label">
                         未来发展
                     </template>
-
                     {{ student.studentInfo.planning }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('个人介绍')"></el-button>
-
-
+                    <el-button type="small" icon="el-icon-edit" @click="open('未来发展')"></el-button>
                 </el-form-item>
+
+
                 <el-form-item>
                     <template slot="label">
                         个人荣誉
                     </template>
-
                     {{ student.studentInfo.honor }}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="small" icon="el-icon-edit" @click="open('个人介绍')"></el-button>
-
-
+                    <el-button type="small" icon="el-icon-edit" @click="open('个人荣誉')"></el-button>
                 </el-form-item>
+
                 <el-form-item>
                     <template slot="label">
                         密码
@@ -161,11 +134,12 @@
                 student: "",
                 updateStudentInfo: {
                     gender: -1,
-                    title: -1,
-                    educationBackground: -1,
-                    researchField: -1,
-                    lessons: -1,
-                    selfIntroduction: -1
+                    politicsStatus: -1,
+                    planning: -1,
+                    email: -1,
+                    phoneNumber: -1,
+                    honor: -1,
+                    birthday: -1,
                 },
                 updateStudent: "",
                 password: "",
@@ -175,22 +149,7 @@
             resultDetail(row) {
 
             },
-            newInfo() {
-                axios.post("protected/tutor?method=updateTutorInfo",
-                    this.updateTutorInfo
-                ).then(resp => {
-                    if (resp.data.flag) {
-                        this.$message.success(resp.data.message)
-                        location.reload();
-                    } else {
-                        this.$message({
-                            message: resp.data.message,
-                            type: "error"
-                        })
-                    }
-                })
 
-            },
             open(text) {
                 this.$prompt('请输入' + text, '提示', {
                     confirmButtonText: '确定',
@@ -198,27 +157,30 @@
                 }).then(({value}) => {
                     switch (text) {
                         case '性别':
-                            this.updateTutorInfo.gender = value;
+                            this.updateStudentInfo.gender = value;
                             break
-                        case '职称':
-                            this.updateTutorInfo.title = value;
+                        case '个人荣誉':
+                            this.updateStudentInfo.honor = value;
                             break
-                        case '学历':
-                            this.updateTutorInfo.educationBackground = value;
+                        case '未来发展':
+                            this.updateStudentInfo.planning = value;
                             break
-                        case '课程':
-                            this.updateTutorInfo.lessons = value;
+                        case '生日':
+                            this.updateStudentInfo.birthday = value;
                             break
-                        case '研究领域':
-                            this.updateTutorInfo.researchField = value;
+                        case '政治面貌':
+                            this.updateStudentInfo.politicsStatus = value;
                             break
-                        case '个人介绍':
-                            this.updateTutorInfo.selfIntroduction = value;
+                        case '电话号码':
+                            this.updateStudentInfo.phoneNumber = value;
+                            break
+                        case '电子邮箱':
+                            this.updateStudentInfo.email = value;
                             break
                     }
 
-                    axios.post("protected/tutor?method=updateTutorInfo",
-                        this.updateTutorInfo
+                    axios.post("protected/student?method=updateStudentInfo",
+                        this.updateStudentInfo
                     ).then(resp => {
                         if (resp.data.flag) {
                             this.$message.success(resp.data.message)
@@ -239,44 +201,44 @@
                 });
             },
 
-            openTutor(text) {
-                this.$prompt('请输入' + text, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({value}) => {
-                    switch (text) {
-                        case '姓名':
-                            this.updateTutor.name = value;
-                            break
-                        case '职权':
-                            this.updateTutor.authority = value;
-                            break
-                        case '密码':
-                            this.updateTutorInfo.authority = value;
-                            break
-                    }
-
-                    axios.post("protected/tutor?method=updateTutor",
-                        this.updateTutor
-                    ).then(resp => {
-                        if (resp.data.flag) {
-                            this.$message.success(resp.data.message)
-                            location.reload();
-                        } else {
-                            this.$message({
-                                message: resp.data.message,
-                                type: "error"
-                            })
-                        }
-                    })
-
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
-                    });
-                });
-            },
+            // openTutor(text) {
+            //     this.$prompt('请输入' + text, '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //     }).then(({value}) => {
+            //         switch (text) {
+            //             case '姓名':
+            //                 this.updateTutor.name = value;
+            //                 break
+            //             case '职权':
+            //                 this.updateTutor.authority = value;
+            //                 break
+            //             case '密码':
+            //                 this.updateTutorInfo.authority = value;
+            //                 break
+            //         }
+            //
+            //         axios.post("protected/tutor?method=updateTutor",
+            //             this.updateTutor
+            //         ).then(resp => {
+            //             if (resp.data.flag) {
+            //                 this.$message.success(resp.data.message)
+            //                 location.reload();
+            //             } else {
+            //                 this.$message({
+            //                     message: resp.data.message,
+            //                     type: "error"
+            //                 })
+            //             }
+            //         })
+            //
+            //     }).catch(() => {
+            //         this.$message({
+            //             type: 'info',
+            //             message: '取消输入'
+            //         });
+            //     });
+            // },
 
             updatePassword(text) {
                 this.$prompt('请输入' + text, '提示', {
@@ -289,7 +251,7 @@
                             break
                     }
                     var _this = this
-                    axios.post("protected/tutor?method=updateTutorPassword",
+                    axios.post("protected/student?method=updateStudentPassword",
                         {"string": _this.password}
                     ).then(resp => {
                         if (resp.data.flag) {
@@ -313,12 +275,12 @@
         },
         created() {
 
-            axios.get("protected/tutor?method=selectTutorFullInfo").then(resp => {
+            axios.get("protected/student?method=selectStudentFullInfo").then(resp => {
                 if (resp.data.flag) {
                     this.$message.success(resp.data.message)
-                    this.tutor = resp.data.data
-                    this.updateTutor = resp.data.data
-                    this.updateTutorInfo = resp.data.data.tutorInfo
+                    this.student = resp.data.data
+                    this.updateStudent = resp.data.data
+                    this.updateStudentInfo = resp.data.data.studentInfo
                 } else {
                     this.$message({
                         message: resp.data.message,
@@ -330,10 +292,4 @@
         }
     })
 </script>
-<style>
-
-</style>
-</html>
-
-</body>
 </html>

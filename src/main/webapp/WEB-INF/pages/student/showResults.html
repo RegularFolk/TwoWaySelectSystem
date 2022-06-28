@@ -23,47 +23,39 @@
 <body>
 <div id="app">
     <el-main>
-        <el-card>
         <el-table
-                :data="tutors"
+                :data="events"
                 style="width: 100%"
         >
             <el-table-column
-                    prop="name"
-                    label="导师姓名"
-                    sortable
-                    width="120"
+                    prop="id"
+                    label="序号"
+                    width="90"
+            ></el-table-column>
+            <el-table-column
+                    prop="eventInfo.initiator"
+                    label="发起人"
             >
             </el-table-column>
             <el-table-column
-                    prop="tutorInfo.title"
-                    label="职称"
-                    width="120"
+                    prop="endTime"
+                    label="结束时间"
             >
             </el-table-column>
             <el-table-column
-                    prop="tutorInfo.educationBackground"
-                    label="学历"
-                    width="120"
+                    prop="eventInfo.description"
+                    label="描述"
             >
             </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.researchField"
-                    label="研究领域"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.lessons"
-                    label="任教课程"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.selfIntroduction"
-                    label="自我介绍"
-            >
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+<!--                    跳转第二个页面-->
+                    <el-button
+                            size="mini"
+                            @click="resultDetail(scope.row)">查看详情</el-button>
+                </template>
             </el-table-column>
         </el-table>
-        </el-card>
     </el-main>
 </div>
 </body>
@@ -71,14 +63,23 @@
     var vue = new Vue({
         el: "#app",
         data: {
-            "tutors": []
+            "events": [],
+            "chosenEvent": {},
+            eventId: "",
         },
-        methods: {},
+        methods: {
+            resultDetail(row){
+                this.eventId=row.id;
+                window.sessionStorage.setItem("eventId",row.id)
+                window.location.href="protected/event?method=toShowResultDetail";
+            }
+        },
         created() {
-            if (this.tutors.length === 0) {
-                axios.get("protected/tutor?method=getFullTutors").then(resp => {
+            if (this.events.length === 0) {
+                axios.get("protected/event?method=getFullEvents").then(resp => {
                     if (resp.data.flag) {
-                        this.tutors = resp.data.data
+                        this.$message.success(resp.data.message)
+                        this.events = resp.data.data
                     } else {
                         this.$message({
                             message: resp.data.message,
@@ -90,4 +91,14 @@
         }
     })
 </script>
+<style>
+    .el-transfer-panel {
+        width: 400px;
+        height: 500px;
+    }
+
+    .el-transfer-panel__list.is-filterable {
+        height: 400px;
+    }
+</style>
 </html>

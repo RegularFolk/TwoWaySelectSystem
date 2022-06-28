@@ -23,76 +23,77 @@
 <body>
 <div id="app">
     <el-main>
-        <div id="messageboard">
-            <el-container>
-                <el-aside>
-                    <el-menu
-                            default-active="2"
-                            class="el-menu-vertical-demo"
-                            @open="handleOpen"
-                            @close="handleClose">
-                        <el-submenu index="1">
-                            <template slot="title">
-                                <i class="el-icon-menu"></i>
-                                <span>所有好友</span>
-                            </template>
-                            <!--                    循环数据库里所有人名-->
-                            <div>
-                                <el-menu-item :index="names">莎士比亚</el-menu-item>
-                            </div>
-                            <div v-for="tutor in tutors" @click="getReceiverId(tutor.id,tutor.name)">
-                                <el-menu-item :index="names">{{tutor.name}}</el-menu-item>
-                            </div>
-                        </el-submenu>
-                    </el-menu>
-                </el-aside>
-                <el-main>
+        <el-card>
+            <div id="messageboard">
+                <el-container>
+                    <el-aside>
+                        <el-menu
+                                default-active="2"
+                                class="el-menu-vertical-demo"
+                                @open="handleOpen"
+                                @close="handleClose">
+                            <el-submenu index="1">
+                                <template slot="title">
+                                    <i class="el-icon-menu"></i>
+                                    <span>所有好友</span>
+                                </template>
+                                <!--                    循环数据库里所有人名-->
+                                <div>
+                                    <el-menu-item :index="names">莎士比亚</el-menu-item>
+                                </div>
+                                <div v-for="tutor in tutors" @click="getReceiverId(tutor.id,tutor.name)">
+                                    <el-menu-item :index="names">{{tutor.name}}</el-menu-item>
+                                </div>
+                            </el-submenu>
+                        </el-menu>
+                    </el-aside>
+                    <el-main>
 
 
-                    <el-form ref="form" label-width="50px">
-                        <el-form-item label="内容">
-                            <el-input v-model="content" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button @click="add()">发送</el-button>
-                            <el-button @click="clearReceiver()"><strong>接收人：{{receiverName}}</strong>
-                            </el-button>
-                        </el-form-item>
+                        <el-form ref="form" label-width="50px">
+                            <el-form-item label="内容">
+                                <el-input v-model="content" placeholder="请输入内容"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button @click="add()">发送</el-button>
+                                <el-button @click="clearReceiver()"><strong>接收人：{{receiverName}}</strong>
+                                </el-button>
+                            </el-form-item>
 
-                        <el-table border :data="mydata">
-                            <!--                            <el-table-column label="留言条数" inline-template :context="_self">-->
-                            <!--                                <span>{{$index + 1}}</span>-->
-                            <!--                            </el-table-column>-->
-                            <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">
-                            </el-table-column>
-                            <el-table-column prop="senderName" sortable label="发送人" :show-overflow-tooltip="true">
-                            </el-table-column>
-                            <el-table-column prop="receiverName" sortable label="接收人" :show-overflow-tooltip="true">
-                            </el-table-column>
-                            <el-table-column prop="text" label="内容" :show-overflow-tooltip="true">
-                            </el-table-column>
+                            <el-table border :data="mydata">
+                                <!--                            <el-table-column label="留言条数" inline-template :context="_self">-->
+                                <!--                                <span>{{$index + 1}}</span>-->
+                                <!--                            </el-table-column>-->
+                                <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">
+                                </el-table-column>
+                                <el-table-column prop="senderName" sortable label="发送人" :show-overflow-tooltip="true">
+                                </el-table-column>
+                                <el-table-column prop="receiverName" sortable label="接收人" :show-overflow-tooltip="true">
+                                </el-table-column>
+                                <el-table-column prop="text" label="内容" :show-overflow-tooltip="true">
+                                </el-table-column>
 
-                        </el-table>
-
-
-                        <!--                        <div style="text-align:right" v-show="mydata.length>0">-->
-                        <!--                            <el-button size="small" @click="showDelallDialog()">全部删除</el-button>-->
-                        <!--                        </div>-->
-                    </el-form>
-
-                    <!--                    <el-dialog title="提示" v-model="dialogVisible" size="tiny">-->
-                    <!--                        <span v-if="nowIndex==-2">删除全部条留言</span>-->
-                    <!--                        <span v-else>删除此条留言</span>-->
-                    <!--                        <span slot="footer" class="dialog-footer">-->
-                    <!--          <el-button @click="dialogVisible = false">取 消</el-button>-->
-                    <!--          <el-button type="primary" @click="del(nowIndex)">确 定</el-button>-->
-                    <!--        </span>-->
-                    </el-dialog>
-                </el-main>
-            </el-container>
-        </div>
+                            </el-table>
 
 
+                            <!--                        <div style="text-align:right" v-show="mydata.length>0">-->
+                            <!--                            <el-button size="small" @click="showDelallDialog()">全部删除</el-button>-->
+                            <!--                        </div>-->
+                        </el-form>
+
+                        <!--                    <el-dialog title="提示" v-model="dialogVisible" size="tiny">-->
+                        <!--                        <span v-if="nowIndex==-2">删除全部条留言</span>-->
+                        <!--                        <span v-else>删除此条留言</span>-->
+                        <!--                        <span slot="footer" class="dialog-footer">-->
+                        <!--          <el-button @click="dialogVisible = false">取 消</el-button>-->
+                        <!--          <el-button type="primary" @click="del(nowIndex)">确 定</el-button>-->
+                        <!--        </span>-->
+                        </el-dialog>
+                    </el-main>
+                </el-container>
+            </div>
+
+        </el-card>
     </el-main>
 </div>
 </body>
