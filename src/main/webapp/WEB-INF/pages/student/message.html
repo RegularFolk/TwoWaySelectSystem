@@ -38,9 +38,9 @@
                                     <span>所有好友</span>
                                 </template>
                                 <!--                    循环数据库里所有人名-->
-                                <div>
-                                    <el-menu-item :index="names">莎士比亚</el-menu-item>
-                                </div>
+<!--                                <div>-->
+<!--                                    <el-menu-item :index="names">莎士比亚</el-menu-item>-->
+<!--                                </div>-->
                                 <div v-for="tutor in tutors" @click="getReceiverId(tutor.id,tutor.name)">
                                     <el-menu-item :index="names">{{tutor.name}}</el-menu-item>
                                 </div>

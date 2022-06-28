@@ -347,4 +347,29 @@ public class StudentServlet extends ModelBaseServlet {
         }
     }
 
+    public void getFullStudents(HttpServletRequest request, HttpServletResponse response){
+        try {
+            List<Student> studentList = studentService.getStudentList();
+
+            for(Student student:studentList){
+                student=studentService.getStudentById(student.getId());
+            }
+
+            JSONUtils.writeResult(response, new ResultMessage(true, studentList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.QUERY_FAIL));
+        }
+    }
+
+    //跳转ShowResultDetail页面，郑应啟
+    public void toShowStudents(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/showStudents", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
 }
