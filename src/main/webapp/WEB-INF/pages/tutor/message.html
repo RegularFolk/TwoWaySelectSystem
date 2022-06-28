@@ -23,6 +23,7 @@
 <body>
 <div id="app">
     <el-main>
+        <el-card>
         <div id="messageboard">
             <el-container>
                 <el-aside>
@@ -40,8 +41,8 @@
                             <div>
                                 <el-menu-item :index="names" >莎士比亚</el-menu-item>
                             </div>
-                            <div v-for="student in students" @click="getReceiverId(student.id,student.studentName)">
-                                <el-menu-item :index="names">{{student.studentName}}</el-menu-item>
+                            <div v-for="(student,index) in students" @click="getReceiverId(student.id,student.studentName)" >
+                                <el-menu-item :index="index" :key="index">{{student.studentName}}</el-menu-item>
                             </div>
                         </el-submenu>
 
@@ -60,29 +61,7 @@
                         </el-form-item>
 
                         <el-table border :data="mydata">
-                            <!--                            <el-table-column label="留言条数" inline-template :context="_self">-->
-                            <!--                                <span>{{$index + 1}}</span>-->
-                            <!--                            </el-table-column>-->
-                            <!--                            <el-table-column prop="time" label="时间">-->
-                            <!--                            </el-table-column>-->
-                            <!--                            <el-table-column prop="content" label="内容">-->
-                            <!--                            </el-table-column>-->
-                            <!--                            <el-table-column label="操作" inline-template :context="_self">-->
-                            <!--                                <span><el-button size="small" @click="showDialog()">删除</el-button></span>-->
-                            <!--                            </el-table-column>-->
-                            <!--                        </el-table>-->
-<!--                            <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="senderName" label="发送人" :show-overflow-tooltip="true">-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="receiverName" label="接收人" :show-overflow-tooltip="true">-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="text" label="内容" :show-overflow-tooltip="true">-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column label="操作" inline-template>-->
-<!--                                &lt;!&ndash;                                <span><el-button size="small" @click="showDialog()">删除</el-button></span>&ndash;&gt;-->
-<!--                                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>-->
-<!--                            </el-table-column>-->
+
                             <el-table-column prop="time" sortable label="时间" :show-overflow-tooltip="true">
                             </el-table-column>
                             <el-table-column prop="senderName" sortable label="发送人" :show-overflow-tooltip="true">
@@ -94,24 +73,14 @@
                         </el-table>
 
 
-                        <!--                        <div style="text-align:right" v-show="mydata.length>0">-->
-                        <!--                            <el-button size="small" @click="showDelallDialog()">全部删除</el-button>-->
-                        <!--                        </div>-->
                     </el-form>
 
-                    <!--                    <el-dialog title="提示" v-model="dialogVisible" size="tiny">-->
-                    <!--                        <span v-if="nowIndex==-2">删除全部条留言</span>-->
-                    <!--                        <span v-else>删除此条留言</span>-->
-                    <!--                        <span slot="footer" class="dialog-footer">-->
-                    <!--          <el-button @click="dialogVisible = false">取 消</el-button>-->
-                    <!--          <el-button type="primary" @click="del(nowIndex)">确 定</el-button>-->
-                    <!--        </span>-->
-                    <!--                    </el-dialog>-->
                 </el-main>
 
 
             </el-container>
         </div>
+        </el-card>
     </el-main>
 </div>
 </body>
@@ -140,8 +109,7 @@
             clearReceiver() {
                 this.receiverId = "";
                 this.receiverName = "未选择";
-            }
-            ,
+            },
             add() {
                 var _this = this;
                 if (this.content === '') {
@@ -160,16 +128,6 @@
                             this.$message.error(resp.data.message)
                         }
                     });
-                    // if (this.content == '') {
-                    //     this.$message.error('请填写内容');
-                    // } else {
-                    //     this.mydata.push({
-                    //         // 这里去数据库调 CURRENT_TIMESTAMP
-                    //         // time:this.,
-                    //         content: this.content,
-                    //     });
-                    //     this.time = '';
-                    //     this.content = '';
                 }
             },
             showDialog() {
@@ -193,16 +151,6 @@
                 this.content = '';
             }
         },
-        // created() {
-        //     axios.get("protected/tutor?method=getMyStudents").then(resp => {
-        //         if (resp.data.flag) {
-        //             this.students = resp.data.data
-        //             this.$message.success(resp.data.message)
-        //         } else {
-        //             this.$message.error(resp.data.message)
-        //         }
-        //     })
-        // },
         mounted() {
             var _this = this;
 

@@ -70,6 +70,7 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到展示导师页面 （zcb）
     public void toShowTutors(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/showTutors", request, response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,9 +78,10 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //跳转到教师主页面
+    //跳转到教师个人信息
     public void toSelfInfo(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/selfInfo", request, response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -158,6 +160,7 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到教师主页面 （周才邦）
     public void toMain(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/main", request, response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -168,6 +171,7 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到导师私信页面
     public void toMessage(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/message", request, response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -178,6 +182,7 @@ public class TutorServlet extends ModelBaseServlet {
     //导师跳转到选择学生页面
     public void toRound(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             int round = Integer.parseInt(request.getParameter("round"));
             processTemplate("tutor/round" + round, request, response);
         } catch (IOException e) {
@@ -302,6 +307,7 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到登录欢迎页面
     public void toWelcome(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/welcome", request, response);
         } catch (IOException e) {
             e.printStackTrace();

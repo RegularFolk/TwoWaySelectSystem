@@ -11,6 +11,8 @@ public interface EventService {
 
     List<Event> getFullAllEvents();
 
+    List<Event> getFullAllEventsByStudentId(int id);
+
     Event getOngoingEvent();
 
     void setEventFinished(int id);
@@ -20,4 +22,6 @@ public interface EventService {
     Event enableEvent(Integer chosenEventId);
 
     Event getEventById(int id);
+
+    
 }

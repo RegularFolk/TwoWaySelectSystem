@@ -32,6 +32,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getFullAllEventsByStudentId(int id) {
+        List<Event> events = eventDao.getAllEventsByStudentId(id);
+        for (Event event : events) {
+            event.setEventInfo(eventInfoDao.getEventInfoByInfoId(event.getEventInfoId()));
+        }
+        return events;
+    }
+
+    @Override
     public Event getOngoingEvent() {
         List<Event> ongoingEvent = eventDao.getOngoingEvent();
         if (ongoingEvent.size() > 1) {

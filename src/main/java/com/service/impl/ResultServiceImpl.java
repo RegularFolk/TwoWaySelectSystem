@@ -45,5 +45,19 @@ public class ResultServiceImpl implements ResultService {
         return result;
     }
 
+    @Override
+    public Result getResultByEventIdStudentId(int eventId, int studentId) {
+        Result result=new Result(eventId);
+        List<IntBean> tutorList = resultDao.findTutorByEventIdStudentId(eventId,studentId);
+        List<Tutor> tutors = tutorDao.findTutorResult(tutorList);
+        for (Tutor tutor:tutors){
+            List<IntBean> studentList = resultDao.findStudentByEventIdTutor(eventId, tutor.getId());
+            List<Student> students = studentDao.findStudentResult(studentList);
+            tutor.setStudents(students);
+        }
+        result.setTutors(tutors);
+        return result;
+    }
+
 
 }

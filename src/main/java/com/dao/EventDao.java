@@ -13,6 +13,8 @@ public interface EventDao {
 
     List<Event> getAllEvents();
 
+    List<Event> getAllEventsByStudentId(int id);
+
     List<Event> getOngoingEvent();
 
     void setEventFinished(int id);

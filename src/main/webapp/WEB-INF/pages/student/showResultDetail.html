@@ -24,9 +24,6 @@
 <div id="app">
     <el-main>
         <el-card>
-            <el-button-group>
-                <el-button type="primary" icon="el-icon-arrow-left" @click="backToShowResults">返回</el-button>
-            </el-button-group>
             <el-table
                     :data="tableDate"
                     style="width: 100%">
@@ -35,11 +32,12 @@
                         <el-form label-position="left" inline class="demo-table-expand">
                             <div>
                                 <el-form-item label="导师">
-                                    <strong>{{ props.row.name }}</strong>
+                                    <strong>{{ props.row.result.tutors[0].name }}</strong>
                                 </el-form-item>
                             </div>
                             <div>
-                                <el-form-item v-for="(s,index) in props.row.students" :label="'学生'+`${index+1}`">
+                                <el-form-item v-for="(s,index) in props.row.result.tutors[0].students"
+                                              :label="'学生'+`${index+1}`">
                                     <div>姓名：{{ s.studentName }}</div>
 
                                     <div>学号：{{s.studentNumber}}</div>
@@ -51,24 +49,23 @@
 
 
                 <el-table-column
-                        label="导师姓名"
+                        label="序号"
                         sortable
-                        prop="name">
+                        prop="id">
                 </el-table-column>
                 <el-table-column
-                        label="教师工号"
+                        label="发起人"
                         sortable
-                        prop="number">
+                        prop="eventInfo.initiator">
                 </el-table-column>
                 <el-table-column
-                        label="所在学院"
+                        label="结束时间"
                         sortable
-                        prop="major.collegeName">
+                        prop="endTime">
                 </el-table-column>
                 <el-table-column
-                        label="主要专业"
-                        sortable
-                        prop="major.major">
+                        label="描述"
+                        prop="eventInfo.description">
                 </el-table-column>
 
 
@@ -103,16 +100,12 @@
         },
         methods: {
             backToShowResults() {
-                window.location.href = "protected/tutor?method=toResult";
+                window.location.href = "protected/student?method=toResult";
             }
         },
         created() {
-            this.eventId = sessionStorage.getItem("eventId")
-            console.log(this.eventId)
             var _this = this;
-            axios.post("protected/event?method=getResult", {
-                id: _this.eventId
-            }).then(resp => {
+            axios.post("protected/event?method=getFullEventsByStudent").then(resp => {
                 if (resp.data.flag) {
                     this.$message.success(resp.data.message)
                     this.tableDate = resp.data.data

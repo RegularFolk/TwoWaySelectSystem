@@ -69,6 +69,28 @@ public class EventServlet extends ModelBaseServlet {
         }
     }
 
+
+    //获取所有双选事件，和学生相关的事件  郑应啟
+    public void getFullEventsByStudent(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            List<Event> events = eventService.getFullAllEventsByStudentId(student.getId());
+            for (Event event : events) {
+                Result result = resultService.getResultByEventIdStudentId(event.getId(),student.getId());
+                if (event.getStatus() == 2) {
+                    event.setResult(result);
+                }
+            }
+
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.GET_ALL_EVENT_SUCCESS, events));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, Constants.GET_ALL_EVENT_FAIL));
+        }
+    }
+
+
     //强制结束当前正在进行的双选事件
     public void shutCurrentEvent(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -107,6 +129,35 @@ public class EventServlet extends ModelBaseServlet {
         try {
             IntBean intBean = (IntBean) JSONUtils.parseJsonToBean(request, IntBean.class);
             Integer id = intBean.getId();
+            Event event = eventService.getEventById(id);
+            Result result = resultService.getResultByEventId(id);
+            switch (event.getStatus()) {
+                case 0:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS));
+                    break;
+                case 1:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS));
+                    break;
+                case 2:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, result.getTutors()));
+                    break;
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败则返回失败,返回错误信息
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //返回双选结果，郑应啟
+    public void getResultByStudentId(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Student student = (Student) session.getAttribute(Constants.STUDENT_SESSION_KEY);
+            int id = student.getId();
+
             Event event = eventService.getEventById(id);
             Result result = resultService.getResultByEventId(id);
             switch (event.getStatus()) {

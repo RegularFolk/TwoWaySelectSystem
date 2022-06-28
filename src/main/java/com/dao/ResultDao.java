@@ -14,7 +14,9 @@ public interface ResultDao {
 
     List<IntBean> findTutorByEventId(int eventId);
 
-    List<IntBean> findStudentByEventIdTutor(int eventId,int tutorId);
+    List<IntBean> findTutorByEventIdStudentId(int eventId, int studentId);
 
+    List<IntBean> findStudentByEventIdTutor(int eventId, int tutorId);
 
+    List<IntBean> findEventByStudentId(int id);
 }

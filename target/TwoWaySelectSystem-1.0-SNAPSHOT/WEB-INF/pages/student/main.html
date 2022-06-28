@@ -107,7 +107,7 @@
                             "path": "2-2",
                             "title": "查看结果",
                             "notActive": false,
-                            "linkUrl": ""
+                            "linkUrl": "protected/student?method=toShowResultDetail"
                         },
                         {
                             "path": "2-3",
@@ -140,7 +140,7 @@
         },
         methods: {
             selectLogout(path, linkUrl) {
-                if (path == "3-1") {
+                if (path == "3-2") {
                     this.$confirm('确定退出吗？', '消息提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',

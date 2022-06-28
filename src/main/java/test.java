@@ -9,14 +9,8 @@ import com.dao.StudentDao;
 import com.dao.TutorDao;
 import com.dao.TutorInfoDao;
 import com.dao.impl.*;
-import com.service.MessageService;
-import com.service.ResultService;
-import com.service.StudentService;
-import com.service.TutorService;
-import com.service.impl.MessageServiceImpl;
-import com.service.impl.ResultServiceImpl;
-import com.service.impl.StudentServiceImpl;
-import com.service.impl.TutorServiceImpl;
+import com.service.*;
+import com.service.impl.*;
 import com.utils.JDBCUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbutils.*;
@@ -43,6 +37,7 @@ public class test {
     TutorDao tutorDao = new TutorDaoImpl();
     TutorInfoDao tutorInfoDao = new TutorInfoDaoImpl();
     StudentDao studentDao = new StudentDaoImpl();
+    EventService eventService=new EventServiceImpl();
 
     @Test  //测试教师登录
     public void testTutorDoLogin() {
@@ -143,15 +138,15 @@ public class test {
         //list1=studentService.getInfoList();
         //System.out.println(list1);
 
-        Student studentById = studentService.getStudentById(4);
-        StudentInfo infoByStudentId = studentService.getInfoByStudentId(4);
-        StudentInfo infoByInfoId = studentService.getInfoByInfoId(1);
-
-//        StudentInfo studentInfo=new StudentInfo();
-//        studentInfo.setBirthday("1800");
-//        Student student = studentService.updateStudentInfo(studentById, studentInfo);
-////        System.out.println(student);
-        System.out.println(studentById);
+//        Student studentById = studentService.getStudentById(4);
+//        StudentInfo infoByStudentId = studentService.getInfoByStudentId(4);
+//        StudentInfo infoByInfoId = studentService.getInfoByInfoId(1);
+//
+////        StudentInfo studentInfo=new StudentInfo();
+////        studentInfo.setBirthday("1800");
+////        Student student = studentService.updateStudentInfo(studentById, studentInfo);
+//////        System.out.println(student);
+//        System.out.println(studentById);
 
 //        studentService.getStudentListByTutorId();
 //        List<Student> studentListByMajorId = studentService.getStudentListByMajorId(1);
@@ -161,6 +156,11 @@ public class test {
 
 //        System.out.println(studentService.getStudentList());
 
+        List<Tutor> tutorList = tutorService.getTutorList();
+        tutorList.forEach(tutor -> tutor.setTutorInfo(tutorService.getInfoByTutorId(tutor.getTutorInfoId())));
+
+//        Student byId = studentService.getStudentById(1);
+        System.out.println(tutorList);
     }
 
     @Test //tutor信息增删改查
@@ -273,6 +273,17 @@ public class test {
         System.out.println(id);
         tutorService.updateTutorInfo(tutor,tutorInfo);
 
+    }
 
+    @Test
+    public void testEvent1(){
+        List<Event> events = eventService.getFullAllEventsByStudentId(1);
+        for (Event event : events) {
+            Result result = resultService.getResultByEventIdStudentId(event.getId(),1);
+            if (event.getStatus() == 2) {
+                event.setResult(result);
+            }
+        }
+        System.out.println(events);
     }
 }
