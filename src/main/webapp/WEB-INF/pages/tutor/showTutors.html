@@ -23,69 +23,158 @@
 <body>
 <div id="app">
     <el-main>
-        <el-table
-                :data="tutors"
-                style="width: 100%"
-        >
-            <el-table-column
-                    prop="name"
-                    label="导师姓名"
-                    sortable
-                    width="120"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.title"
-                    label="职称"
-                    width="120"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.educationBackground"
-                    label="学历"
-                    width="120"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.researchField"
-                    label="研究领域"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.lessons"
-                    label="任教课程"
-            >
-            </el-table-column>
-            <el-table-column
-                    prop="tutorInfo.selfIntroduction"
-                    label="自我介绍"
-            >
-            </el-table-column>
-        </el-table>
+        <!--        <el-table-->
+        <!--                :data="tutors"-->
+        <!--                style="width: 100%"-->
+        <!--        >-->
+        <!--            <el-table-column-->
+        <!--                    prop="name"-->
+        <!--                    label="导师姓名"-->
+        <!--                    sortable-->
+        <!--                    width="120"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--                    prop="tutorInfo.title"-->
+        <!--                    label="职称"-->
+        <!--                    width="120"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--                    prop="tutorInfo.educationBackground"-->
+        <!--                    label="学历"-->
+        <!--                    width="120"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--                    prop="tutorInfo.researchField"-->
+        <!--                    label="研究领域"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--                    prop="tutorInfo.lessons"-->
+        <!--                    label="任教课程"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--            <el-table-column-->
+        <!--                    prop="tutorInfo.selfIntroduction"-->
+        <!--                    label="自我介绍"-->
+        <!--            >-->
+        <!--            </el-table-column>-->
+        <!--        </el-table>-->
+
+        <div id="pro_form" style="position: relative;width: 100%;height: 1000px;">
+            <div style="position: relative;top: 100px;left:130px;">
+                <el-row>
+                    <!--一行显示四个，就改下面一行-->
+                    <el-col :span="4" v-for="(tutor, index) in tutors" :key="index" :offset="1"
+                            style="margin-bottom:40px">
+                        <el-card :body-style="{ padding: '10px', height:'360px'}" shadow="hover"
+                                 style="width: 260px;height: 320px;">
+                            <div style="padding: 6px;height: 310px;">
+                                <div>
+                                    <div style="font-size: 5px"><font size="5">{{tutor.name}}</font></div>
+                                    <!--                                    <div style="position: relative;top: 15px;text-align: center;">{{project.tutorInfo.title}}</div>-->
+                                </div>
+                                <!--                                <div style="position: relative;top: 30px;">-->
+                                <!--&lt;!&ndash;                                    <img src="../images/project/prohead.jpg" class="image">&ndash;&gt;-->
+                                <!--                                    <div style="position: relative;top: 10px;left: 66px;"><i class="el-icon-user"></i>{{tutorInfo.researchField}}</div>-->
+                                <!--                                </div>-->
+
+                                <!--                                请注意tutorInfo需要循环访问的数组。 如果只有一个类别，则可以使用{{product.pcategories[0].pcategoryname}} ，但是如果没有类别，将引起问题，即使类别更多，也只会显示一个类别-->
+                                <!--                                使用v-for遍历类别并为每个类别添加dom元素-->
+
+                                <!--                                <li v-for="pproduct in pproducts" :key="pproduct.id">-->
+                                <!--                                    <span>{{ pproduct.title }}</span>-->
+                                <!--                                    <span><strong>Kategoria: </strong><strong v-for="pcategory in product.pcategories" :key="pcategory.id">{{ pcategory.pcategoryname }}</strong></span>-->
+                                <!--                                    <span class="price">{{ pproduct.price }} zł</span>-->
+                                <!--                                </li>-->
+
+                                <div>
+                                    <el-popover
+                                            placement="bottom"
+                                            title="自我介绍"
+                                            width="200"
+                                            trigger="click"
+                                    >
+                                        <div slot="content" class="tips"
+                                        >
+<!--                                            <div v-if="tutor.tutorInfo[0]">${tutor.name} - ${tutor.tutorInfo[0].title}</div>-->
+<!--                                            <li v-for="tutorInfo in tutor" :key="tutor.id">-->
+<!--                                                <span>{{ tutorInfo.title }}</span>-->
+<!--                                                <span><strong>个人介绍: </strong><strong v-for="title in tutorInfo.titles" :key="tutor.id">{{ pcategory.pcategoryname }}</strong></span>-->
+<!--                                            </li>-->
+                                            <div v-if="tutor.tutorInfo"  class="content">
+                                                <p>职称{{tutor.tutorInfo.title}}</p>
+                                            </div>
+                                        </div>
+                                        <el-button slot="reference">查看</el-button>
+                                    </el-popover>
+                                </div>
+
+
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
     </el-main>
 </div>
 </body>
 <script>
     var vue = new Vue({
-        el: "#app",
-        data: {
-            "tutors": []
+        data() {
+            return {
+                tutors: []
+                     // tutorInfos:{},
+                // const tutorInfos = array.tutors.flatMap(i => i.tutorInfos)
+                // console.log(tutorInfos);
+            }
         },
-        methods: {},
+
+        methods: {
+            //
+            // getTutorInfo() {
+            //     this.data.tutorInfo = tutorInfo;
+            // }
+
+        },
         created() {
-            if (this.tutors.length === 0) {
+            //改变this指向，因为promise中的this指向promise实例
+            var _this = this;
+            const output = []
+            if (_this.tutors.length === 0) {
                 axios.get("protected/tutor?method=getFullTutors").then(resp => {
                     if (resp.data.flag) {
-                        this.tutors = resp.data.data
+                        console.log(resp.data);
+                        _this.tutors = resp.data.data;
+                        // var res = list.map(item => item.id);
+                        console.log(_this.tutors);
+                       // console.log(_this.tutors.tutorInfo["title"]);
+                        //
+                        // const tutorInfos = array.tutors.map(item => {
+                        //     return item.tutorInfos;
+                        // });
+                        // console.log(tutorInfos);
+                        //_this.tutorInfos = resp.data.data.map(tutorInfo => tutorInfo["title"]);
+                        //_this.tutorInfos = resp.data.map(tutorInfo => tutorInfo["title"]);
+                        //console.log(_this.tutorInfos);
+
                     } else {
                         this.$message({
                             message: resp.data.message,
                             type: "error"
                         })
                     }
+                    // const tutorInfos = array.tutors.flatMap(i => i.tutorInfos)
+                    // let tutordata = Array.from(tutorInfos);
+                    // console.log(tutordata);
                 })
             }
+
         }
     })
+    vue.$mount('#app');
 </script>
 </html>
