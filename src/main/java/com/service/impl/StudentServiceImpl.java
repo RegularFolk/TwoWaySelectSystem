@@ -82,7 +82,9 @@ public class StudentServiceImpl implements StudentService {
         List<Student> students = studentDao.findAll();
         for (Student student:students){
             StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+            Major major=majorDao.findMajor(student.getMajorId());
             student.setStudentInfo(info);
+            student.setMajor(major);
         }
         return students;
     }
@@ -91,7 +93,9 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getStudentListByMajorId(int majorId) {
         List<Student> students = studentDao.findByMajorId(majorId);
         for (Student student:students){
+
             StudentInfo info = studentInfoDao.findInfoByStudentId(student.getId());
+
             student.setStudentInfo(info);
         }
         return students;

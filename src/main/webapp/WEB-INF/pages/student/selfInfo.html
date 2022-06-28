@@ -97,7 +97,7 @@
 
                 <el-form-item>
                     <template slot="label">
-                        未来发展
+                        未来计划
                     </template>
                     {{ student.studentInfo.planning }}&nbsp;&nbsp;&nbsp;&nbsp;
                     <el-button type="small" icon="el-icon-edit" @click="open('未来发展')"></el-button>
@@ -201,44 +201,6 @@
                 });
             },
 
-            // openTutor(text) {
-            //     this.$prompt('请输入' + text, '提示', {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //     }).then(({value}) => {
-            //         switch (text) {
-            //             case '姓名':
-            //                 this.updateTutor.name = value;
-            //                 break
-            //             case '职权':
-            //                 this.updateTutor.authority = value;
-            //                 break
-            //             case '密码':
-            //                 this.updateTutorInfo.authority = value;
-            //                 break
-            //         }
-            //
-            //         axios.post("protected/tutor?method=updateTutor",
-            //             this.updateTutor
-            //         ).then(resp => {
-            //             if (resp.data.flag) {
-            //                 this.$message.success(resp.data.message)
-            //                 location.reload();
-            //             } else {
-            //                 this.$message({
-            //                     message: resp.data.message,
-            //                     type: "error"
-            //                 })
-            //             }
-            //         })
-            //
-            //     }).catch(() => {
-            //         this.$message({
-            //             type: 'info',
-            //             message: '取消输入'
-            //         });
-            //     });
-            // },
 
             updatePassword(text) {
                 this.$prompt('请输入' + text, '提示', {
