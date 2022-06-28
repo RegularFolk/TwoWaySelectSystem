@@ -40,4 +40,5 @@ public interface TutorService {
 
 
 
+    Tutor updateTutor(Tutor updateTutor, Tutor tutor);
 }

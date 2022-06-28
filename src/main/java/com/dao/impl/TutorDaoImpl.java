@@ -1,9 +1,11 @@
 package com.dao.impl;
 
 import com.bean.IntBean;
+import com.bean.Major;
 import com.bean.Tutor;
 import com.constant.Constants;
 import com.dao.BaseDao;
+import com.dao.MajorDao;
 import com.dao.TutorDao;
 
 import java.util.ArrayList;
@@ -96,12 +98,21 @@ public class TutorDaoImpl extends BaseDao<Tutor> implements TutorDao {
 
     public List<Tutor> findTutorResult(List<IntBean> intBeans) {
         String sql = "select  * from tutor where id =?";
+        MajorDao majorDao = new MajorDaoImpl();
         List<Tutor> list = new ArrayList<>();
         for (IntBean intBean : intBeans) {
             Tutor tutor = getBean(Tutor.class, sql, intBean.getId());
+            Major major = majorDao.findMajor(tutor.getMajorId());
+            tutor.setMajor(major);
             list.add(tutor);
         }
         return list;
 
+    }
+
+    @Override
+    public void updateTutor(Tutor tutor) {
+        String sql = "update tutor set name=?,major_id=?,authority=? where id =?";
+        update(sql, tutor.getName(), tutor.getMajorId(), tutor.getAuthority(), tutor.getId());
     }
 }

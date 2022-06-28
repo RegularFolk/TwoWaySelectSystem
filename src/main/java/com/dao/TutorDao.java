@@ -35,4 +35,6 @@ public interface TutorDao {
     void removeTaken(int tutorId, int round);
 
     List<Tutor> findTutorResult(List<IntBean> intBeans);
+
+    void updateTutor(Tutor tutor);
 }

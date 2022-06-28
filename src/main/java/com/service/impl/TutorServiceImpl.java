@@ -20,6 +20,8 @@ public class TutorServiceImpl implements TutorService {
 
     StudentDao studentDao = new StudentDaoImpl();
 
+    MajorDao majorDao = new MajorDaoImpl();
+
     ResultDao resultDao = new ResultDaoImpl();
 
     IntPreferDao intPreferDao = new IntPreferDaoImpl();
@@ -73,7 +75,18 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public Tutor getTutorById(int id) {
-        return tutorDao.findById(id);
+        Tutor byId = tutorDao.findById(id);
+        TutorInfo info = new TutorInfo();
+        Major major = new Major();
+        if (byId.getMajorId()!=0){
+            major=majorDao.findMajor(byId.getMajorId());
+        }
+        if (byId.getTutorInfoId()!=0){
+            info=tutorInfoDao.findInfoByTutorId(id);
+        }
+        byId.setMajor(major);
+        byId.setTutorInfo(info);
+        return byId;
     }
 
     @Override
@@ -158,13 +171,30 @@ public class TutorServiceImpl implements TutorService {
         return students;
     }
 
+    @Override
+    public Tutor updateTutor(Tutor updateTutor, Tutor tutor) {
+        tutorDao.updateTutor(updateTutor);
+        if (!tutor.getName().equals(updateTutor.getName())) {
+            tutor.setName(updateTutor.getName());
+        }
+        if (!tutor.getAuthority().equals(updateTutor.getAuthority())) {
+            tutor.setAuthority(updateTutor.getAuthority());
+        }
+        if (tutor.getMajorId() != updateTutor.getMajorId()) {
+            tutor.setMajorId(updateTutor.getMajorId());
+        }
+
+
+        return tutor;
+
+    }
 
 
     @Override
     public Tutor updatePassword(String password, Tutor tutor) {
         String encode = MD5Util.encode(password);
         tutorDao.updatePassword(encode, tutor.getId());
-        tutor.setPassword(password);
+        tutor.setPassword(encode);
         return tutor;
     }
 }

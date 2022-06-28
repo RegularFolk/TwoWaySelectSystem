@@ -25,7 +25,7 @@ public class TutorServlet extends ModelBaseServlet {
 
     TutorService tutorService = new TutorServiceImpl();
     StudentService studentService = new StudentServiceImpl();
-    MessageService messageService=new MessageServiceImpl();
+    MessageService messageService = new MessageServiceImpl();
 
     //教师查看学生志愿（仅自己） by王城梓
     public void doSelectStudent(HttpServletRequest request, HttpServletResponse response) {
@@ -77,12 +77,35 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
-    //导师info表修改，by郑应啟
-    public void updateStudentInfo(HttpServletRequest request, HttpServletResponse response) {
+    //跳转到教师主页面
+    public void toSelfInfo(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            TutorInfo tutorInfo = new TutorInfo();
-            BeanUtils.populate(tutorInfo, parameterMap);
+            processTemplate("tutor/selfInfo", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+
+    //查询导师详细信息，个人信息  郑应啟
+    public void selectTutorFullInfo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session = request.getSession();
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            Tutor tutorFull=new Tutor();
+            tutorFull = tutorService.getTutorById(tutor.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, tutorFull));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
+    //导师info表修改，by郑应啟
+    public void updateTutorInfo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            TutorInfo tutorInfo = (TutorInfo) JSONUtils.parseJsonToBean(request, TutorInfo.class);
             HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             tutor = tutorService.updateTutorInfo(tutor, tutorInfo);
@@ -95,9 +118,26 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
 
+    //修改导师 郑应啟
+    public void updateTutor(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Tutor updateTutor = (Tutor) JSONUtils.parseJsonToBean(request, Tutor.class);
+            HttpSession session = request.getSession();
+            Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
+            Tutor tutor1 = tutorService.updateTutor(updateTutor, tutor);
+            session.setAttribute(Constants.TUTOR_SESSION_KEY, tutor1);
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.UPDATE_SUCCESS));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
+
     //导师密码修改，by郑应啟
     public void updateTutorPassword(HttpServletRequest request, HttpServletResponse response) {
-        String password = request.getParameter("password");
+        StringBean stringBean = (StringBean) JSONUtils.parseJsonToBean(request, StringBean.class);
+        String password=stringBean.getString();
+        System.out.println(password);
         try {
             HttpSession session = request.getSession();
             //获取当前登入导师
@@ -113,6 +153,7 @@ public class TutorServlet extends ModelBaseServlet {
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
+
 
     //跳转到教师主页面 （周才邦）
     public void toMain(HttpServletRequest request, HttpServletResponse response) {
@@ -148,6 +189,8 @@ public class TutorServlet extends ModelBaseServlet {
     //跳转到最终结果页面
     public void toResult(HttpServletRequest request, HttpServletResponse response) {
         try {
+            request.setCharacterEncoding("utf-8");
+            response.setContentType("text/html;charset=utf-8");
             processTemplate("tutor/showResults", request, response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -276,9 +319,9 @@ public class TutorServlet extends ModelBaseServlet {
         }
     }
     //获取学生，（私信对象） 郑应啟
-    public void getMyStudents(HttpServletRequest request, HttpServletResponse response){
+    public void getMyStudents(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession session=request.getSession();
+            HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             List<Student> students = studentService.getStudentList();
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, students));
@@ -290,16 +333,16 @@ public class TutorServlet extends ModelBaseServlet {
     }
 
     //导师给学生 发送私信 郑应啟
-    public void sendMessageToStudent(HttpServletRequest request, HttpServletResponse response){
+    public void sendMessageToStudent(HttpServletRequest request, HttpServletResponse response) {
         Message message = (Message) JSONUtils.parseJsonToBean(request, Message.class);
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = sdf.format(new Date());
-            HttpSession session=request.getSession();
+            HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
             //学生id 负数，导师id 正数
-            messageService.sendMessageById(+tutor.getId(),-message.getReceiverId(),message.getText(),format);
+            messageService.sendMessageById(+tutor.getId(), -message.getReceiverId(), message.getText(), format);
             JSONUtils.writeResult(response, new ResultMessage(true, Constants.SEND_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
@@ -309,14 +352,14 @@ public class TutorServlet extends ModelBaseServlet {
     }
 
     //导师接受私信 郑应啟
-    public void getMessageFromStudent(HttpServletRequest request, HttpServletResponse response){
+    public void getMessageFromStudent(HttpServletRequest request, HttpServletResponse response) {
         String s = request.getParameter("studentId");
-        int studentId= Integer.parseInt(s);
+        int studentId = Integer.parseInt(s);
         try {
-            HttpSession session=request.getSession();
+            HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            List<Message> messages=messageService.getMessage(-studentId,+tutor.getId());
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.RECEIVE_SUCCESS,messages));
+            List<Message> messages = messageService.getMessage(-studentId, +tutor.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.RECEIVE_SUCCESS, messages));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
@@ -325,12 +368,12 @@ public class TutorServlet extends ModelBaseServlet {
     }
 
     //查询所有私信 郑应啟
-    public void getMessageList(HttpServletRequest request, HttpServletResponse response){
+    public void getMessageList(HttpServletRequest request, HttpServletResponse response) {
         try {
-            HttpSession session=request.getSession();
+            HttpSession session = request.getSession();
             Tutor tutor = (Tutor) session.getAttribute(Constants.TUTOR_SESSION_KEY);
-            List<Message> messages=messageService.getMessageList(+tutor.getId());
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,messages));
+            List<Message> messages = messageService.getMessageList(+tutor.getId());
+            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, messages));
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息

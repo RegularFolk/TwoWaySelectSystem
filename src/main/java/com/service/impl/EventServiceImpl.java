@@ -58,4 +58,9 @@ public class EventServiceImpl implements EventService {
         eventDao.enableEvent(chosenEventId);
         return getOngoingEvent();
     }
+
+    @Override
+    public Event getEventById(int id) {
+        return eventDao.getEventById(id);
+    }
 }

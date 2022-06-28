@@ -40,7 +40,7 @@ public class TutorInfoDaoImpl extends BaseDao<TutorInfo> implements TutorInfoDao
 
     @Override
     public void updateInfo(int tutorInfoId, TutorInfo tutorInfo) {
-        String sql = "update tutor_info set gender = ?, title=?, education_background = ?, research_field = ?, lessons = ?, self_introduction = ?";
-        update(sql, tutorInfo.getGender(), tutorInfo.getTitle(), tutorInfo.getEducationBackground(), tutorInfo.getResearchField(), tutorInfo.getLessons(), tutorInfo.getSelfIntroduction());
+        String sql = "update tutor_info set gender = ?, title=?, education_background = ?, research_field = ?, lessons = ?, self_introduction = ? where id=?";
+        update(sql, tutorInfo.getGender(), tutorInfo.getTitle(), tutorInfo.getEducationBackground(), tutorInfo.getResearchField(), tutorInfo.getLessons(), tutorInfo.getSelfIntroduction(),tutorInfoId);
     }
 }

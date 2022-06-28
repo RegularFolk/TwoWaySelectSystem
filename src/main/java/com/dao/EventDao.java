@@ -20,4 +20,5 @@ public interface EventDao {
     void setEventDisabled(int id);
 
     void enableEvent(Integer chosenEventId);
+    Event getEventById(int id);
 }

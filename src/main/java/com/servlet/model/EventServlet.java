@@ -22,7 +22,7 @@ public class EventServlet extends ModelBaseServlet {
     EventService eventService = new EventServiceImpl();
     StudentService studentService = new StudentServiceImpl();
     TutorService tutorService = new TutorServiceImpl();
-    ResultService resultService=new ResultServiceImpl();
+    ResultService resultService = new ResultServiceImpl();
 
     //跳转到新建双选页面 （周才邦）
     public void toSetEvent(HttpServletRequest request, HttpServletResponse response) {
@@ -102,17 +102,41 @@ public class EventServlet extends ModelBaseServlet {
     }
 
 
-    //
-    public void getResult(HttpServletRequest request, HttpServletResponse response){
+    //返回双选结果，郑应啟
+    public void getResult(HttpServletRequest request, HttpServletResponse response) {
         try {
-            IntBean intBean= (IntBean) JSONUtils.parseJsonToBean(request, IntBean.class);
+            IntBean intBean = (IntBean) JSONUtils.parseJsonToBean(request, IntBean.class);
             Integer id = intBean.getId();
+            Event event = eventService.getEventById(id);
             Result result = resultService.getResultByEventId(id);
-            JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS,result));
+            switch (event.getStatus()) {
+                case 0:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS));
+                    break;
+                case 1:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS));
+                    break;
+                case 2:
+                    JSONUtils.writeResult(response, new ResultMessage(true, Constants.QUERY_SUCCESS, result.getTutors()));
+                    break;
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             //失败则返回失败,返回错误信息
             JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
         }
     }
+
+    //跳转ShowResultDetail页面，郑应啟
+    public void toShowResultDetail(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processTemplate("tutor/showResultDetail", request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JSONUtils.writeResult(response, new ResultMessage(false, e.getMessage()));
+        }
+    }
 }
+

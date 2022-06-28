@@ -18,4 +18,6 @@ public interface EventService {
     void setEventDisabled(int id);
 
     Event enableEvent(Integer chosenEventId);
+
+    Event getEventById(int id);
 }

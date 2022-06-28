@@ -156,6 +156,13 @@
                         {
                             "path": "3-1",
                             "notActive": false,
+                            "title": "个人信息",
+                            "linkUrl": "protected/tutor?method=toSelfInfo"
+                        }
+                        ,
+                        {
+                            "path": "3-2",
+                            "notActive": false,
                             "title": "退出登录"
                         }
                     ]
@@ -165,7 +172,7 @@
         },
         methods: {
             selectLogout(path, linkUrl) {
-                if (path == "3-1") {
+                if (path == "3-2") {
                     this.$confirm('确定退出吗？', '消息提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',

@@ -52,7 +52,7 @@
 <!--                    跳转第二个页面-->
                     <el-button
                             size="mini"
-                            @click="resultDetail(scope.$index, scope.row)">查看详情</el-button>
+                            @click="resultDetail(scope.row)">查看详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -64,9 +64,15 @@
         el: "#app",
         data: {
             "events": [],
-            "chosenEvent": {}
+            "chosenEvent": {},
+            eventId: "",
         },
         methods: {
+            resultDetail(row){
+                this.eventId=row.id;
+                window.sessionStorage.setItem("eventId",row.id)
+                window.location.href="protected/event?method=toShowResultDetail";
+            }
         },
         created() {
             if (this.events.length === 0) {

@@ -55,4 +55,10 @@ public class EventDaoImpl extends BaseDao<Event> implements EventDao {
         String sql = "update event set status = ? where id = ?";
         update(sql, Constants.EVENT_ENABLED, chosenEventId);
     }
+
+    @Override
+    public Event getEventById(int id) {
+        String sql = "select  * from event where id=?";
+        return getBean(Event.class, sql, id);
+    }
 }
