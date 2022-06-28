@@ -23,46 +23,47 @@
 <body>
 <div id="app">
     <el-main>
-        <el-row>
-        <el-table
-                :data="students"
-                :span-method="objectSpanMethod"
-                style="width: 100%"
-        >
-<!--            //根据具体数据库具体字段来-->
-            <el-table-column
-                    prop="id"
-                    label="ID"
-                    sortable
-                    width="200"
-            >
-            </el-table-column>
-            <!--            //根据具体数据库具体字段来-->
-            <el-table-column
-                    prop="tutorName"
-                    label="导师姓名"
-                    sortable
-                    width="200"
-            >
-            </el-table-column>
-<!--            //根据具体数据库具体字段来-->
-            <el-table-column
-                    prop="studentName"
-                    label="学生姓名"
-                    width="200"
-            >
-            </el-table-column>
-        </el-table>
-        <el-divider><br></el-divider>
-        </el-row>
-<!--        <el-row>-->
-<!--&lt;!&ndash;            每个按钮对应一个点击事件，从数据库里取数据&ndash;&gt;-->
-<!--            <el-col :span="6"> <el-button>第一轮选人结果</el-button></el-col>-->
-<!--            <el-col :span="6"><el-button>第二 轮选人结果</el-button></el-col>-->
-<!--            <el-col :span="6"><el-button>第三轮选人结果</el-button></el-col>-->
-<!--            <el-col :span="6"><el-button>最终双选结果</el-button></el-col>-->
-<!--        </el-row>-->
-
+        <el-card>
+            <el-row>
+                <el-table
+                        :data="students"
+                        :span-method="objectSpanMethod"
+                        style="width: 100%"
+                >
+                    <!--            //根据具体数据库具体字段来-->
+                    <el-table-column
+                            prop="id"
+                            label="ID"
+                            sortable
+                            width="200"
+                    >
+                    </el-table-column>
+                    <!--            //根据具体数据库具体字段来-->
+                    <el-table-column
+                            prop="tutorName"
+                            label="导师姓名"
+                            sortable
+                            width="200"
+                    >
+                    </el-table-column>
+                    <!--            //根据具体数据库具体字段来-->
+                    <el-table-column
+                            prop="studentName"
+                            label="学生姓名"
+                            width="200"
+                    >
+                    </el-table-column>
+                </el-table>
+                <el-divider><br></el-divider>
+            </el-row>
+            <!--        <el-row>-->
+            <!--&lt;!&ndash;            每个按钮对应一个点击事件，从数据库里取数据&ndash;&gt;-->
+            <!--            <el-col :span="6"> <el-button>第一轮选人结果</el-button></el-col>-->
+            <!--            <el-col :span="6"><el-button>第二 轮选人结果</el-button></el-col>-->
+            <!--            <el-col :span="6"><el-button>第三轮选人结果</el-button></el-col>-->
+            <!--            <el-col :span="6"><el-button>最终双选结果</el-button></el-col>-->
+            <!--        </el-row>-->
+        </el-card>
     </el-main>
 </div>
 </body>
@@ -72,7 +73,7 @@
         data: {
             "students": []
         },
-        mounted: function() {
+        mounted: function () {
             this.getSpanArr(this.students);
         },
         methods: {
@@ -95,7 +96,7 @@
                     console.log(this.spanArr);
                 }
             },
-            objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+            objectSpanMethod({row, column, rowIndex, columnIndex}) {
                 if (columnIndex === 0 || columnIndex === 1) {
                     const _row = this.spanArr[rowIndex];
                     const _col = _row > 0 ? 1 : 0;
@@ -107,7 +108,7 @@
                     };
                 }
             }
-            },
+        },
         created() {
             if (this.students.length === 0) {
                 //根据具体方法来

@@ -132,7 +132,7 @@
                       "code": this.ruleForm.code
                   }).then(resp => {
                       if (resp.data.flag) {
-                          window.location.href = "protected/student?method=toMain"
+                          window.location.href = "protected/tutor?method=toMain"
                       } else {
                           this.$message.error(resp.data.message)
                       }
